@@ -1,14 +1,18 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from AppRecetas.models import *
+from .models import *
 
 
 # Create your views here.
 
-def recetasMain(request):
+def inicio(request):
+    return render(request,'AppRecetas/inicio.html')
+
+
+def addRecetasMain(request):
 
     receta_1 = RecetasMain(nom_platos= "pizza",
-     ingredientes= "harina, agua, levadura, sal, aceite , salsa de tomate",
+      ingredientes= "harina, agua, levadura, sal, aceite , salsa de tomate",
       receta= "harina 1kg, agua 0.5 litros, sal 10gr, levadura 10gr, sal 35, aceite 10cc",
       tiempo= 30, 
       dificultad= "media",
@@ -19,6 +23,29 @@ def recetasMain(request):
     receta_1.save()
 
     return HttpResponse(f" La receta de {receta_1.nom_platos} \n es de dificultad {receta_1.dificultad} \n y los pasos de su elavoracion son {receta_1.procedimiento} ")  
+   #return render(request,'AppRecetas/addRecetasMain.html')
+
+def addRecetasUsr(request):
+  return render(request,'AppRecetas/addRecetasUsr.html')
+
+
+
+
+
+def vista_recetasUsr(request):
+  return render(request,'AppRecetas/recetasUsr.html')
+
+def vista_recetasMain(request):
+  return render(request,'AppRecetas/recetas.html')
+
+
+def vista_usuario(request):
+
+  return render(request,'AppRecetas/usuaio.html')
+
+
+
+
 
 
 
