@@ -5,12 +5,12 @@ from AppRecetas.views import *
 
 
 urlpatterns = [
-    path("", inicio),
-    path("addrecetasMain/", addRecetasMain),
-    path("addrecetasUsr/", addRecetasUsr),
-    path("recetasUsr/", vista_recetasUsr),
-    path("recetasMain/", vista_recetasMain),
-    path("usuarios/", vista_usuario),
+    path("", inicio, name= "Inicio"),
+    path("addrecetasMain/", addRecetasMain, name= "AddrecetasMain"),
+    path("addrecetasUsr/", addRecetasUsr, name= "AddRecetasUsr"),
+    path("recetasUsr/", vista_recetasUsr, name= "RecetasUsr" ),
+    path("recetasMain/", vista_recetasMain, name= "RecetasMain"),
+    path("usuarios/", vista_usuario, name= "Usuarios"),
 
 
 

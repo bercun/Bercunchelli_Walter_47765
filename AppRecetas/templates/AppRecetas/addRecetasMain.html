@@ -1,0 +1,64 @@
+{% extends "AppRecetas/base.html" %}
+
+
+
+{ % load static % }
+
+
+{% block  titulo %}
+                                
+Esta es mi pagina par agregar Recetaslocales
+
+{% endblock  %}
+
+
+
+
+{% block  complement %}
+                                
+<form action="" method="POST">  {% csrf_token %}
+
+
+    <table>
+
+
+        {{form1.as_table}}
+
+
+
+    </table>
+
+    <input type="submit" value="Guardar">
+
+    
+
+
+
+
+
+</form>
+
+
+    
+
+
+
+{% endblock  %}
+
+
+<!--
+        <form action="/AppRecetas/addrecetasMain/ " method="POST">{% csrf_token %}
+
+            <p>Nombre del plato: <input type="text" name="f_platos"></p>
+            <p>Ingredientes: <input type="text" name="f_ingre"></p>
+            <p>Receta: <input type="text" name="f_rece"></p>
+            <p>Tiempo de elavoracion: <input type="number" name="f_time"></p>
+            <p>Dificultad: <input type="text" name="f_level"></p>
+            <p>tipo de cocina: <input type="text" name="f_from"></p>
+            <p>Fuente: <input type="text" name="f_sourse"></p>
+            <p>Pasos de la receta: <input type="text" name="f_steps"></p>
+
+            <input type="submit" value="Guardar" >
+
+        </form>
+-->
