@@ -1,8 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import *
-from AppRecetas.forms import Form_AddRecetasMain
-
+from AppRecetas.models import RecetasMain, RecetasUsr, Usuario 
+from AppRecetas.forms import Form_AddRecetasMain, FormAddRecetasUsr , FormAddUsuario
 
 
 # Create your views here.
@@ -42,8 +41,67 @@ def addRecetasMain(request):
                            
 
 
+
 def addRecetasUsr(request):
-  return render(request,'AppRecetas/addRecetasUsr.html')
+  
+  if request.method == "POST":#despues de dar click a eviar
+    
+    formulario2 = FormAddRecetasUsr(request.POST)
+    
+    if formulario2.is_valid():
+
+      info = formulario2.cleaned_data
+
+      res_Usr = RecetasUsr(nom_platosUsr=info["nom_platosUsr"],
+                           ingredientesUsr=info["ingredientesUsr"],
+                           recetaUsr=info["recetaUsr"],
+                           tiempoUsr=info["tiempoUsr"],
+                           dificultadUsr=info["dificultadUsr"],
+                           tipoDeCocinaUsr=info["tipoDeCocinaUsr"],
+                           fuenteUsr=info["fuenteUsr"], 
+                           procedimientoUsr=info["procedimientoUsr"])
+      
+      res_Usr.save()                       
+      return render(request,'AppRecetas/inicio.html')  
+    
+  else:
+    formulario2 = FormAddRecetasUsr()
+
+                         
+
+  return render(request,'AppRecetas/addRecetasUsr.html', {"form2" :formulario2})
+  
+                           
+
+def addUsuario(request):
+  if request.method == "POST":#despues de dar click a eviar
+    
+    formulario3 = FormAddUsuario(request.POST)
+    
+    if formulario3.is_valid():
+
+      info = formulario3.cleaned_data
+
+      addUsr = Usuario(nombreUsr=info["nombreUsr"],
+                      emailUsr= info["emailUsr"],
+                      telfonoUsr=info["telfonoUsr"],
+                      ciudad=info["ciudad"],
+                      edad =info["edad"],
+      )
+      addUsr.save()  
+      
+      return render(request,'AppRecetas/inicio.html')  
+  else:
+    formulario3 = FormAddUsuario()
+
+
+  return render(request, "AppRecetas/addUsr.html", {"form3" : formulario3} )
+
+
+
+
+
+
 
 
 
@@ -61,9 +119,6 @@ def vista_usuario(request):
   return render(request,'AppRecetas/usuario.html')
 
 
-def add_RecetasMain(request):
-
-  return render(request, "AddrecetasMain")
 
 
 
