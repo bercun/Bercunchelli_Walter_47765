@@ -9,7 +9,7 @@ from AppRecetas.forms import Form_AddRecetasMain, FormAddRecetasUsr , FormAddUsu
 def inicio(request):
     return render(request,'AppRecetas/inicio.html')
 
-
+# ingresar datos
 def addRecetasMain(request):
   if request.method == "POST":#despues de dar click a eviar
     
@@ -38,9 +38,6 @@ def addRecetasMain(request):
 
   return render(request,'AppRecetas/addRecetasMain.html', {"form1" :formulario1})
   
-                           
-
-
 
 def addRecetasUsr(request):
   
@@ -70,8 +67,7 @@ def addRecetasUsr(request):
                          
 
   return render(request,'AppRecetas/addRecetasUsr.html', {"form2" :formulario2})
-  
-                           
+                        
 
 def addUsuario(request):
   if request.method == "POST":#despues de dar click a eviar
@@ -97,6 +93,27 @@ def addUsuario(request):
 
   return render(request, "AppRecetas/addUsr.html", {"form3" : formulario3} )
 
+#buscar y mostrar datos
+
+
+def seekRecetasUsr(request):
+
+  return render(request, "AppRecetas/seekRecetasUsr.html")
+
+
+def showRecetasUsr(request):
+
+  if request.GET["ingrediUsr"]:
+
+    ingreseekUsr = request.GET["ingrediUsr"]
+    recetasfindUsr = RecetasUsr.objects.filter(ingredientesUsr__icontains=ingreseekUsr)
+
+    return render(request, "AppRecetas/showRecetasUsr.html", {"ingreBus" : ingreseekUsr, "recetasfoundUsr": recetasfindUsr})
+
+
+  else:
+   respuesta ="No enviaste datos"  
+   return HttpResponse(respuesta)   
 
 
 
@@ -104,22 +121,47 @@ def seekRecetas(request):
 
   return render(request, "AppRecetas/seekRecetas.html")
 
-
-  
-
 def showRecetas(request):
 
   if request.GET["ingredientes"]:
 
     ingreseek = request.GET["ingredientes"]
     recetasfind = RecetasMain.objects.filter(ingredientes__icontains=ingreseek)
+    
 
-   
-    return render(request,"AppRecetas/showRecetas.html", {"ingreseek":ingreseek, "ingrefind": recetasfind })
+    
+    return render(request,"AppRecetas/showRecetas.html", {"ingreseek":ingreseek, "ingrefind": recetasfind , "recetasfindUsr": recetasfindUsr })
 
   else:
    respuesta ="No enviaste datos"  
-   return HttpResponse(respuesta)
+   return HttpResponse(respuesta)                                 
+
+
+
+
+def seekUsr(request):
+  return render(request,"AppRecetas/seekUsr.html")
+
+
+def showUsr(request):
+
+  if request.GET["Usr"]:
+
+    ingreUsrseek = request.GET["Usr"]
+    Usrfind = Usuario.objects.filter(nombreUsr__icontains=ingreUsrseek)
+    
+
+    
+    return render(request,"AppRecetas/showUsr.html", {"ingreUsrseek":ingreUsrseek, "Usrfind": Usrfind })
+
+  else:
+   respuesta ="No enviaste datos"  
+   return HttpResponse(respuesta)                                 
+
+
+
+
+
 
 
 

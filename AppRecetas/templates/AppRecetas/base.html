@@ -24,9 +24,12 @@
                 <a class="navbar-brand" href="{% url 'RecetasMain' %}">Recetaslocales</a>
                 <a class="navbar-brand" href="{% url 'RecetasUsr' %}">Receta usuarios</a>
                 <a class="navbar-brand" href="{% url 'Usuarios' %}">Usuarios</a>
+                <a class="navbar-brand" href="{% url 'Addusr' %}">Agregar  Usuarios</a>
+                <a class="navbar-brand" href="{% url 'seekUsr' %}">buscar usuario</a>
                 <a class="navbar-brand" href="{% url 'AddRecetasMain' %}">agrega recetas local</a>
                 <a class="navbar-brand" href="{% url 'AddRecetasUsr' %}">agrega recetas usuarios</a>
                 <a class="navbar-brand" href="{% url 'seekRecetas' %}">buscar recetas</a>
+                <a class="navbar-brand" href="{% url 'seekRecetasUsr' %}">buscar recetas de usuario</a>
                 <a class="btn btn-primary" href="#signup">Sign Up</a>
                 <a class="btn btn-primary" href="{% url 'Addusr' %}">agregar usuario</a>
             </div>
@@ -57,11 +60,8 @@
                             <!-- https://startbootstrap.com/solution/contact-forms-->
                             <!-- to get an API token!-->
                             <form class="form-subscribe" id="contactForm" data-sb-form-api-token="API_TOKEN">
-                                <!-- Email address input-->
+                       
                                 
-                                <!-- Submit success message-->
-                                <!---->
-                                <!-- This is what your users will see when the form-->
                                 <!-- has successfully submitted-->
                                 <div class="d-none" id="submitSuccessMessage">
                                     <div class="text-center mb-3">
@@ -70,9 +70,7 @@
                                         <a class="text-white" href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
                                     </div>
                                 </div>
-                                <!-- Submit error message-->
-                                <!---->
-                                <!-- This is what your users will see when there is-->
+                                
                                 <!-- an error submitting the form-->
                                 <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
                             </form>
@@ -88,6 +86,10 @@
                                 
         {% endblock  %}
 
+        {% block  complement2 %}
+                                
+                                
+        {% endblock  %}
         
         
         <section class="features-icons bg-light text-center">
@@ -108,7 +110,7 @@
                 <div class="row g-0">
                
                 <div class="row g-0">
-                    <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('{% static "assets/img/fondoweb_cocina.jpg" %}')"></div>
+                     <!--<div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('{% static "/assets/img/fondoweb_cocina.jpg" %}')"></div>-->
               <!-- has successfully submitted-->
                             <div class="d-none" id="submitSuccessMessage">
                                 <div class="text-center mb-3">

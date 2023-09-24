@@ -1,0 +1,27 @@
+
+{% extends "AppRecetas/base.html" %}
+
+
+
+{ % load static % }
+
+
+{% block  titulo %}
+                                
+Esta es mi pagina muestra busquede de usuarios 
+
+{% endblock  %}
+
+
+
+{% block  complement %}
+
+
+{%  for usr in Usrfind %}
+    <p> Nombre: {{usr.nombreUsr}} <br> Ciudad: {{usr.ciudad}}   </p>
+ 
+
+
+{% endfor %}  
+
+{% endblock  %}

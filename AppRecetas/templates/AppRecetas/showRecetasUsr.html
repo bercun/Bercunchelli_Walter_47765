@@ -1,0 +1,25 @@
+{% extends "AppRecetas/base.html" %}
+
+
+
+{ % load static % }
+
+
+{% block  titulo %}
+                                
+Esta es mi pagina de resultados de recetas de usuarios 
+
+{% endblock  %}
+
+
+{% block  complement %}
+ 
+<p>Estamos buscando : {{ingreBus}}</p>
+
+{% for ingredientes in recetasfoundUsr %}
+    
+<p> Nombre: {{ingredientes.nom_platosUsr}} <br> Igredientes: {{ingredientes.ingredientesUsr}}</p>
+
+{% endfor %}       
+                                
+{% endblock  %}

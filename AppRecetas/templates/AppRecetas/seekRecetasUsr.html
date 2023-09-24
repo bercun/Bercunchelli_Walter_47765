@@ -7,22 +7,24 @@
 
 {% block  titulo %}
                                 
-Esta es mi pagina de busqueda
+Esta es mi pagina de busqueda de recetas de usuarios
 
 {% endblock  %}
 
 {% block  complement %}
 
-    
-<form action="/AppRecetas/showRecetas/" method="GET" >
 
-    <input type="text" name="ingredientes"  id="ingredientes">
+
+
+    
+<form action="/AppRecetas/showRecetasUsr/" method="GET" >
+
+    <input type="text" name="ingrediUsr"  id="ingrediUsr">
 
     <input type="submit" value="Busacar">
     
     
 
 </form>
-                                
                                 
 {% endblock  %}

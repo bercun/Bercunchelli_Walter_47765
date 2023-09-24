@@ -1,19 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-    <p>Estamos buscando : {{ingreseek}}</p>
-
-    {%  for RecetasMains in ingreseek %}
-        <p> Nombre: {{RecetasMain.nom_platos}} --- Igredientes: {{RecetasMain.ingredientes}}</p>
+{% extends "AppRecetas/base.html" %}
 
 
-    {% endfor %}    
 
-</body>
-</html>
+{ % load static % }
+
+
+{% block  titulo %}
+                                
+Esta es mi pagina de resultados
+
+{% endblock  %}
+
+
+
+{% block  complement %}
+
+<p>Estamos buscando : {{ingreseek}}</p>
+
+{%  for RecetasMains in ingrefind %}
+    <p> Nombre: {{RecetasMains.nom_platos}} <br> Igredientes: {{RecetasMains.ingredientes}}</p>
+ 
+
+
+{% endfor %}  
+
+{% endblock  %}
+
