@@ -7,19 +7,13 @@
 </head>
 <body>
     
-    <form action="/AppRecetas/showRecetas/" method="GET" >
+    <p>Estamos buscando : {{ingreseek}}</p>
 
-        <input type="text" name="ingredientes"  id="ingredientes">
-
-        <input type="submit" value="Busacar">
-        
-        
+    {%  for RecetasMains in ingreseek %}
+        <p> Nombre: {{RecetasMain.nom_platos}} --- Igredientes: {{RecetasMain.ingredientes}}</p>
 
 
-
-
-    </form>
-
+    {% endfor %}    
 
 </body>
 </html>

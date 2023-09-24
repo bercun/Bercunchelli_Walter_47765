@@ -11,7 +11,8 @@ urlpatterns = [
     path("recetasUsr/", vista_recetasUsr, name= "RecetasUsr" ),
     path("recetasMain/", vista_recetasMain, name= "RecetasMain"),
     path("usuarios/", vista_usuario, name= "Usuarios"),
-    path("Addusr", addUsuario, name= "Addusr"),
-
+    path("Addusr/", addUsuario, name= "Addusr"),
+    path("seekRecetas/", seekRecetas, name= "seekRecetas"),
+    path("showRecetas/", showRecetas, name= "showRecetas"),
 
 ]

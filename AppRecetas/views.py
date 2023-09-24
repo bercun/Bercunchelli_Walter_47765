@@ -100,6 +100,28 @@ def addUsuario(request):
 
 
 
+def seekRecetas(request):
+
+  return render(request, "AppRecetas/seekRecetas.html")
+
+
+  
+
+def showRecetas(request):
+
+  if request.GET["ingredientes"]:
+
+    ingreseek = request.GET["ingredientes"]
+    recetasfind = RecetasMain.objects.filter(ingredientes__icontains=ingreseek)
+
+   
+    return render(request,"AppRecetas/showRecetas.html", {"ingreseek":ingreseek, "ingrefind": recetasfind })
+
+  else:
+   respuesta ="No enviaste datos"  
+   return HttpResponse(respuesta)
+
+
 
 
 
@@ -117,6 +139,7 @@ def vista_recetasMain(request):
 def vista_usuario(request):
 
   return render(request,'AppRecetas/usuario.html')
+
 
 
 

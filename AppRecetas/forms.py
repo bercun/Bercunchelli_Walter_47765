@@ -34,7 +34,7 @@ class FormAddUsuario(forms.Form):
     edad = forms.IntegerField()
 
     
-class AddUsuario(forms.Form):
+class FormAddUsuario(forms.Form):
     
     nombreUsr = forms.CharField(max_length=20)
     emailUsr = forms.EmailField()
