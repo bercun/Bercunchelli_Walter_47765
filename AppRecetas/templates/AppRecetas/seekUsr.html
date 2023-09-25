@@ -1,3 +1,20 @@
+{% extends "AppRecetas/base.html" %}
+
+
+
+{ % load static % }
+
+
+{% block  titulo %}
+                                
+Esta es mi pagina de busqueda  de usuarios
+
+{% endblock  %}
+
+
+
+{% block  complement %}
+
 
     
 <form action="/AppRecetas/showUsr/" method="GET" >
@@ -9,3 +26,5 @@
     
 
 </form>
+
+{% endblock  %}

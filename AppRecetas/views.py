@@ -130,7 +130,7 @@ def showRecetas(request):
     
 
     
-    return render(request,"AppRecetas/showRecetas.html", {"ingreseek":ingreseek, "ingrefind": recetasfind , "recetasfindUsr": recetasfindUsr })
+    return render(request,"AppRecetas/showRecetas.html", {"ingreseek":ingreseek, "ingrefind": recetasfind ,  })
 
   else:
    respuesta ="No enviaste datos"  

@@ -24,14 +24,17 @@
                 <a class="navbar-brand" href="{% url 'RecetasMain' %}">Recetaslocales</a>
                 <a class="navbar-brand" href="{% url 'RecetasUsr' %}">Receta usuarios</a>
                 <a class="navbar-brand" href="{% url 'Usuarios' %}">Usuarios</a>
-                <a class="navbar-brand" href="{% url 'Addusr' %}">Agregar  Usuarios</a>
+                <br>
+                <!-- add -->
+                
+                <br>
+                <!--seek-->
                 <a class="navbar-brand" href="{% url 'seekUsr' %}">buscar usuario</a>
-                <a class="navbar-brand" href="{% url 'AddRecetasMain' %}">agrega recetas local</a>
-                <a class="navbar-brand" href="{% url 'AddRecetasUsr' %}">agrega recetas usuarios</a>
                 <a class="navbar-brand" href="{% url 'seekRecetas' %}">buscar recetas</a>
                 <a class="navbar-brand" href="{% url 'seekRecetasUsr' %}">buscar recetas de usuario</a>
+                <!--login-->
                 <a class="btn btn-primary" href="#signup">Sign Up</a>
-                <a class="btn btn-primary" href="{% url 'Addusr' %}">agregar usuario</a>
+                
             </div>
         </nav>
         <!-- Masthead-->
@@ -96,6 +99,11 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-4">
+                        
+                        <a class="btn btn-primary" href="{% url 'Addusr' %}">Agregar  Usuarios</a>
+                        <a class="btn btn-primary" href="{% url 'AddRecetasMain' %}">agrega recetas local</a>
+                        <a class="btn btn-primary" href="{% url 'AddRecetasUsr' %}">agrega recetas usuarios</a> 
+                        
                     </div>
                     <div class="col-lg-4">
                     
