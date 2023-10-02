@@ -1,0 +1,28 @@
+{% extends "AppRecetas/base.html" %}
+
+
+
+{ % load static % }
+
+
+{% block  titulo %}
+                                
+Lista de Usuarios
+
+
+{% endblock  %}
+
+{% block  complement %}
+
+{% for comunidad in gente  %}
+<H4>
+<p>Nombre: {{comunidad.nombreUsr}}  </p>
+<p>Telefóno: {{comunidad.telfonoUsr}}  </p>
+<p>Email: {{comunidad.emailUsr}}  </p>
+
+</H4>
+
+
+{% endfor %}
+
+{% endblock  %}

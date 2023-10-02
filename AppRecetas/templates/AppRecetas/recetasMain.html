@@ -1,3 +1,4 @@
+
 {% extends "AppRecetas/base.html" %}
 
 
@@ -7,7 +8,62 @@
 
 {% block  titulo %}
                                 
-Recetas locales
+Listado de recetas
 
 {% endblock  %}
 
+
+
+{% block complement%}
+
+{% for recetasUsr in  lista_recetasUsr %}
+
+
+    <p>Nombre: {{recetasUsr.nom_platosUsr}}  </p>
+    <p>Tiempo: {{recetasUsr.tiempoUsr}}  </p>
+    <p>Tipo de cocina : {{recetasUsr.tipoDeCocinaUsr}}  </p>
+
+_____________________________________________________________
+{%endfor%}
+
+
+*********************Recetas  Locales***********************
+
+{% for recetasMain in  lista_recetasMain %}
+
+
+    <p>Nombre: {{recetasMain.nom_platos}}  </p>
+    <p>Tiempo: {{recetasMain.tiempo}}  </p>
+    <p>Tipo de cocina : {{recetasMain.tipoDeCocina}}  </p>
+
+________________________________________________________
+{%endfor%}
+<section class="features-icons bg-light text-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                            <div class="features-icons-icon d-flex"><i class="bi-window m-auto text-primary"></i></div>
+                            <h3>Recetas</h3>
+                            <p class="lead mb-0">Aqui encontraras las recetas, tanto de los creadores de la pagina cómo las creadas por la comunidad </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                            <div class="features-icons-icon d-flex"><i class="bi-layers m-auto text-primary"></i></div>
+                            <h3>Bootstrap 5 Ready</h3>
+                            <p class="lead mb-0">Featuring the latest build of the new Bootstrap 5 framework!</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+                            <div class="features-icons-icon d-flex"><i class="bi-terminal m-auto text-primary"></i></div>
+                            <h3>Easy to Use</h3>
+                            <p class="lead mb-0">Ready to use with your own content, or customize the source files!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{%endblock%}

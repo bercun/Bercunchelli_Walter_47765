@@ -2,14 +2,13 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from AppRecetas.models import RecetasMain, RecetasUsr, Usuario 
 from AppRecetas.forms import Form_AddRecetasMain, FormAddRecetasUsr , FormAddUsuario
-
-
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def inicio(request):
     return render(request,'AppRecetas/inicio.html')
 
-# ingresar datos
+# ingresar datos "C"UDE 
 def addRecetasMain(request):
   if request.method == "POST":#despues de dar click a eviar
     
@@ -93,28 +92,7 @@ def addUsuario(request):
 
   return render(request, "AppRecetas/addUsr.html", {"form3" : formulario3} )
 
-#buscar y mostrar datos
-
-
-def seekRecetasUsr(request):
-
-  return render(request, "AppRecetas/seekRecetasUsr.html")
-
-
-def showRecetasUsr(request):
-
-  if request.GET["ingrediUsr"]:
-
-    ingreseekUsr = request.GET["ingrediUsr"]
-    recetasfindUsr = RecetasUsr.objects.filter(ingredientesUsr__icontains=ingreseekUsr)
-
-    return render(request, "AppRecetas/showRecetasUsr.html", {"ingreBus" : ingreseekUsr, "recetasfoundUsr": recetasfindUsr})
-
-
-  else:
-   respuesta ="No enviaste datos"  
-   return HttpResponse(respuesta)   
-
+#buscar y mostrar datos C"R"UDE
 
 
 def seekRecetas(request):
@@ -136,6 +114,25 @@ def showRecetas(request):
    respuesta ="No enviaste datos"  
    return HttpResponse(respuesta)                                 
 
+
+def seekRecetasUsr(request):
+
+  return render(request, "AppRecetas/seekRecetasUsr.html")
+
+
+def showRecetasUsr(request):
+
+  if request.GET["ingrediUsr"]:
+
+    ingreseekUsr = request.GET["ingrediUsr"]
+    recetasfindUsr = RecetasUsr.objects.filter(ingredientesUsr__icontains=ingreseekUsr)
+
+    return render(request, "AppRecetas/showRecetasUsr.html", {"ingreBus" : ingreseekUsr, "recetasfoundUsr": recetasfindUsr})
+
+
+  else:
+   respuesta ="No enviaste datos"  
+   return HttpResponse(respuesta)   
 
 
 
@@ -160,28 +157,69 @@ def showUsr(request):
 
 
 
+#modificar datos CR"U"DE
+
+def update_RecetasMain(request):
+  if request.method == "POST":#despues de dar click a eviar
+    
+    formulario1 = Form_AddRecetasMain(request.POST)
+    
+    if formulario1.is_valid():
+
+      info =formulario1.cleaned_data
+
+      res_Main = RecetasMain(nom_platos=info["nom_platos"],
+                           ingredientes=request.POST["ingredientes"],
+                           receta=request.POST["receta"],
+                           tiempo=request.POST["tiempo"],
+                           dificultad=request.POST["dificultad"],
+                           tipoDeCocina=request.POST["tipoDeCocina"],
+                           fuente=request.POST["fuente"], 
+                           procedimiento=request.POST["procedimiento"])
+      
+      res_Main.save()                       
+      return render(request,'AppRecetas/inicio.html')  
+
+def update_Usuario(request):
+  
+   pass
+
+  
 
 
 
 
+#para listar, recetas totales y usuarios ****listas***
 
+def vista_recetasMain(request):
 
+  recetasUsr_all = RecetasUsr.objects.all()
+  recetasMain_all = RecetasMain.objects.all()
 
+    
+  return render(request,'AppRecetas/recetasMain.html', {"lista_recetasUsr" : recetasUsr_all , "lista_recetasMain": recetasMain_all})
 
 
 
 
 def vista_recetasUsr(request):
-  return render(request,'AppRecetas/recetasUsr.html')
-
-def vista_recetasMain(request):
+  
+  
   return render(request,'AppRecetas/recetasMain.html')
 
 
-def vista_usuario(request):
 
-  return render(request,'AppRecetas/usuario.html')
+def vista_usuarios(request):
+   usuario_all = Usuario.objects.all()
+   listado = {"gente": usuario_all}
 
+   return render(request, "AppRecetas/usuarios.html", listado )
+
+    
+    
+
+
+ 
 
 
 

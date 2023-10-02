@@ -11,9 +11,9 @@ urlpatterns = [
     path("addRecetasUsr/", addRecetasUsr, name= "AddRecetasUsr"),
     path("Addusr/", addUsuario, name= "Addusr"),
     # listar datos##################
-    path("recetasUsr/", vista_recetasUsr, name= "RecetasUsr" ),
+    path("recetasUsr/", vista_recetasUsr, name= "RecetasUsr"),
     path("recetasMain/", vista_recetasMain, name= "RecetasMain"),
-    path("usuarios/", vista_usuario, name= "Usuarios"),
+    path("usuarios/", vista_usuarios, name= "Usuarios"),
     #buscar y mostrar datos###########
     
     path("seekRecetas/", seekRecetas, name= "seekRecetas"),
