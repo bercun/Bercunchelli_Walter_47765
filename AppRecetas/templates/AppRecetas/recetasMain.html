@@ -22,48 +22,53 @@ Listado de recetas
     <p>Nombre: {{recetasUsr.nom_platosUsr}}  </p>
     <p>Tiempo: {{recetasUsr.tiempoUsr}}  </p>
     <p>Tipo de cocina : {{recetasUsr.tipoDeCocinaUsr}}  </p>
+__________________________________________________________
 
-_____________________________________________________________
-{%endfor%}
+<br>
+
+<button>
+
+<a href=" {% url 'eliminarRecetasUsr' recetasUsr.nom_platosUsr %}  ">Eliminar</a>
+
+</button>
 
 
+<button>
+
+    <a href=" {% url 'updateRecetasUsr' recetasUsr.nom_platosUsr %}  ">actualizar</a>
+    
+    </button>
+    
+
+
+ {%endfor%}
+
+<br>
 *********************Recetas  Locales***********************
 
 {% for recetasMain in  lista_recetasMain %}
 
-
+<br>
     <p>Nombre: {{recetasMain.nom_platos}}  </p>
     <p>Tiempo: {{recetasMain.tiempo}}  </p>
     <p>Tipo de cocina : {{recetasMain.tipoDeCocina}}  </p>
 
-________________________________________________________
+
+<button>
+
+<a href=" {% url 'eliminarRecetasMain' recetasMain.nom_platos %}  ">Eliminar</a>
+
+</button>
+
+
+<button>
+
+<a href=" {% url 'updateRecetasMain' recetasMain.nom_platos %}  ">actualizar</a>
+    
+</button>
+
+_____________________________________________________
 {%endfor%}
-<section class="features-icons bg-light text-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
-                            <div class="features-icons-icon d-flex"><i class="bi-window m-auto text-primary"></i></div>
-                            <h3>Recetas</h3>
-                            <p class="lead mb-0">Aqui encontraras las recetas, tanto de los creadores de la pagina cómo las creadas por la comunidad </p>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
-                            <div class="features-icons-icon d-flex"><i class="bi-layers m-auto text-primary"></i></div>
-                            <h3>Bootstrap 5 Ready</h3>
-                            <p class="lead mb-0">Featuring the latest build of the new Bootstrap 5 framework!</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="features-icons-item mx-auto mb-0 mb-lg-3">
-                            <div class="features-icons-icon d-flex"><i class="bi-terminal m-auto text-primary"></i></div>
-                            <h3>Easy to Use</h3>
-                            <p class="lead mb-0">Ready to use with your own content, or customize the source files!</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+
 
 {%endblock%}

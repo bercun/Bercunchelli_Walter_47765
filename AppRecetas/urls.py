@@ -24,5 +24,9 @@ urlpatterns = [
     
     path("seekUsr/", seekUsr, name= "seekUsr"),
     path("showUsr/", showUsr, name= "showUsr"),
-
-]
+    # editar y borrar modelos
+    path("eliminarRecetasUsr/<nom_recetasUsr>/", eliminarRecetasUsr, name="eliminarRecetasUsr" ),
+    path("eliminarRecetasMain/<recetas>/", eliminarRecetasMain, name="eliminarRecetasMain" ),
+    path("updateRecetasMain/<recetas>/", update_RecetasMain, name="updateRecetasMain" ),
+    path("updateRecetasUsr/<recetasUsr>/", update_RecetasUsr, name="updateRecetasUsr" ),
+  ] 

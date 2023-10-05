@@ -3,12 +3,13 @@ from django.http import HttpResponse
 from AppRecetas.models import RecetasMain, RecetasUsr, Usuario 
 from AppRecetas.forms import Form_AddRecetasMain, FormAddRecetasUsr , FormAddUsuario
 from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 
 def inicio(request):
     return render(request,'AppRecetas/inicio.html')
 
-# ingresar datos "C"UDE 
+# ingresar datos "C"UD 
 def addRecetasMain(request):
   if request.method == "POST":#despues de dar click a eviar
     
@@ -92,7 +93,7 @@ def addUsuario(request):
 
   return render(request, "AppRecetas/addUsr.html", {"form3" : formulario3} )
 
-#buscar y mostrar datos C"R"UDE
+#buscar y mostrar datos C"R"UD
 
 
 def seekRecetas(request):
@@ -157,32 +158,91 @@ def showUsr(request):
 
 
 
-#modificar datos CR"U"DE
+#modificar datos CR"U"D
 
-def update_RecetasMain(request):
+def update_RecetasMain(request, recetas):
+  
+  recetas_eli = RecetasMain.objects.get(nom_platos=recetas)
+
   if request.method == "POST":#despues de dar click a eviar
     
     formulario1 = Form_AddRecetasMain(request.POST)
     
     if formulario1.is_valid():
 
-      info =formulario1.cleaned_data
+      info = formulario1.cleaned_data
 
-      res_Main = RecetasMain(nom_platos=info["nom_platos"],
-                           ingredientes=request.POST["ingredientes"],
-                           receta=request.POST["receta"],
-                           tiempo=request.POST["tiempo"],
-                           dificultad=request.POST["dificultad"],
-                           tipoDeCocina=request.POST["tipoDeCocina"],
-                           fuente=request.POST["fuente"], 
-                           procedimiento=request.POST["procedimiento"])
+      recetas_eli.nom_platos = info["nom_platos"]
+      recetas_eli.tipoDeCocina = info["tipoDeCocina"]
+      recetas_eli.ingredientes = info["ingredientes"]
+      recetas_eli.receta = info["receta"]
+      recetas_eli.tiempo = info["tiempo"]
+      recetas_eli.dificultad = info["dificultad"]
+      recetas_eli.fuente = info["fuente"]
+      recetas_eli.procedimiento = info["procedimiento"]
       
-      res_Main.save()                       
+      recetas_eli.save() 
+      
       return render(request,'AppRecetas/inicio.html')  
 
-def update_Usuario(request):
+  else:
+
+    formulario1 = Form_AddRecetasMain(initial ={  "nom_platos" : recetas_eli.nom_platos,
+                                                  "tipoDeCocina" : recetas_eli.tipoDeCocina,
+                                                  "ingredientes" : recetas_eli.ingredientes,
+                                                  "receta" : recetas_eli.receta,
+                                                  "tiempo" : recetas_eli.tiempo,
+                                                  "dificultad" : recetas_eli.dificultad,
+                                                  "fuente" :recetas_eli.fuente,
+                                                  "procedimiento" : recetas_eli.procedimiento} )
   
-   pass
+  return render(request, "AppRecetas/updateRecetasMain.html", {"formulario1": formulario1 , "recetas" : recetas  } )    
+
+    
+def update_RecetasUsr(request, recetasUsr):
+
+  recetas_eli_Usr = RecetasUsr.objects.get(nom_platosUsr=recetasUsr)
+
+  if request.method == "POST":#despues de dar click a eviar
+    
+    formulario2 = Form_AddRecetasUsr(request.POST)
+    
+    if formulario2.is_valid():
+
+      info = formulario2.cleaned_data
+
+      recetas_eli_Usr.nom_platosUsr = info["nom_platosUsr"]
+      recetas_eli_Usr.tipoDeCocinaUsr = info["tipoDeCocinaUsr"]
+      recetas_eli_Usr.ingredientesUsr = info["ingredientesUsr"]
+      recetas_eli_Usr.recetaUsr = info["recetaUsr"]
+      recetas_eli_Usr.tiempoUsr = info["tiempoUsr"]
+      recetas_eli_Usr.dificultadUsr = info["dificultadUsr"]
+      recetas_eli_Usr.fuenteUsr = info["fuenteUsr"]
+      recetas_eli_Usr.procedimientoUsr = info["procedimientoUsr"]
+      
+      recetas_eli_Usr.save() 
+      
+      return render(request,'AppRecetas/inicio.html')  
+
+  else:
+
+    formulario2 = FormAddRecetasUsr(initial ={  "nom_platosUsr" : recetas_eli_Usr.nom_platosUsr,
+                                                  "tipoDeCocinaUsr" : recetas_eli_Usr.tipoDeCocinaUsr,
+                                                  "ingredientesUsr" : recetas_eli_Usr.ingredientesUsr,
+                                                  "recetaUsr" : recetas_eli_Usr.recetaUsr,
+                                                  "tiempoUsr" : recetas_eli_Usr.tiempoUsr,
+                                                  "dificultadUsr" : recetas_eli_Usr.dificultadUsr,
+                                                  "fuenteUsr" :recetas_eli_Usr.fuenteUsr,
+                                                  "procedimientoUsr" : recetas_eli_Usr.procedimientoUsr} )
+  
+  return render(request, "AppRecetas/updateRecetasUsr.html", {"formulario2": formulario2 , "recetasUsr" : recetasUsr  } )    
+
+
+
+
+#def update_Usuario(request):
+  
+ #  pass
 
   
 
@@ -215,8 +275,35 @@ def vista_usuarios(request):
 
    return render(request, "AppRecetas/usuarios.html", listado )
 
-    
-    
+
+
+#modificar datos CRU"D"    
+
+def eliminarRecetasUsr(request, nom_recetasUsr):
+  recetasUsr_eli = RecetasUsr.objects.get(nom_platosUsr=nom_recetasUsr)
+  recetasUsr_eli.delete()
+
+  recetasUsr_remain = RecetasUsr.objects.all()
+
+  envioWeb ={"lista_recetasUsr": recetasUsr_remain}
+
+  return render(request, "AppRecetas/recetasMain.html", envioWeb)
+
+
+def eliminarRecetasMain(request, recetas):
+  recetas_eli =RecetasMain.objects.get(nom_platos=recetas)
+  recetas_eli.delete()
+
+  
+  recetas_remain = RecetasMain.objects.all()
+
+  envWeb = {"lista_recetasMain": recetas_remain}
+
+  return render(request, "AppRecetas/recetasMain.html", envWeb)
+
+
+
+
 
 
  

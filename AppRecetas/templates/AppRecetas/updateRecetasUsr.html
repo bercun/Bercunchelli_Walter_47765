@@ -1,0 +1,44 @@
+{% extends "AppRecetas/base.html" %}
+
+{ % load static % }
+
+
+{% block  titulo %}
+                                
+Esta es mi pagina par actualizar recetas locales
+
+{% endblock  %}
+
+
+
+
+{% block  complement %}
+                                
+<form action="" method="POST">  {% csrf_token %}
+
+
+    <table>
+
+
+        {{formulario2.as_table}}
+
+
+
+    </table>
+
+    <input type="submit" value="Guardar">
+
+    
+
+
+
+
+
+</form>
+
+
+    
+
+
+
+{% endblock  %}
