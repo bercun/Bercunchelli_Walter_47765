@@ -1,0 +1,26 @@
+{% extends "AppRecetas/base.html" %}
+
+
+
+{ % load static % }
+
+
+{% block  titulo %}
+                                
+
+<form action="" method="POST">  {% csrf_token %} 
+
+   <p> Cuidado!!!  Se va a borrar!!!!!!</p>
+
+    <input type="submit" value="aceptar">
+
+</form>
+
+
+ 
+
+{% endblock  %}
+
+
+
+

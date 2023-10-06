@@ -1,0 +1,27 @@
+{% extends "AppRecetas/base.html" %}
+
+
+
+{ % load static % }
+
+
+{% block  titulo %}
+                                
+
+<form action="" method="POST">  {% csrf_token %} 
+
+    {{form.as_p}}
+
+    <input type="submit" value="enviar">
+
+</form>
+
+
+ 
+
+{% endblock  %}
+
+
+
+
+

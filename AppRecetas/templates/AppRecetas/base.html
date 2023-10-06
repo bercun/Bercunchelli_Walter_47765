@@ -26,7 +26,7 @@
                 <a class="navbar-brand" href="{% url 'Inicio' %}">inicio</a>
                 <a class="navbar-brand" href="{% url 'RecetasMain' %}">Recetas</a>
                 
-                <a class="navbar-brand" href="{% url 'Usuarios' %}">Usuarios</a>
+                <a class="navbar-brand" href="{% url 'listaUsuario' %}">Usuarios</a>
                 <br>
                 <!-- add -->
                 
@@ -98,21 +98,6 @@
         {% endblock  %}
         
         
-        <section class="features-icons bg-light text-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-4">
-                        
-                        <a class="btn btn-primary" href="{% url 'Addusr' %}">Agregar  Usuarios</a>
-                        <a class="btn btn-primary" href="{% url 'AddRecetasMain' %}">agrega recetas local</a>
-                        <a class="btn btn-primary" href="{% url 'AddRecetasUsr' %}">agrega recetas usuarios</a> 
-                        
-                    </div>
-                    <div class="col-lg-4">
-                    
-                </div>
-            </div>
-        </section>
         
         
         <!-- Image Showcases-->

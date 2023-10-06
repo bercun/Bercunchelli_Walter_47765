@@ -25,8 +25,16 @@ urlpatterns = [
     path("seekUsr/", seekUsr, name= "seekUsr"),
     path("showUsr/", showUsr, name= "showUsr"),
     # editar y borrar modelos
-    path("eliminarRecetasUsr/<nom_recetasUsr>/", eliminarRecetasUsr, name="eliminarRecetasUsr" ),
-    path("eliminarRecetasMain/<recetas>/", eliminarRecetasMain, name="eliminarRecetasMain" ),
-    path("updateRecetasMain/<recetas>/", update_RecetasMain, name="updateRecetasMain" ),
-    path("updateRecetasUsr/<recetasUsr>/", update_RecetasUsr, name="updateRecetasUsr" ),
+    path("eliminarRecetasUsr/<nom_recetasUsr>/", eliminarRecetasUsr, name="eliminarRecetasUsr"),
+    path("eliminarRecetasMain/<recetas>/", eliminarRecetasMain, name="eliminarRecetasMain"),
+    path("updateRecetasMain/<recetas>/", update_RecetasMain, name="updateRecetasMain"),
+    path("updateRecetasUsr/<recetasUsr>/", update_RecetasUsr, name="updateRecetasUsr"),
+  # editar con classes
+    path("usuario/list/", ListaUsuario.as_view(), name="listaUsuario"),
+    path("usuario/<int:pk>/", DetalleUsuario.as_view(), name="detalleUsuario"),
+    path("usuario/crear/", CrearUsuario.as_view(), name="crearUsuario"),
+    path("usuario/editar/<int:pk>/", UpdateUsuario.as_view(), name="updateUsuario"),
+     path("usuario/borrar/<int:pk>/", BorrarUsuario.as_view(), name="borrarUsuario"),
+  
+  
   ] 

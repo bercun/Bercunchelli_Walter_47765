@@ -3,6 +3,9 @@ from django.http import HttpResponse
 from AppRecetas.models import RecetasMain, RecetasUsr, Usuario 
 from AppRecetas.forms import Form_AddRecetasMain, FormAddRecetasUsr , FormAddUsuario
 from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView  
 
 # Create your views here.
 
@@ -302,14 +305,28 @@ def eliminarRecetasMain(request, recetas):
   return render(request, "AppRecetas/recetasMain.html", envWeb)
 
 
+    # CRUD con clases
 
+class ListaUsuario(ListView):
 
+  model = Usuario
 
+class DetalleUsuario(DetailView):
+  
+  model  = Usuario
 
- 
+class CrearUsuario(CreateView):
+  model = Usuario
+  success_url = "/AppRecetas/usuario/list"
+  fields = ["nombreUsr","emailUsr","telfonoUsr","ciudad","edad"]
 
+class UpdateUsuario(UpdateView):
 
+  model = Usuario
+  success_url = "/AppRecetas/usuario/list"
+  fields = ["nombreUsr","emailUsr","telfonoUsr","ciudad","edad"]
 
-
-
-
+class BorrarUsuario(DeleteView):
+  model = Usuario  
+  success_url = "/AppRecetas/usuario/list"     
+    
