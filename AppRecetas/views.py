@@ -1,19 +1,20 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
+
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView  
 
 from django.contrib.auth.forms import AuthenticationForm ,UserCreationForm
-
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.mixins import LoginRequiredMixin
+#Decorador por defecto
+from django.contrib.auth.decorators import login_required
 
 from AppRecetas.models import RecetasMain, RecetasUsr, Usuario 
 from AppRecetas.forms import *
 
-#Decorador por defecto
-from django.contrib.auth.decorators import login_required
+
 
 
 # Create your views here.
@@ -68,6 +69,9 @@ def inicio(request):
     return render(request,'AppRecetas/inicio.html')
 
 # ingresar datos "C"UD 
+
+
+@login_required
 def addRecetasMain(request):
   if request.method == "POST":#despues de dar click a eviar
     
@@ -96,7 +100,7 @@ def addRecetasMain(request):
 
   return render(request,'AppRecetas/addRecetasMain.html', {"form1" :formulario1})
   
-
+@login_required
 def addRecetasUsr(request):
   
   if request.method == "POST":#despues de dar click a eviar
@@ -126,7 +130,7 @@ def addRecetasUsr(request):
 
   return render(request,'AppRecetas/addRecetasUsr.html', {"form2" :formulario2})
                         
-
+@login_required
 def addUsuario(request):
   if request.method == "POST":#despues de dar click a eviar
     
@@ -194,11 +198,11 @@ def showRecetasUsr(request):
    return HttpResponse(respuesta)   
 
 
-
+@login_required
 def seekUsr(request):
   return render(request,"AppRecetas/seekUsr.html")
 
-
+@login_required
 def showUsr(request):
 
   if request.GET["Usr"]:
@@ -217,7 +221,7 @@ def showUsr(request):
 
 
 #modificar datos CR"U"D
-
+@login_required
 def update_RecetasMain(request, recetas):
   
   recetas_eli = RecetasMain.objects.get(nom_platos=recetas)
@@ -256,7 +260,7 @@ def update_RecetasMain(request, recetas):
   
   return render(request, "AppRecetas/updateRecetasMain.html", {"formulario1": formulario1 , "recetas" : recetas  } )    
 
-    
+@login_required    
 def update_RecetasUsr(request, recetasUsr):
 
   recetas_eli_Usr = RecetasUsr.objects.get(nom_platosUsr=recetasUsr)
@@ -298,10 +302,6 @@ def update_RecetasUsr(request, recetasUsr):
 
 
 
-#def update_Usuario(request):
-  
- #  pass
-
   
 
 
@@ -326,7 +326,7 @@ def vista_recetasUsr(request):
   return render(request,'AppRecetas/recetasMain.html')
 
 
-
+@login_required
 def vista_usuarios(request):
    usuario_all = Usuario.objects.all()
    listado = {"gente": usuario_all}
@@ -336,7 +336,7 @@ def vista_usuarios(request):
 
 
 #modificar datos CRU"D"    
-
+@login_required
 def eliminarRecetasUsr(request, nom_recetasUsr):
   recetasUsr_eli = RecetasUsr.objects.get(nom_platosUsr=nom_recetasUsr)
   recetasUsr_eli.delete()
@@ -347,7 +347,7 @@ def eliminarRecetasUsr(request, nom_recetasUsr):
 
   return render(request, "AppRecetas/recetasMain.html", envioWeb)
 
-
+@login_required
 def eliminarRecetasMain(request, recetas):
   recetas_eli =RecetasMain.objects.get(nom_platos=recetas)
   recetas_eli.delete()
@@ -362,26 +362,26 @@ def eliminarRecetasMain(request, recetas):
 
     # CRUD con clases
 
-class ListaUsuario(ListView):
+class ListaUsuario(LoginRequiredMixin, ListView):
 
   model = Usuario
 
-class DetalleUsuario(DetailView):
+class DetalleUsuario(LoginRequiredMixin, DetailView):
   
   model  = Usuario
 
-class CrearUsuario(CreateView):
+class CrearUsuario(LoginRequiredMixin, CreateView):
   model = Usuario
   success_url = "/AppRecetas/usuario/list"
   fields = ["nombreUsr","emailUsr","telfonoUsr","ciudad","edad"]
 
-class UpdateUsuario(UpdateView):
+class UpdateUsuario(LoginRequiredMixin, UpdateView):
 
   model = Usuario
   success_url = "/AppRecetas/usuario/list"
   fields = ["nombreUsr","emailUsr","telfonoUsr","ciudad","edad"]
 
-class BorrarUsuario(DeleteView):
+class BorrarUsuario(LoginRequiredMixin, DeleteView):
   model = Usuario  
   success_url = "/AppRecetas/usuario/list"     
     
