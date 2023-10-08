@@ -1,13 +1,68 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from AppRecetas.models import RecetasMain, RecetasUsr, Usuario 
-from AppRecetas.forms import Form_AddRecetasMain, FormAddRecetasUsr , FormAddUsuario
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView  
 
+from django.contrib.auth.forms import AuthenticationForm ,UserCreationForm
+
+from django.contrib.auth import login, logout, authenticate
+
+from AppRecetas.models import RecetasMain, RecetasUsr, Usuario 
+from AppRecetas.forms import *
+
+#Decorador por defecto
+from django.contrib.auth.decorators import login_required
+
+
 # Create your views here.
+
+#authentications  
+
+def inicioDeSesion(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            usr = form.cleaned_data.get('username')
+            pssw = form.cleaned_data.get('password')
+            user = authenticate(username=usr, password=pssw)
+            if user is not None:
+                login(request, user)
+                return render(request, 'AppRecetas/inicio.html', {'mensaje': f'login correcto {user}'})
+            else:
+                return render(request, 'AppRecetas/inicio.html', {'mensaje': 'login Erroneo'})
+    else:
+        form = AuthenticationForm()
+    return render(request, "AppRecetas/login.html", {'formulario': form})
+
+
+def register (request):
+
+  if request.method == "POST":
+
+    form = UserCreationForm(request.POST)
+    if form.is_valid():
+
+      username = form.cleaned_data ["username"]
+      form.save()
+      return render(request, 'AppRecetas/inicio.html', {"mensaje": "Usuario creado"} )
+  else:
+    form = UserCreationForm()
+
+  return render(request, "AppRecetas/register.html", {'formulario': form})  
+
+
+
+
+
+
+
+
+
+
+
+
 
 def inicio(request):
     return render(request,'AppRecetas/inicio.html')

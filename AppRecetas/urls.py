@@ -5,6 +5,12 @@ from AppRecetas.views import *
 
 
 urlpatterns = [
+    
+    #inicio de sesion
+    path("login/", inicioDeSesion, name= "Login"),
+    path("register/", register, name= "Register"),
+    
+    
     path("", inicio, name= "Inicio"),
     # ingresar datos#######################
     path("addRecetasMain/", addRecetasMain, name= "AddRecetasMain"),

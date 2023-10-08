@@ -1,4 +1,10 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
+
+
+
 
 class Form_AddRecetasMain(forms.Form):
     nom_platos = forms.CharField(max_length=20)
@@ -41,5 +47,21 @@ class FormAddUsuario(forms.Form):
     telfonoUsr = forms.IntegerField()
     ciudad = forms.CharField(max_length=20)
     edad = forms.IntegerField()
+
+"""
+class UserRegiser(UserCreationForm):
+
+    email = forms.EmailField()
+    nombre = forms.CharField()
+    passw1 = forms.CharField(label= "contraseña", widget=forms.PasswordInput)
+    passw2 = forms.CharField(label= "reiterar la contraseña", widget=forms.PasswordInput)
+
+    class Meta:
+
+        model = User
+        fields= ["username", "email", "fist_name", "password1", "password2"]
+
+"""
+    
 
 
