@@ -41,14 +41,14 @@ def register (request):
 
   if request.method == "POST":
 
-    form = UserCreationForm(request.POST)
+    form = UserRegiser(request.POST)
     if form.is_valid():
 
       username = form.cleaned_data ["username"]
       form.save()
       return render(request, 'AppRecetas/inicio.html', {"mensaje": "Usuario creado"} )
   else:
-    form = UserCreationForm()
+    form = UserRegiser()
 
   return render(request, "AppRecetas/register.html", {'formulario': form})  
 
