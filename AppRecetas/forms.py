@@ -60,6 +60,20 @@ class UserRegiser(UserCreationForm):
         fields= ["username","first_name", "email",  "password1", "password2"]
 
 
+class EditUsrForm(UserCreationForm):
+
+    mail = forms.EmailField()
+    
+
+    class Meta:
+
+        model = User
+        fields= ["first_name", "email",  "password1", "password2"]
+
+
+
+
+
     
 
 

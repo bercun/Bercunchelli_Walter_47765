@@ -11,6 +11,8 @@ urlpatterns = [
     path("login/", inicioDeSesion, name= "Login"),
     path("register/", register, name= "Register"),
     path("logout/", LogoutView.as_view(template_name="AppRecetas/logout.html"), name= "Logout"),
+    path( "editUsr/", editarUsuario, name= "EditUsr"),
+    
     
     path("", inicio, name= "Inicio"),
     # ingresar datos#######################

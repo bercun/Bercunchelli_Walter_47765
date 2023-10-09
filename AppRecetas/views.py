@@ -53,6 +53,39 @@ def register (request):
 
   return render(request, "AppRecetas/register.html", {'formulario': form})  
 
+@login_required
+def editarUsuario (request):
+
+  usr  = request.user
+
+  if request.method == "POST":
+
+    form = EditUsrForm(request.POST)
+
+    if form.is_valid():
+
+      info = form.cleaned_data
+
+      usr.email = info["email"]
+      usr.set_password(info["password1"])
+      usr.first_name = ["first_name"]
+
+      usr.save()
+
+      return render(request, "AppRecetas/inicio.html")
+
+  else:
+
+    form = EditUsrForm( initial={"email" : usr.email,
+                                 "first_name": usr.first_name,})
+
+  return render(request, "AppRecetas/editPerfil.html", {"formulario": form, "usuario": usr} )
+
+
+
+
+
+    
 
 
 
