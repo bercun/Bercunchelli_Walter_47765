@@ -1,0 +1,27 @@
+{% extends "AppRecetas/base.html" %}
+
+
+
+{ % load static % }
+
+
+{% block  titulo %}
+                                
+pagina para agregar avatars
+
+{% endblock  %}
+
+{% block  complement %}
+
+<form action="" method="POST" enctype="multipart/form-data" > {% csrf_token %}
+
+    {{formulario.as_p}}
+
+
+
+
+<button type="submit"> agregar Avatar </button>
+
+</form>
+
+{% endblock  %}

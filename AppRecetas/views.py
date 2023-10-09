@@ -81,18 +81,25 @@ def editarUsuario (request):
 
   return render(request, "AppRecetas/editPerfil.html", {"formulario": form, "usuario": usr} )
 
+@login_required
 
+def addAvatar(request):
+  if request.method=="POST":
 
+    form=AvatarForm(request.POST, request.FILES)
 
+    if form.is_valid():
+      usuarioActual = User.objects.get(username=request.user)
 
-    
+      avatar = Avatar(usuario=usuarioActual, image=form.cleaned_data["image"])
+      
+      avatar.save()
 
+      return render(request, "AppRecetas/inicio.html" )
+  else:
+    form =AvatarForm()
 
-
-
-
-
-
+  return render(request, "AppRecetas/addAvatar.html", {"formulario" : form})  
 
 
 
@@ -335,11 +342,6 @@ def update_RecetasUsr(request, recetasUsr):
 
 
 
-  
-
-
-
-
 #para listar, recetas totales y usuarios ****listas***
 
 def vista_recetasMain(request):
@@ -365,6 +367,10 @@ def vista_usuarios(request):
    listado = {"gente": usuario_all}
 
    return render(request, "AppRecetas/usuarios.html", listado )
+
+
+
+
 
 
 
@@ -394,6 +400,11 @@ def eliminarRecetasMain(request, recetas):
 
 
     # CRUD con clases
+
+
+
+
+
 
 class ListaUsuario(LoginRequiredMixin, ListView):
 
