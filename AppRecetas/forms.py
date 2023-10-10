@@ -32,6 +32,15 @@ class FormAddRecetasUsr(forms.Form):
 
 
 
+class FormAddCheff(forms.Form):
+    
+    nombreUsr = forms.CharField(max_length=20)
+    emailUsr = forms.EmailField()
+    telfonoUsr = forms.IntegerField()
+    ciudad = forms.CharField(max_length=20)
+    edad = forms.IntegerField()
+    tipoDeCocina = forms.CharField()
+"""   
 class FormAddUsuario(forms.Form):
     
     nombreUsr = forms.CharField(max_length=20)
@@ -39,16 +48,7 @@ class FormAddUsuario(forms.Form):
     telfonoUsr = forms.IntegerField()
     ciudad = forms.CharField(max_length=20)
     edad = forms.IntegerField()
-
-    
-class FormAddUsuario(forms.Form):
-    
-    nombreUsr = forms.CharField(max_length=20)
-    emailUsr = forms.EmailField()
-    telfonoUsr = forms.IntegerField()
-    ciudad = forms.CharField(max_length=20)
-    edad = forms.IntegerField()
-
+"""
 
 class UserRegiser(UserCreationForm):
 

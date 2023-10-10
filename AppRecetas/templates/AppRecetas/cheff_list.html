@@ -1,0 +1,31 @@
+{% extends "AppRecetas/base.html" %}
+
+
+
+{ % load static % }
+
+
+{% block  titulo %}
+                                
+Esta es mi pagina muestra busquede de cheffs 
+
+{% endblock  %}
+
+
+
+{% block  complement %}
+
+
+{%  for cheff in object_list %}
+    
+<p> Nombre: {{cheff.nombreUsr}} <br> Email: {{cheff.emailUsr}}   </p>
+ 
+<a href=" {% url 'detalleCheff' cheff.id %}"> ver detalle</a>
+<a href=" {% url 'updateCheff' cheff.id %}"> actualizar </a>
+<a href=" {% url 'borrarCheff' cheff.id %}"> eliminar </a>   
+{% endfor %}  
+<br>
+<a href=" {% url 'crearCheff' %}"> crear cheff</a>
+ 
+
+{% endblock  %}

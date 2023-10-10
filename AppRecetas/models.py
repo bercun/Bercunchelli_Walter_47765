@@ -32,7 +32,7 @@ class RecetasUsr(models.Model):
     fuenteUsr = models.CharField(max_length=30)
     procedimientoUsr = models.TextField()
 
-class Usuario(models.Model):
+class Cheff(models.Model):
 
     def __str__(self):
         return f"  {self.nombreUsr} -- Tipo de cocina: {self.ciudad} " 
@@ -42,7 +42,7 @@ class Usuario(models.Model):
     telfonoUsr = models.IntegerField()
     ciudad = models.CharField(max_length=20)
     edad = models.IntegerField()
-
+    tipoDeCocina = models.CharField(max_length=20)
 
 class Avatar(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)

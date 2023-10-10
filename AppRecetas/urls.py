@@ -18,11 +18,11 @@ urlpatterns = [
     # ingresar datos#######################
     path("addRecetasMain/", addRecetasMain, name= "AddRecetasMain"),
     path("addRecetasUsr/", addRecetasUsr, name= "AddRecetasUsr"),
-    path("Addusr/", addUsuario, name= "Addusr"),
+    path("AddCheff/", addCheff, name= "AddCheff"),
     # listar datos##################
     path("recetasUsr/", vista_recetasUsr, name= "RecetasUsr"),
     path("recetasMain/", vista_recetasMain, name= "RecetasMain"),
-    path("usuarios/", vista_usuarios, name= "Usuarios"),
+    path("cheffs/", vista_cheffs, name= "Cheffs"),
     #buscar y mostrar datos###########
     
     path("seekRecetas/", seekRecetas, name= "seekRecetas"),
@@ -39,11 +39,11 @@ urlpatterns = [
     path("updateRecetasMain/<recetas>/", update_RecetasMain, name="updateRecetasMain"),
     path("updateRecetasUsr/<recetasUsr>/", update_RecetasUsr, name="updateRecetasUsr"),
   # editar con classes
-    path("usuario/list/", ListaUsuario.as_view(), name="listaUsuario"),
-    path("usuario/<int:pk>/", DetalleUsuario.as_view(), name="detalleUsuario"),
-    path("usuario/crear/", CrearUsuario.as_view(), name="crearUsuario"),
-    path("usuario/editar/<int:pk>/", UpdateUsuario.as_view(), name="updateUsuario"),
-     path("usuario/borrar/<int:pk>/", BorrarUsuario.as_view(), name="borrarUsuario"),
+    path("cheff/list/", ListaCheff.as_view(), name="listaCheff"),
+    path("cheff/<int:pk>/", DetalleCheff.as_view(), name="detalleCheff"),
+    path("cheff/crear/", CrearCheff.as_view(), name="crearCheff"),
+    path("cheff/editar/<int:pk>/", UpdateCheff.as_view(), name="updateCheff"),
+     path("cheff/borrar/<int:pk>/", BorrarCheff.as_view(), name="borrarCheff"),
   
   
   ] 

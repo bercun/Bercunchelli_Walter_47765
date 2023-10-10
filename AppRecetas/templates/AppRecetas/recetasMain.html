@@ -54,10 +54,12 @@ __________________________________________________________
     <p>Tipo de cocina : {{recetasMain.tipoDeCocina}}  </p>
 
 
+
+
 <button>
-
+{% if request.user.is_authenticated  %}
 <a href=" {% url 'eliminarRecetasMain' recetasMain.nom_platos %}  ">Eliminar</a>
-
+{% endif %}
 </button>
 
 
@@ -68,6 +70,8 @@ __________________________________________________________
 </button>
 
 _____________________________________________________
+
+
 {%endfor%}
 
 

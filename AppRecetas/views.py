@@ -11,7 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 #Decorador por defecto
 from django.contrib.auth.decorators import login_required
 
-from AppRecetas.models import RecetasMain, RecetasUsr, Usuario 
+from AppRecetas.models import RecetasMain, RecetasUsr, Cheff 
 from AppRecetas.forms import *
 
 
@@ -171,26 +171,27 @@ def addRecetasUsr(request):
   return render(request,'AppRecetas/addRecetasUsr.html', {"form2" :formulario2})
                         
 @login_required
-def addUsuario(request):
+def addCheff(request):
   if request.method == "POST":#despues de dar click a eviar
     
-    formulario3 = FormAddUsuario(request.POST)
+    formulario3 = FormAddCheff(request.POST)
     
     if formulario3.is_valid():
 
       info = formulario3.cleaned_data
 
-      addUsr = Usuario(nombreUsr=info["nombreUsr"],
+      addUsr = Cheff(nombreUsr=info["nombreUsr"],
                       emailUsr= info["emailUsr"],
                       telfonoUsr=info["telfonoUsr"],
                       ciudad=info["ciudad"],
                       edad =info["edad"],
+                      tipoDeCocina=info["tipoDeCocina"],
       )
       addUsr.save()  
       
       return render(request,'AppRecetas/inicio.html')  
   else:
-    formulario3 = FormAddUsuario()
+    formulario3 = FormAddCheff()
 
 
   return render(request, "AppRecetas/addUsr.html", {"form3" : formulario3} )
@@ -362,11 +363,11 @@ def vista_recetasUsr(request):
 
 
 @login_required
-def vista_usuarios(request):
-   usuario_all = Usuario.objects.all()
-   listado = {"gente": usuario_all}
+def vista_cheffs(request):
+   cheff_all = Cheff.objects.all()
+   listado = {"gente": cheff_all}
 
-   return render(request, "AppRecetas/usuarios.html", listado )
+   return render(request, "AppRecetas/cheffs.html", listado )
 
 
 
@@ -406,26 +407,26 @@ def eliminarRecetasMain(request, recetas):
 
 
 
-class ListaUsuario(LoginRequiredMixin, ListView):
+class ListaCheff(LoginRequiredMixin, ListView):
 
-  model = Usuario
+  model = Cheff
 
-class DetalleUsuario(LoginRequiredMixin, DetailView):
+class DetalleCheff(LoginRequiredMixin, DetailView):
   
-  model  = Usuario
+  model  = Cheff
 
-class CrearUsuario(LoginRequiredMixin, CreateView):
-  model = Usuario
-  success_url = "/AppRecetas/usuario/list"
-  fields = ["nombreUsr","emailUsr","telfonoUsr","ciudad","edad"]
+class CrearCheff(LoginRequiredMixin, CreateView):
+  model = Cheff
+  success_url = "/AppRecetas/cheff/list"
+  fields = ["nombreUsr","emailUsr","telfonoUsr","ciudad","edad", "tipoDeCocina"]
 
-class UpdateUsuario(LoginRequiredMixin, UpdateView):
+class UpdateCheff(LoginRequiredMixin, UpdateView):
 
-  model = Usuario
-  success_url = "/AppRecetas/usuario/list"
-  fields = ["nombreUsr","emailUsr","telfonoUsr","ciudad","edad"]
+  model = Cheff
+  success_url = "/AppRecetas/cheff/list"
+  fields = ["nombreUsr","emailUsr","telfonoUsr","ciudad","edad", "tipoDeCocina"]
 
-class BorrarUsuario(LoginRequiredMixin, DeleteView):
-  model = Usuario  
-  success_url = "/AppRecetas/usuario/list"     
+class BorrarCheff(LoginRequiredMixin, DeleteView):
+  model = Cheff  
+  success_url = "/AppRecetas/cheff/list"     
     
