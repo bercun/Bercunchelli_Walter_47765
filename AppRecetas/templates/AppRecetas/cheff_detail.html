@@ -1,18 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-<p> Nombre:{{cheff.nombreUsr}}  </p>
-<p> Email:{{cheff.emailUsr}}  </p>
-<p> Telefono:{{cheff.telfonoUsr}}  </p>
 
-<a href=" {% url 'listaCheff' %}">regresar</a>
+{% extends "AppRecetas/base.html" %}
 
 
-</body>
-</html>
+
+{ % load static % }
+
+
+{% block  titulo %}
+                                
+Cheff
+
+{% endblock  %}
+
+{% block  complement %}
+
+<p> Nombre: {{cheff.nombreUsr}}  </p>
+<p> Email: {{cheff.emailUsr}}  </p>
+<p> Ciudad: {{cheff.ciudad}}  </p>
+<p> Telefono: {{cheff.telfonoUsr}}  </p>
+<p> Ciudad: {{cheff.ciudad}}  </p>
+<p> Tipo de cocina: {{cheff.tipoDeCocina}}  </p>
+
+
+
+
+{% endblock  %}

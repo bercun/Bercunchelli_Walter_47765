@@ -108,6 +108,12 @@ def addAvatar(request):
 def inicio(request):
     return render(request,'AppRecetas/inicio.html')
 
+def about(request):
+    return render(request,'AppRecetas/about.html')
+
+
+def test(request):
+  return render(request, "AppRecetas/base.html" )
 # ingresar datos "C"UD 
 
 
@@ -248,12 +254,12 @@ def showUsr(request):
 
   if request.GET["Usr"]:
 
-    ingreUsrseek = request.GET["Usr"]
-    Usrfind = Usuario.objects.filter(nombreUsr__icontains=ingreUsrseek)
+    ingreCeffseek = request.GET["Usr"]
+    Cefffind = Cheff.objects.filter(nombreUsr__icontains=ingreCeffseek)
     
 
     
-    return render(request,"AppRecetas/showUsr.html", {"ingreUsrseek":ingreUsrseek, "Usrfind": Usrfind })
+    return render(request,"AppRecetas/showUsr.html", {"ingreUsrseek":ingreCeffseek, "Usrfind": Cefffind })
 
   else:
    respuesta ="No enviaste datos"  

@@ -12,7 +12,10 @@ Listado de recetas
 
 {% endblock  %}
 
+{% block  titulo_rec_1 %}  
 
+De usuarios
+{% endblock %}
 
 {% block complement%}
 
@@ -20,15 +23,13 @@ Listado de recetas
 
 
     <p>Nombre: {{recetasUsr.nom_platosUsr}}  </p>
-    <p>Tiempo: {{recetasUsr.tiempoUsr}}  </p>
-    <p>Tipo de cocina : {{recetasUsr.tipoDeCocinaUsr}}  </p>
-__________________________________________________________
+    
 
-<br>
+
 
 <button>
 
-<a href=" {% url 'eliminarRecetasUsr' recetasUsr.nom_platosUsr %}  ">Eliminar</a>
+    <a href=" {% url 'eliminarRecetasUsr' recetasUsr.nom_platosUsr %}  ">Eliminar</a>
 
 </button>
 
@@ -39,20 +40,32 @@ __________________________________________________________
     
     </button>
     
-
+<br>
 
  {%endfor%}
+ <br>
 
+ <a href=" {% url 'AddRecetasUsr'  %}  ">Crear receta</a>
+ <br>
+ <a href="{% url 'seekRecetasUsr' %}">buscar recetas de usuario</a>
+
+ 
 <br>
-*********************Recetas  Locales***********************
+{% endblock %}
+
+{% block titulos_rec_2 %}
+
+De la pagina
+
+{% endblock titulos_rec_2 %}
+
+{% block complement_1 %}
 
 {% for recetasMain in  lista_recetasMain %}
 
 <br>
     <p>Nombre: {{recetasMain.nom_platos}}  </p>
-    <p>Tiempo: {{recetasMain.tiempo}}  </p>
-    <p>Tipo de cocina : {{recetasMain.tipoDeCocina}}  </p>
-
+    
 
 
 
@@ -69,10 +82,14 @@ __________________________________________________________
     
 </button>
 
-_____________________________________________________
+<br>
+
 
 
 {%endfor%}
+<br>
 
-
+<a href=" {% url 'AddRecetasMain'  %}  ">Crear receta</a>
+<br>
+<a href="{% url 'seekRecetas' %}">buscar recetas de la pagina </a>
 {%endblock%}

@@ -14,7 +14,12 @@ urlpatterns = [
     path("editUsr/", editarUsuario, name= "EditUsr"),
     path("addAvatar/", addAvatar, name= "AddAvatar"),
     
+    
     path("", inicio, name= "Inicio"),
+    path("about/", about, name= "About"),
+    path("base/", test, name= "Test"),
+    
+    
     # ingresar datos#######################
     path("addRecetasMain/", addRecetasMain, name= "AddRecetasMain"),
     path("addRecetasUsr/", addRecetasUsr, name= "AddRecetasUsr"),
