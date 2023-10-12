@@ -1,4 +1,4 @@
-﻿# TerceraPreEntrega_Bercunchelli
+﻿# Entrega final curso Coder House Python
 
 Este es un readme, que explica en normas generales el uso y como cree este proyecto Web en django
 
