@@ -49,9 +49,10 @@
                 {% endif %}
                 {% if request.user.is_authenticated  %}
                 
-                <p> <h5> 
-                    Soy <br> {{user.username}}
-                </h5>  </p>
+                
+                    
+                <a class="navbar-brand" href="">** {{user.username}}**</a>
+                
                 
                 {% with user.avatar_set.first as  miPrimerAvatar %}
 
