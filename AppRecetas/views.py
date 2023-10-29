@@ -1,17 +1,19 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
-from django.views.generic import ListView
+from django.views.generic import ListView , FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView  
 
 from django.contrib.auth.forms import AuthenticationForm ,UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
+
 #Decorador por defecto
 from django.contrib.auth.decorators import login_required
 
-from AppRecetas.models import RecetasMain, RecetasUsr, Cheff 
+from AppRecetas.models import RecetasMain, RecetasUsr, Cheff , Avatar
 from AppRecetas.forms import *
 
 
@@ -81,8 +83,8 @@ def editarUsuario (request):
 
   return render(request, "AppRecetas/editPerfil.html", {"formulario": form, "usuario": usr} )
 
-@login_required
 
+@login_required
 def addAvatar(request):
   if request.method=="POST":
 
@@ -379,8 +381,6 @@ def vista_cheffs(request):
 
 
 
-
-
 #modificar datos CRU"D"    
 @login_required
 def eliminarRecetasUsr(request, nom_recetasUsr):
@@ -408,10 +408,7 @@ def eliminarRecetasMain(request, recetas):
 
     # CRUD con clases
 
-
-
-
-
+#Cheff
 
 class ListaCheff(LoginRequiredMixin, ListView):
 
@@ -436,3 +433,23 @@ class BorrarCheff(LoginRequiredMixin, DeleteView):
   model = Cheff  
   success_url = "/AppRecetas/cheff/list"     
     
+
+#Avatar
+
+
+
+class ListaAvatar(LoginRequiredMixin, ListView):
+
+  model = Avatar
+
+  def get_queryset(self):
+        # Filtra los avatares del usuario logeado
+        return Avatar.objects.filter(usuario=self.request.user)
+
+
+class CrearAvatar(LoginRequiredMixin, CreateView):
+
+  model= Avatar
+  success_url = "/AppRecetas/avatar/list"
+  fields = ["image", "usuario"]
+

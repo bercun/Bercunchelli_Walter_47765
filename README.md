@@ -26,3 +26,15 @@ Los datos de superuser son:  usuario : bercun passord : 1234
 Muchas gracias por su tiempo
 
 Walter Bercunchelli 
+
+
+
+usr y pass de prueba
+
+lucy 1234lucy
+
+rafa 1234rafa
+
+walter marcelo1234
+
+

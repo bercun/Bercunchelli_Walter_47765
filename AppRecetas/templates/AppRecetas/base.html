@@ -62,13 +62,16 @@
 
                 {% if miPrimerAvatar  %}
 
+                <a href="{% url 'listaavatar' %}">
                 <img src="{{miPrimerAvatar.image.url}}" alt=" NO EXITE AVATAR", style="max-width: 60px;">
+                </a>
 
                 
                 {% endif %}
                 
                 {% endwith %}
 
+                
                 <a class="btn btn-info" href="{% url 'AddAvatar' %}">agregar avatar</a>
                 <a class="btn btn-warning" href="{% url 'EditUsr' %}">Editar usario</a>
                 <a class="btn btn-danger" href="{% url 'Logout' %}">Logout</a>

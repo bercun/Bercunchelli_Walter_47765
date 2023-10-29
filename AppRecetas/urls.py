@@ -14,6 +14,11 @@ urlpatterns = [
     path("editUsr/", editarUsuario, name= "EditUsr"),
     path("addAvatar/", addAvatar, name= "AddAvatar"),
     
+    #avatares con class
+
+    path("avatar/list", ListaAvatar.as_view(), name="listaavatar"), 
+    path("avatar/crear/", CrearAvatar.as_view(), name="crearAvatar"),
+    
     
     path("", inicio, name= "Inicio"),
     path("about/", about, name= "About"),
