@@ -128,13 +128,15 @@ def addRecetasMain(request):
       info =formulario1.cleaned_data
 
       res_Main = RecetasMain(nom_platos=info["nom_platos"],
-                           ingredientes=request.POST["ingredientes"],
-                           receta=request.POST["receta"],
-                           tiempo=request.POST["tiempo"],
-                           dificultad=request.POST["dificultad"],
-                           tipoDeCocina=request.POST["tipoDeCocina"],
-                           fuente=request.POST["fuente"], 
-                           procedimiento=request.POST["procedimiento"])
+                           ingredientes=info["ingredientes"],
+                           receta=info["receta"],
+                           tiempo=info["tiempo"],
+                           dificultad=info["dificultad"],
+                           tipoDeCocina=info["tipoDeCocina"],
+                           fuente=info["fuente"], 
+                           procedimiento=info["procedimiento"],
+                           user=request.user)
+                           
       
       res_Main.save()                       
       return render(request,'AppRecetas/inicio.html')  

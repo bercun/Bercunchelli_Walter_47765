@@ -8,7 +8,7 @@ class RecetasMain(models.Model):
     def __str__(self):
         return f"  {self.nom_platos} -- Tipo de cocina: {self.tipoDeCocina} " 
     
-    
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     nom_platos = models.CharField(max_length=20)
     ingredientes = models.CharField(max_length=100)
     receta = models.CharField(max_length=100)

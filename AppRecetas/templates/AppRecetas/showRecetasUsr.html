@@ -18,7 +18,15 @@ Esta es mi pagina de resultados de recetas de usuarios
 
 {% for ingredientes in recetasfoundUsr %}
     
-<p> Nombre: {{ingredientes.nom_platosUsr}} <br> Igredientes: {{ingredientes.ingredientesUsr}}</p>
+<p> Nombre: {{ingredientes.nom_platosUsr}} 
+
+    <br> Igredientes: {{ingredientes.ingredientesUsr}}
+    <br> Tipo de cocina: {{ingredientes.tipoDeCocinaUsr}}
+    <br> Nivel de dificultad: {{ingredientes.dificultadUsr}}
+    <br> Receta: {{ingredientes.recetaUsr}}
+
+
+</p>
 
 {% endfor %}       
                                 
