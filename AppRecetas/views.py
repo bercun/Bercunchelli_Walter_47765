@@ -105,8 +105,6 @@ def addAvatar(request):
 
 
 
-
-
 def inicio(request):
     return render(request,'AppRecetas/inicio.html')
 
@@ -419,6 +417,7 @@ class DetalleCheff(LoginRequiredMixin, DetailView):
   model  = Cheff
 
 class CrearCheff(LoginRequiredMixin, CreateView):
+ 
   model = Cheff
   success_url = "/AppRecetas/cheff/list"
   fields = ["nombreUsr","emailUsr","telfonoUsr","ciudad","edad", "tipoDeCocina"]
@@ -447,9 +446,5 @@ class ListaAvatar(LoginRequiredMixin, ListView):
         return Avatar.objects.filter(usuario=self.request.user)
 
 
-class CrearAvatar(LoginRequiredMixin, CreateView):
-
-  model= Avatar
-  success_url = "/AppRecetas/avatar/list"
-  fields = ["image", "usuario"]
+  
 

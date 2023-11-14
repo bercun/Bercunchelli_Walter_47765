@@ -35,7 +35,7 @@ class RecetasUsr(models.Model):
 class Cheff(models.Model):
 
     def __str__(self):
-        return f"  {self.nombreUsr} -- Tipo de cocina: {self.ciudad} " 
+        return f"  {self.nombreUsr} -- Origen : {self.ciudad} " 
     
     nombreUsr = models.CharField(max_length=20)
     emailUsr = models.EmailField()
@@ -45,6 +45,11 @@ class Cheff(models.Model):
     tipoDeCocina = models.CharField(max_length=20)
 
 class Avatar(models.Model):
+    
+    def __str__(self):
+        return f"  {self.usuario} -- Avatar: {self.image} " 
+
+
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to= "avatares", null=True, blank=True)
 
