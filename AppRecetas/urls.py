@@ -26,6 +26,7 @@ urlpatterns = [
     
     
     # ingresar datos#######################
+    
     path("addRecetasMain/", addRecetasMain, name= "AddRecetasMain"),
     path("addRecetasUsr/", addRecetasUsr, name= "AddRecetasUsr"),
     path("AddCheff/", addCheff, name= "AddCheff"),
@@ -33,6 +34,7 @@ urlpatterns = [
     path("recetasUsr/", vista_recetasUsr, name= "RecetasUsr"),
     path("recetasMain/", vista_recetasMain, name= "RecetasMain"),
     path("cheffs/", vista_cheffs, name= "Cheffs"),
+    
     #buscar y mostrar datos###########
     
     path("seekRecetas/", seekRecetas, name= "seekRecetas"),
@@ -43,7 +45,9 @@ urlpatterns = [
     
     path("seekUsr/", seekUsr, name= "seekUsr"),
     path("showUsr/", showUsr, name= "showUsr"),
+    
     # editar y borrar modelos
+    
     path("eliminarRecetasUsr/<nom_recetasUsr>/", eliminarRecetasUsr, name="eliminarRecetasUsr"),
     path("eliminarRecetasMain/<recetas>/", eliminarRecetasMain, name="eliminarRecetasMain"),
     path("updateRecetasMain/<recetas>/", update_RecetasMain, name="updateRecetasMain"),

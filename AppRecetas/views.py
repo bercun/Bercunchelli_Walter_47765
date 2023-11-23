@@ -135,7 +135,8 @@ def addRecetasMain(request):
                            tipoDeCocina=info["tipoDeCocina"],
                            fuente=info["fuente"], 
                            procedimiento=info["procedimiento"],
-                           user=request.user)
+                           usuario=request.user
+                           )
                            
       
       res_Main.save()                       

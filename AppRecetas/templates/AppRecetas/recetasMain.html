@@ -26,6 +26,7 @@ De usuarios
     
 
 
+    {% if request.user.is_authenticated  %}
 
 <button>
 
@@ -35,11 +36,11 @@ De usuarios
 
 
 <button>
-
-    <a href=" {% url 'updateRecetasUsr' recetasUsr.nom_platosUsr %}  ">actualizar</a>
-    
+  <a href=" {% url 'updateRecetasUsr' recetasUsr.nom_platosUsr %}  ">actualizar</a>
 </button>
-    
+
+{% endif %}
+
 <br>
 
  {%endfor%}
@@ -69,18 +70,20 @@ De la pagina
 
 
 
-<button>
+
 {% if request.user.is_authenticated  %}
-<a href=" {% url 'eliminarRecetasMain' recetasMain.nom_platos %}  ">Eliminar</a>
-{% endif %}
+<button>
+
+    <a href=" {% url 'eliminarRecetasMain' recetasMain.nom_platos %}  ">Eliminar</a>
+
 </button>
 
 
 <button>
-
 <a href=" {% url 'updateRecetasMain' recetasMain.nom_platos %}  ">actualizar</a>
-    
 </button>
+{% endif %}    
+
 
 <br>
 

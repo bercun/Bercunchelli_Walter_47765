@@ -8,6 +8,7 @@ from AppRecetas.models import Avatar
 
 
 class Form_AddRecetasMain(forms.Form):
+    
     nom_platos = forms.CharField(max_length=20)
     ingredientes = forms.CharField(max_length=100)
     receta = forms.CharField(max_length=100)
