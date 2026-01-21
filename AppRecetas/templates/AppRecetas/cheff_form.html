@@ -1,25 +1,119 @@
 {% extends "AppRecetas/base.html" %}
+{% load static %}
 
+{% block titulo %}
+{% if object %}Editar Cheff{% else %}Crear Nuevo Cheff{% endif %}
+{% endblock %}
 
+{% block complement %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-warning">
+                <div class="card-header bg-warning text-center">
+                    <h4 class="mb-0">
+                        <i class="bi bi-{% if object %}pencil{% else %}plus-circle{% endif %}"></i>
+                        {% if object %}Editar Cheff{% else %}Crear Nuevo Cheff{% endif %}
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.nombreUsr.id_for_label }}" class="form-label fw-bold">
+                                    <i class="bi bi-person"></i> Nombre:
+                                </label>
+                                {{ form.nombreUsr }}
+                                {% if form.nombreUsr.errors %}
+                                    <div class="text-danger small mt-1">{{ form.nombreUsr.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.emailUsr.id_for_label }}" class="form-label fw-bold">
+                                    <i class="bi bi-envelope"></i> Email:
+                                </label>
+                                {{ form.emailUsr }}
+                                {% if form.emailUsr.errors %}
+                                    <div class="text-danger small mt-1">{{ form.emailUsr.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.telfonoUsr.id_for_label }}" class="form-label fw-bold">
+                                    <i class="bi bi-telephone"></i> Teléfono:
+                                </label>
+                                {{ form.telfonoUsr }}
+                                {% if form.telfonoUsr.errors %}
+                                    <div class="text-danger small mt-1">{{ form.telfonoUsr.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.ciudad.id_for_label }}" class="form-label fw-bold">
+                                    <i class="bi bi-geo-alt"></i> Ciudad:
+                                </label>
+                                {{ form.ciudad }}
+                                {% if form.ciudad.errors %}
+                                    <div class="text-danger small mt-1">{{ form.ciudad.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.edad.id_for_label }}" class="form-label fw-bold">
+                                    <i class="bi bi-calendar-event"></i> Edad:
+                                </label>
+                                {{ form.edad }}
+                                {% if form.edad.errors %}
+                                    <div class="text-danger small mt-1">{{ form.edad.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.tipoDeCocina.id_for_label }}" class="form-label fw-bold">
+                                    <i class="bi bi-egg-fried"></i> Tipo de Cocina:
+                                </label>
+                                {{ form.tipoDeCocina }}
+                                {% if form.tipoDeCocina.errors %}
+                                    <div class="text-danger small mt-1">{{ form.tipoDeCocina.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-warning btn-lg">
+                                <i class="bi bi-{% if object %}check-circle{% else %}plus-circle{% endif %}"></i>
+                                {% if object %}Actualizar Cheff{% else %}Crear Cheff{% endif %}
+                            </button>
+                            <a href="{% url 'listaCheff' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-{ % load static % }
-
-
-{% block  titulo %}
-                                
-
-<form action="" method="POST">  {% csrf_token %} 
-
-    {{form.as_p}}
-
-    <input type="submit" value="enviar">
-
-</form>
-
-
- 
-
-{% endblock  %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add form-control class to all input fields
+    const inputs = document.querySelectorAll('input:not([type="submit"]), select, textarea');
+    inputs.forEach(input => {
+        input.classList.add('form-control');
+    });
+});
+</script>
+{% endblock %}
 
 
 

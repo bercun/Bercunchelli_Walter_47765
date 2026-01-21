@@ -1,32 +1,85 @@
 {% extends "AppRecetas/base.html" %}
+{% load static %}
 
+{% block titulo %}
+Gestión de Cheffs
+{% endblock %}
 
+{% block complement %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="bi bi-award"></i> Nuestros Cheffs</h2>
+                <div>
+                    <a href="{% url 'crearCheff' %}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> Crear Nuevo Cheff
+                    </a>
+                    <a href="{% url 'seekUsr' %}" class="btn btn-outline-warning">
+                        <i class="bi bi-search"></i> Buscar Cheff
+                    </a>
+                </div>
+            </div>
+            
+            {% if object_list %}
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    {% for cheff in object_list %}
+                        <div class="col">
+                            <div class="card h-100 shadow-sm hover-shadow border-warning">
+                                <div class="card-header bg-warning">
+                                    <h5 class="card-title mb-0">
+                                        <i class="bi bi-person-badge"></i> {{ cheff.nombreUsr }}
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-2">
+                                        <i class="bi bi-envelope text-primary"></i>
+                                        <strong>Email:</strong><br>
+                                        <a href="mailto:{{ cheff.emailUsr }}" class="text-decoration-none small">
+                                            {{ cheff.emailUsr }}
+                                        </a>
+                                    </p>
+                                    
+                                    <hr>
+                                    
+                                    <div class="d-grid gap-2">
+                                        <a href="{% url 'detalleCheff' cheff.id %}" class="btn btn-sm btn-info">
+                                            <i class="bi bi-eye"></i> Ver Detalle
+                                        </a>
+                                        <a href="{% url 'updateCheff' cheff.id %}" class="btn btn-sm btn-warning">
+                                            <i class="bi bi-pencil"></i> Actualizar
+                                        </a>
+                                        <a href="{% url 'borrarCheff' cheff.id %}" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash"></i> Eliminar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-warning text-center py-5">
+                    <i class="bi bi-person-x" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3">No hay cheffs registrados</h4>
+                    <p class="mb-0">Comienza agregando tu primer cheff</p>
+                    <a href="{% url 'crearCheff' %}" class="btn btn-primary mt-3">
+                        <i class="bi bi-plus-circle"></i> Crear Primer Cheff
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
 
-{ % load static % }
+<style>
+.hover-shadow {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
 
-
-{% block  titulo %}
-                                
-Esta es mi pagina muestra busquede de cheffs 
-
-{% endblock  %}
-
-
-
-{% block  complement %}
-
-
-{%  for cheff in object_list %}
-    
-<p> Nombre: {{cheff.nombreUsr}} <br> Email: {{cheff.emailUsr}}   </p>
- 
-<a href=" {% url 'detalleCheff' cheff.id %}"> ver detalle</a>
-<a href=" {% url 'updateCheff' cheff.id %}"> actualizar </a>
-<a href=" {% url 'borrarCheff' cheff.id %}"> eliminar </a>   
-{% endfor %}  
-<br>
-<a href=" {% url 'crearCheff' %}"> crear cheff</a>
-<br>
-<a href="{% url 'seekUsr' %}">buscar Cheffs</a>
-
-{% endblock  %}
+.hover-shadow:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+</style>
+{% endblock %}

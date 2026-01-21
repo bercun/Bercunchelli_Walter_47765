@@ -1,47 +1,61 @@
 {% extends "AppRecetas/base.html" %}
+{% load static %}
 
+{% block titulo %}
+Agregar Usuario
+{% endblock %}
 
+{% block complement %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-success">
+                <div class="card-header bg-success text-white text-center">
+                    <h4 class="mb-0">
+                        <i class="bi bi-person-plus"></i> Agregar Nuevo Usuario
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        <div class="table-responsive">
+                            <table class="table table-borderless">
+                                {{ form3.as_table }}
+                            </table>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="bi bi-check-circle"></i> Guardar Usuario
+                            </button>
+                            <a href="{% url 'listaCheff' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-{ % load static % }
-
-
-{% block  titulo %}
-                                
-Esta es mi pagina par agregar Usuarios
-
-{% endblock  %}
-
-
-
-
-{% block  complement %}
-                                
-<form action="" method="POST">  {% csrf_token %}
-
-
-    <table>
-
-
-        {{form3.as_table}}
-
-
-
-    </table>
-
-    <input type="submit" value="Guardar">
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add form-control class to all input fields
+    const inputs = document.querySelectorAll('input:not([type="submit"]), select, textarea');
+    inputs.forEach(input => {
+        input.classList.add('form-control');
+    });
     
-
-
-
-
-
-</form>
-
-
-    
-
-
-
-{% endblock  %}
+    // Style table cells
+    const tableCells = document.querySelectorAll('td');
+    tableCells.forEach(cell => {
+        cell.classList.add('py-2');
+    });
+});
+</script>
+{% endblock %}
 

@@ -16,6 +16,7 @@ class Form_AddRecetasMain(forms.Form):
     tipoDeCocina = forms.CharField(max_length=20)
     fuente = forms.CharField(max_length=30)
     procedimiento = forms.CharField()
+    imagen = forms.ImageField(required=False)
     
 
 class FormAddRecetasUsr(forms.Form):
@@ -28,6 +29,7 @@ class FormAddRecetasUsr(forms.Form):
     tipoDeCocinaUsr = forms.CharField(max_length=20)
     fuenteUsr = forms.CharField(max_length=30)
     procedimientoUsr = forms.CharField()
+    imagenUsr = forms.ImageField(required=False)
 
 
 

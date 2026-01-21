@@ -1,36 +1,109 @@
 {% extends "AppRecetas/base.html" %}
+{% load static %}
 
+{% block titulo %}
+Editar Perfil
+{% endblock %}
 
+{% block complement %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-primary">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4 class="mb-0">
+                        <i class="bi bi-person-gear"></i> Editar Perfil
+                    </h4>
+                    <p class="mb-0 mt-2">
+                        <small><i class="bi bi-person-circle"></i> {{ usuario }}</small>
+                    </p>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ formulario.first_name.id_for_label }}" class="form-label fw-bold">
+                                    <i class="bi bi-person"></i> Nombre:
+                                </label>
+                                {{ formulario.first_name }}
+                                {% if formulario.first_name.errors %}
+                                    <div class="text-danger small mt-1">{{ formulario.first_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ formulario.last_name.id_for_label }}" class="form-label fw-bold">
+                                    <i class="bi bi-person"></i> Apellido:
+                                </label>
+                                {{ formulario.last_name }}
+                                {% if formulario.last_name.errors %}
+                                    <div class="text-danger small mt-1">{{ formulario.last_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ formulario.email.id_for_label }}" class="form-label fw-bold">
+                                <i class="bi bi-envelope"></i> Email:
+                            </label>
+                            {{ formulario.email }}
+                            {% if formulario.email.errors %}
+                                <div class="text-danger small mt-1">{{ formulario.email.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        {% if formulario.password1 %}
+                        <hr class="my-4">
+                        <h5 class="mb-3"><i class="bi bi-key"></i> Cambiar Contraseña</h5>
+                        <p class="text-muted small">Deja estos campos vacíos si no deseas cambiar tu contraseña</p>
+                        
+                        <div class="mb-3">
+                            <label for="{{ formulario.password1.id_for_label }}" class="form-label fw-bold">
+                                <i class="bi bi-lock"></i> Nueva Contraseña:
+                            </label>
+                            {{ formulario.password1 }}
+                            {% if formulario.password1.errors %}
+                                <div class="text-danger small mt-1">{{ formulario.password1.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ formulario.password2.id_for_label }}" class="form-label fw-bold">
+                                <i class="bi bi-lock-fill"></i> Confirmar Contraseña:
+                            </label>
+                            {{ formulario.password2 }}
+                            {% if formulario.password2.errors %}
+                                <div class="text-danger small mt-1">{{ formulario.password2.errors }}</div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        
+                        <hr>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-check-circle"></i> Guardar Cambios
+                            </button>
+                            <a href="{% url 'Inicio' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-{ % load static % }
-
-
-{% block  titulo %}
-                                
-Edit Usuario 
-
-<br>
-
-{{usuario}}
-
-{% endblock  %}
-
-{% block  complement %}
-
-
-
-<form action="" method="POST" > {% csrf_token %}
-
-  
-  
-    {{formulario.as_p}}
-
-
-
-
-<button type="submit"> Edit perfil </button>
-
-</form>
-
-
-{% endblock  %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add form-control class to all input fields
+    const inputs = document.querySelectorAll('input:not([type="submit"]), select, textarea');
+    inputs.forEach(input => {
+        input.classList.add('form-control');
+    });
+});
+</script>
+{% endblock %}

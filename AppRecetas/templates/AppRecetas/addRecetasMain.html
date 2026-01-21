@@ -1,47 +1,120 @@
 {% extends "AppRecetas/base.html" %}
 
+{% load static %}
 
+{% block titulo %}
+Agregar Nueva Receta
+{% endblock %}
 
-{ % load static % }
+{% block complement %}
 
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-plus-circle"></i> Crear Receta Local</h4>
+            </div>
+            <div class="card-body p-4">
+                <form action="" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="id_nom_platos" class="form-label fw-bold">Nombre del Plato</label>
+                        {{ form1.nom_platos }}
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_tipoDeCocina" class="form-label fw-bold">Tipo de Cocina</label>
+                            {{ form1.tipoDeCocina }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="id_tiempo" class="form-label fw-bold">Tiempo (min)</label>
+                            {{ form1.tiempo }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="id_dificultad" class="form-label fw-bold">Dificultad</label>
+                            {{ form1.dificultad }}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_ingredientes" class="form-label fw-bold">Ingredientes</label>
+                        {{ form1.ingredientes }}
+                        <small class="text-muted">Separados por comas</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_receta" class="form-label fw-bold">Descripción de la Receta</label>
+                        {{ form1.receta }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_procedimiento" class="form-label fw-bold">Procedimiento Detallado</label>
+                        {{ form1.procedimiento }}
+                        <small class="text-muted">Describe paso a paso la preparación</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_fuente" class="form-label fw-bold">Fuente</label>
+                        {{ form1.fuente }}
+                        <small class="text-muted">Autor o fuente de la receta</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_imagen" class="form-label fw-bold">
+                            <i class="bi bi-image"></i> Imagen de la Receta (Opcional)
+                        </label>
+                        {{ form1.imagen }}
+                        <small class="text-muted d-block">Sube una foto de tu plato terminado</small>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'RecetasMain' %}" class="btn btn-secondary btn-lg">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="bi bi-save"></i> Guardar Receta
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-{% block  titulo %}
-                                
-Esta es mi pagina par agregar Recetaslocales
-
-{% endblock  %}
-
-
-
-
-{% block  complement %}
-                                
-<form action="" method="POST">  {% csrf_token %}
-
-
-    <table>
-
-
-        {{form1.as_table}}
-
-
-
-    </table>
-
-    <input type="submit" value="Guardar">
-
+<style>
+    input[type="text"], 
+    input[type="number"], 
+    textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        font-size: 1rem;
+    }
     
-
-
-
-
-
-</form>
-
-
+    textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
     
+    input:focus, textarea:focus {
+        border-color: #86b7fe;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+    
+    .card {
+        border: none;
+        border-radius: 1rem;
+    }
+    
+    .card-header {
+        border-radius: 1rem 1rem 0 0 !important;
+    }
+</style>
 
-
-
-{% endblock  %}
+{% endblock %}
 

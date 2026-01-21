@@ -17,6 +17,9 @@ urlpatterns = [
     #avatares con class
 
     path("avatar/list/", ListaAvatar.as_view(), name="listaavatar"), 
+    path("avatar/editar/<int:pk>/", UpdateAvatar.as_view(), name="updateAvatar"),
+    path("avatar/borrar/<int:pk>/", BorrarAvatar.as_view(), name="borrarAvatar"),
+    path("avatar/activar/<int:pk>/", activarAvatar, name="activarAvatar"),
     #path("avatar/crear/", CrearAvatar.as_view(), name="crearAvatar"),
     
     
@@ -44,10 +47,10 @@ urlpatterns = [
     path("seekUsr/", seekUsr, name= "seekUsr"),
     path("showUsr/", showUsr, name= "showUsr"),
     # editar y borrar modelos
-    path("eliminarRecetasUsr/<nom_recetasUsr>/", eliminarRecetasUsr, name="eliminarRecetasUsr"),
+    path("eliminarRecetasUsr/<int:pk>/", eliminarRecetasUsr, name="eliminarRecetasUsr"),
     path("eliminarRecetasMain/<recetas>/", eliminarRecetasMain, name="eliminarRecetasMain"),
     path("updateRecetasMain/<recetas>/", update_RecetasMain, name="updateRecetasMain"),
-    path("updateRecetasUsr/<recetasUsr>/", update_RecetasUsr, name="updateRecetasUsr"),
+    path("updateRecetasUsr/<int:pk>/", update_RecetasUsr, name="updateRecetasUsr"),
   # editar con classes
     path("cheff/list/", ListaCheff.as_view(), name="listaCheff"),
     path("cheff/<int:pk>/", DetalleCheff.as_view(), name="detalleCheff"),

@@ -1,27 +1,74 @@
 {% extends "AppRecetas/base.html" %}
 
+{% load static %}
 
+{% block titulo %}
+Iniciar Sesión
+{% endblock %}
 
-{ % load static % }
+{% block complement %}
 
+{% if mensaje %}
+<div class="alert {% if 'correcto' in mensaje %}alert-success{% else %}alert-danger{% endif %} alert-dismissible fade show" role="alert">
+    <strong>{{ mensaje }}</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
 
-{% block  titulo %}
-                                
-{{mensaje}}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h3 class="card-title text-center mb-4">Acceder a tu cuenta</h3>
+                <form action="" method="POST"> {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="{{ formulario.username.id_for_label }}" class="form-label">Usuario</label>
+                        {{ formulario.username }}
+                        {% if formulario.username.errors %}
+                        <div class="text-danger small">{{ formulario.username.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ formulario.password.id_for_label }}" class="form-label">Contraseña</label>
+                        {{ formulario.password }}
+                        {% if formulario.password.errors %}
+                        <div class="text-danger small">{{ formulario.password.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                        </button>
+                    </div>
+                </form>
+                
+                <hr class="my-4">
+                
+                <p class="text-center mb-0">
+                    ¿No tienes cuenta? <a href="{% url 'Register' %}" class="text-decoration-none fw-bold">Regístrate aquí</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
-{% endblock  %}
+<style>
+    {{ formulario.username.as_widget|safe }}
+    {{ formulario.password.as_widget|safe }}
+    input[type="text"], input[type="password"] {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        font-size: 1rem;
+    }
+    input[type="text"]:focus, input[type="password"]:focus {
+        border-color: #86b7fe;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+</style>
 
-{% block  complement %}
-
-<form action="" method="POST" > {% csrf_token %}
-
-    {{formulario.as_p}}
-
-
-
-
-<button type="submit"> inicio de sesion </button>
-
-</form>
-
-{% endblock  %}
+{% endblock %}
