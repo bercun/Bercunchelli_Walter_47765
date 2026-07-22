@@ -21,7 +21,9 @@ La busqueda por el momento solo se hace por ingrediente, pero la idea es cruzar 
 
 El frontend es muy basico que al ser mi primer pagina me falta conocimiento de diseño, pero es funcional, en lo que se refiere a dar de alta instancias en la base de datos , realizar busqueda en dicha base de datos, el login y diferenciar opciones para usuarios logueado o no  
 
-Los datos de superuser son:  usuario : bercun passord : 1234
+
+
+Los datos de superuser son:  usuario : bercun passord : 1234  http://127.0.0.1:8000/admin
 
 Muchas gracias por su tiempo
 
@@ -36,5 +38,7 @@ lucy 1234lucy
 rafa 1234rafa
 
 walter marcelo1234
+
+Nahuel 2iAd6fykXPWAyxy bercun@gmail.com
 
 

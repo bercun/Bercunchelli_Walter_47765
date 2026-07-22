@@ -19,6 +19,8 @@ class RecetasMain(models.Model):
     procedimiento = models.TextField()
     imagen = models.ImageField(upload_to="recetas", null=True, blank=True)
     
+
+
 class RecetasUsr(models.Model):
 
     def __str__(self):
@@ -34,6 +36,8 @@ class RecetasUsr(models.Model):
     procedimientoUsr = models.TextField()
     imagenUsr = models.ImageField(upload_to="recetas_usuarios", null=True, blank=True)
 
+
+
 class Cheff(models.Model):
 
     def __str__(self):
@@ -45,6 +49,8 @@ class Cheff(models.Model):
     ciudad = models.CharField(max_length=20)
     edad = models.IntegerField()
     tipoDeCocina = models.CharField(max_length=20)
+
+
 
 class Avatar(models.Model):
     

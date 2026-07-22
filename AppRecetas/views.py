@@ -40,6 +40,11 @@ def inicioDeSesion(request):
     return render(request, "AppRecetas/login.html", {'formulario': form})
 
 
+def cerrarSesion(request):
+    logout(request)
+    return render(request, "AppRecetas/logout.html")
+
+
 def register (request):
 
   if request.method == "POST":
