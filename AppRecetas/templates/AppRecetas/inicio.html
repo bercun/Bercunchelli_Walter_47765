@@ -1,123 +1,144 @@
+{% extends "AppRecetas/base.html" %}
 
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        {% load static %}
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>--Web de Recetas---</title>
-       <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href= "{% static 'AppRecetas/assets/favicon.ico'%}" />
-        <!-- Google fonts-->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet" />
-        <!-- Core theme CSS (includes Bootstrap)-->
+{% load static %}
+
+{% block titulo %}
+Web de Recetas
+{% endblock %}
+
+{% block titulo_rec_1 %}
+<i class="bi bi-house-heart-fill"></i> Bienvenido a tu Espacio Culinario
+{% endblock %}
+
+{% block complement %}
+
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="text-center mb-4">
+            <img class="img-fluid rounded shadow-lg mb-4" src="{% static 'AppRecetas/assets/img/intro.jpg' %}" alt="Cocina" style="max-height: 400px; width: 100%; object-fit: cover;">
+        </div>
         
-        <link href="{% static 'AppRecetas/css/styles.css'%}" rel="stylesheet" />
-    </head>
-    <body>
-        <header>
-            <h1 class="site-heading text-center text-faded d-none d-lg-block">
-                <span class="site-heading-upper text-primary mb-3">Una web sobre recetas y afines</span>
-                <span class="site-heading-lower">Web de recetas</span>
-            </h1>
-        </header>
-        <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
-            <div class="container">
-                <a class="navbar-brand text-uppercase fw-bold d-lg-none" href="{% url 'Inicio' %}">Start Bootstrap</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mx-auto">
-                        <a class="navbar-brand" href="{% url 'Inicio' %}">Inicio</a>
-                        <a class="navbar-brand" href="{% url 'RecetasMain' %}">Recetas</a>
-                        <a class="navbar-brand" href="{% url 'About' %}">About</a>
-                {% if request.user.is_authenticated  %}
-                
-                <a class="navbar-brand" href="{% url 'listaCheff' %}">Cheffs</a>
-                
-                <br>
-                <!-- add -->
-                
-                <br>
-                <!--seek-->
-                
-                
-                
-                {% endif %}
-                {% if request.user.is_authenticated  %}
-                
-                
-                    
-                <a class="navbar-brand" href="">** {{user.username}}**</a>
-                
-                
-                {% with user.avatar_set.first as  miPrimerAvatar %}
-
-                {% if miPrimerAvatar  %}
-                <a href="{% url 'listaavatar' %}">
-                <img src="{{miPrimerAvatar.image.url}}" alt=" NO EXITE AVATAR", style="max-width: 60px;" >
-                </a>    
-                
-                {% endif %}
-                
-                {% endwith %}
-
-                <a class="btn btn-info" href="{% url 'AddAvatar' %}">agregar avatar</a>
-                <a class="btn btn-warning" href="{% url 'EditUsr' %}">Editar usario</a>
-                <a class="btn btn-danger" href="{% url 'Logout' %}">Logout</a>
-                
-                
-                {% else %}
-                
-                <a class="btn btn-success" href="{% url 'Login' %}">Login</a>
-                <a class="btn btn-primary" href="{% url 'Register' %}">Registrarse</a>
-
-
-                {% endif %}
-                    </ul>
-                </div>
+        <div class="bg-white p-5 rounded shadow-sm">
+            <h2 class="text-center mb-4">
+                <span class="text-primary d-block mb-2">Cocina</span>
+                <span class="h3">¿Qué puedo cocinar?</span>
+            </h2>
+            <p class="lead text-center text-muted mb-4">
+                En esta Web podrás encontrar ideas para preparar platos, buscando por ingredientes y te mostrará el tiempo de cada plato así como su tipo de cocina (Italiana, Española, sin azúcar o sin gluten)
+            </p>
+            
+            <div class="text-center mb-5">
+                <a class="btn btn-primary btn-lg px-5" href="{% url 'RecetasMain' %}">
+                    <i class="bi bi-rocket-takeoff"></i> ¡Comenzamos!
+                </a>
             </div>
-        </nav>
-        <section class="page-section clearfix">
-            <div class="container">
-                <div class="intro">
-                    <img class="intro-img img-fluid mb-3 mb-lg-0 rounded" src="{% static 'AppRecetas/assets/img/intro.jpg' %}" alt="..." />
-                    <div class="intro-text left-0 text-center bg-faded p-5 rounded">
-                        <h2 class="section-heading mb-4">
-                            <span class="section-heading-upper">Cocina</span>
-                            <span class="section-heading-lower">¿Que puedo cocinar?</span>
-                        </h2>
-                        <p class="mb-3">En esta Web podrás encontrar ideas para preparar platos, buscando por ingredientes y te mostrará el tiempo de cada plato así como su tipo de cocina (Italiana, Española, sin azúcar o sin gluten) </p>
-                        <div class="intro-button mx-auto"><a class="btn btn-primary btn-xl" href="{% url 'RecetasMain' %}">Comenzamos ?</a></div>
+            
+            <div class="row g-4 mt-4">
+                <div class="col-md-4">
+                    <div class="card border-0 bg-light h-100 text-center p-3">
+                        <div class="card-body">
+                            <i class="bi bi-search text-primary" style="font-size: 2.5rem;"></i>
+                            <h5 class="card-title mt-3">Busca por Ingredientes</h5>
+                            <p class="card-text small text-muted">Encuentra recetas según lo que tienes en casa</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-        <section class="page-section cta">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-9 mx-auto">
-                        <div class="cta-inner bg-faded text-center rounded">
-                            <h2 class="section-heading mb-4">
-                                <span class="section-heading-upper">en esencia</span>
-                                <span class="section-heading-lower">compartir</span>
-                            </h2>
-                            <p class="mb-0">En parte el alma de esta página es compartir nuestra cultura gastronómica, nuestros platos de creación propia, heredados en tradición familiar, o simplemente alguna receta que leímos, probamos y nos gustó. Porque como dicen por ahí "a gustos, colores" cada quien tiene algún color para compartir  </p>
+                <div class="col-md-4">
+                    <div class="card border-0 bg-light h-100 text-center p-3">
+                        <div class="card-body">
+                            <i class="bi bi-clock-history text-success" style="font-size: 2.5rem;"></i>
+                            <h5 class="card-title mt-3">Filtra por Tiempo</h5>
+                            <p class="card-text small text-muted">Recetas rápidas o elaboradas, tú decides</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 bg-light h-100 text-center p-3">
+                        <div class="card-body">
+                            <i class="bi bi-globe text-info" style="font-size: 2.5rem;"></i>
+                            <h5 class="card-title mt-3">Cocina Internacional</h5>
+                            <p class="card-text small text-muted">Descubre sabores de todo el mundo</p>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-        <footer class="footer text-faded text-center py-5">
-            <div class="container"><p class="m-0 small">Copyright &copy; brkoon</p></div>
-        </footer>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        
-        <script src="{% static  'AppRecetas/js/scripts.js' %}"></script>
-    </body>
-</html>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block titulos_rec_2 %}
+<i class="bi bi-heart-fill"></i> En Esencia
+{% endblock %}
+
+{% block complement_1 %}
+
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="bg-white p-5 rounded shadow-sm">
+            <h2 class="text-center mb-4">
+                <span class="h3 text-primary">Compartir</span>
+            </h2>
+            <p class="lead text-center text-muted mb-4">
+                En parte el alma de esta página es compartir nuestra cultura gastronómica, nuestros platos de creación propia, heredados en tradición familiar, o simplemente alguna receta que leímos, probamos y nos gustó.
+            </p>
+            <p class="text-center text-muted fst-italic">
+                <i class="bi bi-quote"></i> Porque como dicen por ahí "a gustos, colores" cada quien tiene algún color para compartir <i class="bi bi-quote"></i>
+            </p>
+            
+            <div class="row g-4 mt-4">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-share text-warning me-3" style="font-size: 2rem;"></i>
+                        <div>
+                            <h5 class="mb-2">Comparte tus Recetas</h5>
+                            <p class="text-muted small mb-0">Crea y publica tus propias recetas para que otros las disfruten</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-people text-success me-3" style="font-size: 2rem;"></i>
+                        <div>
+                            <h5 class="mb-2">Comunidad</h5>
+                            <p class="text-muted small mb-0">Descubre recetas de otros apasionados de la cocina</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-book text-info me-3" style="font-size: 2rem;"></i>
+                        <div>
+                            <h5 class="mb-2">Aprende</h5>
+                            <p class="text-muted small mb-0">Mejora tus habilidades culinarias con recetas detalladas</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-star text-danger me-3" style="font-size: 2rem;"></i>
+                        <div>
+                            <h5 class="mb-2">Descubre</h5>
+                            <p class="text-muted small mb-0">Encuentra nuevos sabores y técnicas de cocina</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {% if not request.user.is_authenticated %}
+            <div class="text-center mt-5">
+                <p class="text-muted mb-3">¿Listo para unirte a nuestra comunidad?</p>
+                <a href="{% url 'Register' %}" class="btn btn-success me-2">
+                    <i class="bi bi-person-plus"></i> Registrarse
+                </a>
+                <a href="{% url 'Login' %}" class="btn btn-outline-primary">
+                    <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

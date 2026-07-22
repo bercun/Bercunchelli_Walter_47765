@@ -1,25 +1,95 @@
 {% extends "AppRecetas/base.html" %}
+{% load static %}
 
+{% block titulo %}
+Resultados de Recetas de Usuarios
+{% endblock %}
 
-
-{ % load static % }
-
-
-{% block  titulo %}
+{% block complement %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="mb-4">
+                <a href="{% url 'seekRecetasUsr' %}" class="btn btn-outline-success">
+                    <i class="bi bi-arrow-left"></i> Nueva Búsqueda
+                </a>
+            </div>
+            
+            {% if ingreBus %}
+                <div class="alert alert-success">
+                    <i class="bi bi-search"></i> 
+                    Buscando recetas de usuarios con: <strong>{{ ingreBus }}</strong>
+                </div>
+            {% endif %}
+            
+            {% if recetasfoundUsr %}
+                <h4 class="mb-4">
+                    <i class="bi bi-people"></i> 
+                    Se encontraron {{ recetasfoundUsr|length }} receta{% if recetasfoundUsr|length != 1 %}s{% endif %} de usuarios
+                </h4>
+                
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    {% for receta in recetasfoundUsr %}
+                        <div class="col">
+                            <div class="card h-100 shadow-sm hover-shadow border-success">
+                                {% if receta.imagenUsr %}
+                                    <img src="{{ receta.imagenUsr.url }}" 
+                                         class="card-img-top" 
+                                         alt="{{ receta.nom_platosUsr }}"
+                                         style="height: 200px; object-fit: cover;">
+                                {% else %}
+                                    <div class="card-img-top bg-success d-flex align-items-center justify-content-center" 
+                                         style="height: 200px;">
+                                        <i class="bi bi-egg-fried text-white" style="font-size: 4rem;"></i>
+                                    </div>
+                                {% endif %}
                                 
-Esta es mi pagina de resultados de recetas de usuarios 
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 class="card-title mb-0">{{ receta.nom_platosUsr }}</h5>
+                                        <span class="badge bg-success">
+                                            <i class="bi bi-person"></i> Usuario
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="mt-3">
+                                        <p class="mb-2">
+                                            <strong><i class="bi bi-basket"></i> Ingredientes:</strong>
+                                        </p>
+                                        <p class="card-text text-muted small">
+                                            {{ receta.ingredientesUsr }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-warning text-center py-5">
+                    <i class="bi bi-search" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3">No se encontraron recetas</h4>
+                    <p class="mb-0">
+                        No hay recetas de usuarios que contengan <strong>"{{ ingreBus }}"</strong>. 
+                        Intenta con otro ingrediente.
+                    </p>
+                    <a href="{% url 'seekRecetasUsr' %}" class="btn btn-success mt-3">
+                        <i class="bi bi-arrow-left"></i> Intentar de nuevo
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
 
-{% endblock  %}
+<style>
+.hover-shadow {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
 
-
-{% block  complement %}
- 
-<p>Estamos buscando : {{ingreBus}}</p>
-
-{% for ingredientes in recetasfoundUsr %}
-    
-<p> Nombre: {{ingredientes.nom_platosUsr}} <br> Igredientes: {{ingredientes.ingredientesUsr}}</p>
-
-{% endfor %}       
-                                
-{% endblock  %}
+.hover-shadow:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+</style>
+{% endblock %}

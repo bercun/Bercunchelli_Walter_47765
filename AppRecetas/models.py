@@ -17,7 +17,10 @@ class RecetasMain(models.Model):
     tipoDeCocina = models.CharField(max_length=20)
     fuente = models.CharField(max_length=30)
     procedimiento = models.TextField()
+    imagen = models.ImageField(upload_to="recetas", null=True, blank=True)
     
+
+
 class RecetasUsr(models.Model):
 
     def __str__(self):
@@ -31,6 +34,9 @@ class RecetasUsr(models.Model):
     tipoDeCocinaUsr = models.CharField(max_length=20)
     fuenteUsr = models.CharField(max_length=30)
     procedimientoUsr = models.TextField()
+    imagenUsr = models.ImageField(upload_to="recetas_usuarios", null=True, blank=True)
+
+
 
 class Cheff(models.Model):
 
@@ -44,6 +50,8 @@ class Cheff(models.Model):
     edad = models.IntegerField()
     tipoDeCocina = models.CharField(max_length=20)
 
+
+
 class Avatar(models.Model):
     
     def __str__(self):
@@ -52,6 +60,7 @@ class Avatar(models.Model):
 
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to= "avatares", null=True, blank=True)
+    is_active = models.BooleanField(default=False)
 
 
 

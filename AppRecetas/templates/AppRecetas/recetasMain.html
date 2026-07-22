@@ -1,95 +1,310 @@
-
 {% extends "AppRecetas/base.html" %}
 
+{% load static %}
 
-
-{ % load static % }
-
-
-{% block  titulo %}
-                                
-Listado de recetas
-
-{% endblock  %}
-
-{% block  titulo_rec_1 %}  
-
-De usuarios
+{% block titulo %}
+Catálogo de Recetas
 {% endblock %}
 
-{% block complement%}
+{% block titulo_rec_1 %}  
+<i class="bi bi-people-fill"></i> Recetas de la Comunidad
+{% endblock %}
 
-{% for recetasUsr in  lista_recetasUsr %}
+{% block complement %}
 
+<div class="row g-3 mb-4">
+    <div class="col-12 text-end">
+        <a href="{% url 'AddRecetasUsr' %}" class="btn btn-success btn-sm">
+            <i class="bi bi-plus-circle"></i> Crear Receta
+        </a>
+        <a href="{% url 'seekRecetasUsr' %}" class="btn btn-info btn-sm">
+            <i class="bi bi-search"></i> Buscar Recetas
+        </a>
+    </div>
+</div>
 
-    <p>Nombre: {{recetasUsr.nom_platosUsr}}  </p>
-    
+{% if lista_recetasUsr %}
+<div class="row g-4">
+    {% for recetasUsr in lista_recetasUsr %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm hover-shadow">
+            {% if recetasUsr.imagenUsr %}
+            <img src="{{ recetasUsr.imagenUsr.url }}" class="card-img-top" alt="{{ recetasUsr.nom_platosUsr }}" style="height: 200px; object-fit: cover;">
+            {% else %}
+            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title text-primary mb-3">
+                    <i class="bi bi-egg-fried"></i> {{ recetasUsr.nom_platosUsr }}
+                </h5>
+                
+                <div class="mb-3">
+                    <span class="badge bg-secondary">{{ recetasUsr.tipoDeCocinaUsr }}</span>
+                    <span class="badge bg-info"><i class="bi bi-clock"></i> {{ recetasUsr.tiempoUsr }} min</span>
+                    <span class="badge bg-warning text-dark">{{ recetasUsr.dificultadUsr }}</span>
+                </div>
+                
+                <ul class="list-unstyled small mb-3">
+                    <li class="mb-2">
+                        <strong><i class="bi bi-basket text-success"></i> Ingredientes:</strong>
+                        <p class="text-muted mb-0">{{ recetasUsr.ingredientesUsr|truncatewords:8 }}</p>
+                    </li>
+                    <li class="mb-2">
+                        <strong><i class="bi bi-file-text text-info"></i> Descripción:</strong>
+                        <p class="text-muted mb-0">{{ recetasUsr.recetaUsr|truncatewords:12 }}</p>
+                    </li>
+                    <li class="mb-2">
+                        <strong><i class="bi bi-bookmark text-warning"></i> Fuente:</strong>
+                        <p class="text-muted mb-0">{{ recetasUsr.fuenteUsr|default:"No especificada" }}</p>
+                    </li>
+                </ul>
+                
+                <!-- Botón Ver Detalles -->
+                <button class="btn btn-sm btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#detalles-{{ recetasUsr.id }}" aria-expanded="false">
+                    <i class="bi bi-eye"></i> Ver Procedimiento Completo
+                </button>
+                
+                <!-- Detalles colapsables -->
+                <div class="collapse" id="detalles-{{ recetasUsr.id }}">
+                    <div class="card card-body bg-light mt-2">
+                        <h6 class="text-primary"><i class="bi bi-list-ol"></i> Procedimiento:</h6>
+                        <p class="small text-dark mb-0" style="white-space: pre-line;">{{ recetasUsr.procedimientoUsr }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-top-0">
+                <div class="btn-group w-100" role="group">
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url 'updateRecetasUsr' recetasUsr.id %}" 
+                       class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-pencil"></i> Editar
+                    </a>
+                    <a href="{% url 'eliminarRecetasUsr' recetasUsr.id %}" 
+                       class="btn btn-outline-danger btn-sm"
+                       onclick="return confirm('¿Eliminar esta receta?')">
+                        <i class="bi bi-trash"></i> Eliminar
+                    </a>
+                    {% else %}
+                    <a href="{% url 'Login' %}" class="btn btn-outline-secondary btn-sm w-100">
+                        <i class="bi bi-lock"></i> Inicia sesión para editar
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info text-center">
+    <i class="bi bi-info-circle"></i> No hay recetas de usuarios aún. ¡Sé el primero en agregar una!
+</div>
+{% endif %}
 
-
-
-<button>
-
-    <a href=" {% url 'eliminarRecetasUsr' recetasUsr.nom_platosUsr %}  ">Eliminar</a>
-
-</button>
-
-
-<button>
-
-    <a href=" {% url 'updateRecetasUsr' recetasUsr.nom_platosUsr %}  ">actualizar</a>
-    
-    </button>
-    
-<br>
-
- {%endfor%}
- <br>
-
- <a href=" {% url 'AddRecetasUsr'  %}  ">Crear receta</a>
- <br>
- <a href="{% url 'seekRecetasUsr' %}">buscar recetas de usuario</a>
-
- 
-<br>
 {% endblock %}
 
 {% block titulos_rec_2 %}
-
-De la pagina
-
-{% endblock titulos_rec_2 %}
+<i class="bi bi-star-fill"></i> Recetas Destacadas
+{% endblock %}
 
 {% block complement_1 %}
 
-{% for recetasMain in  lista_recetasMain %}
+<div class="row g-3 mb-4">
+    <div class="col-12 text-end">
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'AddRecetasMain' %}" class="btn btn-success btn-sm">
+            <i class="bi bi-plus-circle"></i> Crear Receta
+        </a>
+        {% endif %}
+        <a href="{% url 'seekRecetas' %}" class="btn btn-info btn-sm">
+            <i class="bi bi-search"></i> Buscar Recetas
+        </a>
+    </div>
+</div>
 
-<br>
-    <p>Nombre: {{recetasMain.nom_platos}}  </p>
-    
-
-
-
-<button>
-{% if request.user.is_authenticated  %}
-<a href=" {% url 'eliminarRecetasMain' recetasMain.nom_platos %}  ">Eliminar</a>
+{% if lista_recetasMain %}
+<div class="row g-4">
+    {% for recetasMain in lista_recetasMain %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm hover-shadow border-primary">
+            {% if recetasMain.imagen %}
+            <img src="{{ recetasMain.imagen.url }}" class="card-img-top" alt="{{ recetasMain.nom_platos }}" style="height: 200px; object-fit: cover;">
+            {% else %}
+            <div class="card-img-top bg-primary d-flex align-items-center justify-content-center" style="height: 200px;">
+                <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title text-primary mb-3">
+                    <i class="bi bi-star-fill text-warning"></i> {{ recetasMain.nom_platos }}
+                </h5>
+                
+                <div class="mb-3">
+                    <span class="badge bg-primary">{{ recetasMain.tipoDeCocina }}</span>
+                    <span class="badge bg-info"><i class="bi bi-clock"></i> {{ recetasMain.tiempo }} min</span>
+                    <span class="badge bg-warning text-dark">{{ recetasMain.dificultad }}</span>
+                </div>
+                
+                <ul class="list-unstyled small mb-3">
+                    <li class="mb-2">
+                        <strong><i class="bi bi-basket text-success"></i> Ingredientes:</strong>
+                        <p class="text-muted mb-0">{{ recetasMain.ingredientes|truncatewords:8 }}</p>
+                    </li>
+                    <li class="mb-2">
+                        <strong><i class="bi bi-file-text text-info"></i> Descripción:</strong>
+                        <p class="text-muted mb-0">{{ recetasMain.receta|truncatewords:12 }}</p>
+                    </li>
+                    <li class="mb-2">
+                        <strong><i class="bi bi-bookmark text-warning"></i> Fuente:</strong>
+                        <p class="text-muted mb-0">{{ recetasMain.fuente }}</p>
+                    </li>
+                </ul>
+                
+                <!-- Botón Ver Detalles -->
+                <button class="btn btn-sm btn-outline-primary w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#detalles-main-{{ recetasMain.id }}" aria-expanded="false">
+                    <i class="bi bi-eye"></i> Ver Procedimiento Completo
+                </button>
+                
+                <!-- Detalles colapsables -->
+                <div class="collapse" id="detalles-main-{{ recetasMain.id }}">
+                    <div class="card card-body bg-light mt-2">
+                        <h6 class="text-primary"><i class="bi bi-list-ol"></i> Procedimiento:</h6>
+                        <p class="small text-dark mb-0" style="white-space: pre-line;">{{ recetasMain.procedimiento }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-top-0">
+                <div class="btn-group w-100" role="group">
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url 'updateRecetasMain' recetasMain.nom_platos %}" 
+                       class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-pencil"></i> Editar
+                    </a>
+                    <a href="{% url 'eliminarRecetasMain' recetasMain.nom_platos %}" 
+                       class="btn btn-outline-danger btn-sm"
+                       onclick="return confirm('¿Eliminar esta receta?')">
+                        <i class="bi bi-trash"></i> Eliminar
+                    </a>
+                    {% else %}
+                    <a href="{% url 'Login' %}" class="btn btn-outline-secondary btn-sm w-100">
+                        <i class="bi bi-lock"></i> Inicia sesión para editar
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-warning text-center">
+    <i class="bi bi-exclamation-triangle"></i> No hay recetas destacadas disponibles.
+</div>
 {% endif %}
-</button>
 
-
-<button>
-
-<a href=" {% url 'updateRecetasMain' recetasMain.nom_platos %}  ">actualizar</a>
+<style>
+    .hover-shadow {
+        transition: all 0.3s ease;
+    }
+    .hover-shadow:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+    .card {
+        border-radius: 0.75rem;
+        margin-bottom: 1rem;
+    }
+    .card-title {
+        font-weight: 600;
+    }
     
-</button>
+    /* Espaciado entre secciones */
+    .content-wrapper {
+        min-height: 300px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    /* Asegurar que las secciones no se superpongan */
+    .page-section {
+        position: relative;
+        clear: both;
+        margin-bottom: 2rem;
+    }
+    
+    .bg-faded {
+        background-color: rgba(255, 255, 255, 0.95);
+        position: relative;
+        z-index: 2;
+    }
+    
+    /* Mejorar el grid de cards */
+    .row.g-4 {
+        margin-bottom: 2rem;
+    }
+    
+    /* Estilos para las listas de información */
+    .list-unstyled li {
+        padding: 0.25rem 0;
+    }
+    
+    .list-unstyled strong {
+        color: #495057;
+        font-size: 0.9rem;
+    }
+    
+    .list-unstyled p {
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+    
+    /* Estilos para el collapse */
+    .collapse .card-body {
+        max-height: 300px;
+        overflow-y: auto;
+        border-radius: 0.5rem;
+    }
+    
+    .collapse .card-body::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    .collapse .card-body::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    
+    .collapse .card-body::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 10px;
+    }
+    
+    .collapse .card-body::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+    
+    /* Badges con mejor espaciado */
+    .badge {
+        margin-right: 0.25rem;
+        padding: 0.4rem 0.6rem;
+        font-weight: 500;
+    }
+    
+    /* Espaciado para móviles */
+    @media (max-width: 768px) {
+        .page-section {
+            margin-bottom: 3rem;
+        }
+        .card {
+            margin-bottom: 2rem;
+        }
+        
+        .list-unstyled p {
+            font-size: 0.8rem;
+        }
+    }
+</style>
 
-<br>
-
-
-
-{%endfor%}
-<br>
-
-<a href=" {% url 'AddRecetasMain'  %}  ">Crear receta</a>
-<br>
-<a href="{% url 'seekRecetas' %}">buscar recetas de la pagina </a>
-{%endblock%}
+{% endblock %}

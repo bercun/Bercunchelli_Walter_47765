@@ -1,63 +1,167 @@
 {% extends "AppRecetas/base.html" %}
 
+{% load static %}
 
+{% block titulo %}
+Nueva Receta de Usuario
+{% endblock %}
 
-{ % load static % }
+{% block complement %}
 
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-lg">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0"><i class="bi bi-plus-circle-fill"></i> Compartir Mi Receta</h4>
+            </div>
+            <div class="card-body p-4">
+                <p class="text-muted mb-4">
+                    <i class="bi bi-info-circle"></i> Comparte tus mejores recetas con la comunidad
+                </p>
+                
+                <form action="" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="id_nom_platosUsr" class="form-label fw-bold">
+                            <i class="bi bi-award"></i> Nombre del Plato
+                        </label>
+                        {{ form2.nom_platosUsr }}
+                        <small class="text-muted">Dale un nombre atractivo a tu receta</small>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_tipoDeCocinaUsr" class="form-label fw-bold">
+                                <i class="bi bi-globe"></i> Tipo de Cocina
+                            </label>
+                            {{ form2.tipoDeCocinaUsr }}
+                            <small class="text-muted d-block">Ej: Italiana, Mexicana, Japonesa</small>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="id_tiempoUsr" class="form-label fw-bold">
+                                <i class="bi bi-clock"></i> Tiempo (min)
+                            </label>
+                            {{ form2.tiempoUsr }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="id_dificultadUsr" class="form-label fw-bold">
+                                <i class="bi bi-speedometer2"></i> Dificultad
+                            </label>
+                            {{ form2.dificultadUsr }}
+                            <small class="text-muted d-block">Fácil, Media, Difícil</small>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_ingredientesUsr" class="form-label fw-bold">
+                            <i class="bi bi-basket"></i> Ingredientes
+                        </label>
+                        {{ form2.ingredientesUsr }}
+                        <small class="text-muted">Separa cada ingrediente con comas</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_recetaUsr" class="form-label fw-bold">
+                            <i class="bi bi-file-text"></i> Descripción Breve
+                        </label>
+                        {{ form2.recetaUsr }}
+                        <small class="text-muted">Resume tu receta en pocas palabras</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_procedimientoUsr" class="form-label fw-bold">
+                            <i class="bi bi-list-ol"></i> Procedimiento Completo
+                        </label>
+                        {{ form2.procedimientoUsr }}
+                        <small class="text-muted">Describe paso a paso cómo preparar el plato</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_fuenteUsr" class="form-label fw-bold">
+                            <i class="bi bi-bookmark-star"></i> Fuente u Origen
+                        </label>
+                        {{ form2.fuenteUsr }}
+                        <small class="text-muted">¿De dónde viene esta receta? (Opcional)</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_imagenUsr" class="form-label fw-bold">
+                            <i class="bi bi-camera"></i> Foto de tu Plato (Opcional)
+                        </label>
+                        {{ form2.imagenUsr }}
+                        <small class="text-muted d-block">Compártenos una imagen de tu creación culinaria</small>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="alert alert-light border">
+                        <i class="bi bi-lightbulb"></i> 
+                        <strong>Consejo:</strong> Asegúrate de incluir todos los detalles para que otros puedan replicar tu receta fácilmente.
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'RecetasMain' %}" class="btn btn-secondary btn-lg">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="bi bi-check-circle-fill"></i> Publicar Receta
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-{% block  titulo %}
-                                
-Esta es mi pagina par agregar usuarios
-{% endblock  %}
-
-
-
-
-{% block  complement %}
-                                
-<form action="" method="POST">  {% csrf_token %}
-
-
-    <table>
-
-
-        {{form2.as_table}}
-
-
-
-    </table>
-
-    <input type="submit" value="Guardar">
-
+<style>
+    input[type="text"], 
+    input[type="number"], 
+    textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        font-size: 1rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
     
-
-
-
-
-
-</form>
-
-
+    textarea {
+        min-height: 120px;
+        resize: vertical;
+        font-family: inherit;
+    }
     
+    input:focus, textarea:focus {
+        border-color: #198754;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+    }
+    
+    .card {
+        border: none;
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+    
+    .card-header {
+        border-radius: 0 !important;
+        padding: 1.25rem;
+    }
+    
+    .form-label {
+        margin-bottom: 0.5rem;
+        color: #495057;
+    }
+    
+    small.text-muted {
+        font-size: 0.875rem;
+        display: block;
+        margin-top: 0.25rem;
+    }
+    
+    .alert-light {
+        background-color: #f8f9fa;
+    }
+</style>
 
-
-
-{% endblock  %}
-
-
-<!--
-        <form action="/AppRecetas/addrecetasMain/ " method="POST">{% csrf_token %}
-
-            <p>Nombre del plato: <input type="text" name="f_platos"></p>
-            <p>Ingredientes: <input type="text" name="f_ingre"></p>
-            <p>Receta: <input type="text" name="f_rece"></p>
-            <p>Tiempo de elavoracion: <input type="number" name="f_time"></p>
-            <p>Dificultad: <input type="text" name="f_level"></p>
-            <p>tipo de cocina: <input type="text" name="f_from"></p>
-            <p>Fuente: <input type="text" name="f_sourse"></p>
-            <p>Pasos de la receta: <input type="text" name="f_steps"></p>
-
-            <input type="submit" value="Guardar" >
-
-        </form>
--->
+{% endblock %}

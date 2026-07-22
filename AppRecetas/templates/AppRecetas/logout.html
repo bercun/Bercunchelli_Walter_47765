@@ -1,18 +1,43 @@
 {% extends "AppRecetas/base.html" %}
+{% load static %}
 
+{% block titulo %}
+Cierre de Sesión
+{% endblock %}
 
-
-{ % load static % }
-
-
-{% block  titulo %}
-                                
-saliste con exito
-
-{% endblock  %}
-
-{% block  complement %}
-<h1>
-Gracias por visitarnos
-</h1>
-{% endblock  %}
+{% block complement %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm text-center">
+                <div class="card-body p-5">
+                    <div class="mb-4">
+                        <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+                    </div>
+                    
+                    <h2 class="mb-3">¡Hasta pronto!</h2>
+                    <p class="text-muted mb-4">
+                        Has cerrado sesión exitosamente. Gracias por visitarnos.
+                    </p>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'Inicio' %}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-house-door"></i> Volver al Inicio
+                        </a>
+                        <a href="{% url 'Login' %}" class="btn btn-outline-success">
+                            <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión Nuevamente
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <p class="text-muted">
+                    <i class="bi bi-heart-fill text-danger"></i> 
+                    Esperamos verte pronto
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

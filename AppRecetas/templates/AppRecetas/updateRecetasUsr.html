@@ -1,44 +1,112 @@
 {% extends "AppRecetas/base.html" %}
 
-{ % load static % }
+{% load static %}
 
+{% block titulo %}
+Editar Mi Receta
+{% endblock %}
 
-{% block  titulo %}
-                                
-Esta es mi pagina par actualizar recetas locales
+{% block complement %}
 
-{% endblock  %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-lg">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0"><i class="bi bi-pencil-square"></i> Editar: {{ recetasUsr }}</h4>
+            </div>
+            <div class="card-body p-4">
+                <form action="" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="id_nom_platosUsr" class="form-label fw-bold">Nombre del Plato</label>
+                        {{ formulario2.nom_platosUsr }}
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="id_tipoDeCocinaUsr" class="form-label fw-bold">Tipo de Cocina</label>
+                            {{ formulario2.tipoDeCocinaUsr }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="id_tiempoUsr" class="form-label fw-bold">Tiempo (min)</label>
+                            {{ formulario2.tiempoUsr }}
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="id_dificultadUsr" class="form-label fw-bold">Dificultad</label>
+                            {{ formulario2.dificultadUsr }}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_ingredientesUsr" class="form-label fw-bold">Ingredientes</label>
+                        {{ formulario2.ingredientesUsr }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_recetaUsr" class="form-label fw-bold">Descripción</label>
+                        {{ formulario2.recetaUsr }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_procedimientoUsr" class="form-label fw-bold">Procedimiento</label>
+                        {{ formulario2.procedimientoUsr }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_fuenteUsr" class="form-label fw-bold">Fuente</label>
+                        {{ formulario2.fuenteUsr }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_imagenUsr" class="form-label fw-bold">
+                            <i class="bi bi-camera"></i> Cambiar Imagen (Opcional)
+                        </label>
+                        {{ formulario2.imagenUsr }}
+                        <small class="text-muted d-block">Deja vacío para mantener la imagen actual</small>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'RecetasMain' %}" class="btn btn-secondary btn-lg">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-info btn-lg">
+                            <i class="bi bi-save"></i> Actualizar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-
-
-
-{% block  complement %}
-                                
-<form action="" method="POST">  {% csrf_token %}
-
-
-    <table>
-
-
-        {{formulario2.as_table}}
-
-
-
-    </table>
-
-    <input type="submit" value="Guardar">
-
+<style>
+    input[type="text"], 
+    input[type="number"], 
+    textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        font-size: 1rem;
+    }
     
-
-
-
-
-
-</form>
-
-
+    textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
     
+    input:focus, textarea:focus {
+        border-color: #0dcaf0;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(13, 202, 240, 0.25);
+    }
+    
+    .card {
+        border: none;
+        border-radius: 1rem;
+    }
+</style>
 
-
-
-{% endblock  %}
+{% endblock %}

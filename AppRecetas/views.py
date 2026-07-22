@@ -40,6 +40,11 @@ def inicioDeSesion(request):
     return render(request, "AppRecetas/login.html", {'formulario': form})
 
 
+def cerrarSesion(request):
+    logout(request)
+    return render(request, "AppRecetas/logout.html")
+
+
 def register (request):
 
   if request.method == "POST":
@@ -93,7 +98,10 @@ def addAvatar(request):
     if form.is_valid():
       usuarioActual = User.objects.get(username=request.user)
 
-      avatar = Avatar(usuario=usuarioActual, image=form.cleaned_data["image"])
+      # Si el usuario no tiene avatares, este será el activo
+      tiene_avatares = Avatar.objects.filter(usuario=usuarioActual).exists()
+      
+      avatar = Avatar(usuario=usuarioActual, image=form.cleaned_data["image"], is_active=not tiene_avatares)
       
       avatar.save()
 
@@ -121,20 +129,21 @@ def test(request):
 def addRecetasMain(request):
   if request.method == "POST":#despues de dar click a eviar
     
-    formulario1 = Form_AddRecetasMain(request.POST)
+    formulario1 = Form_AddRecetasMain(request.POST, request.FILES)
     
     if formulario1.is_valid():
 
       info =formulario1.cleaned_data
 
       res_Main = RecetasMain(nom_platos=info["nom_platos"],
-                           ingredientes=request.POST["ingredientes"],
-                           receta=request.POST["receta"],
-                           tiempo=request.POST["tiempo"],
-                           dificultad=request.POST["dificultad"],
-                           tipoDeCocina=request.POST["tipoDeCocina"],
-                           fuente=request.POST["fuente"], 
-                           procedimiento=request.POST["procedimiento"])
+                           ingredientes=info["ingredientes"],
+                           receta=info["receta"],
+                           tiempo=info["tiempo"],
+                           dificultad=info["dificultad"],
+                           tipoDeCocina=info["tipoDeCocina"],
+                           fuente=info["fuente"], 
+                           procedimiento=info["procedimiento"],
+                           imagen=info.get("imagen"))
       
       res_Main.save()                       
       return render(request,'AppRecetas/inicio.html')  
@@ -151,7 +160,7 @@ def addRecetasUsr(request):
   
   if request.method == "POST":#despues de dar click a eviar
     
-    formulario2 = FormAddRecetasUsr(request.POST)
+    formulario2 = FormAddRecetasUsr(request.POST, request.FILES)
     
     if formulario2.is_valid():
 
@@ -164,7 +173,8 @@ def addRecetasUsr(request):
                            dificultadUsr=info["dificultadUsr"],
                            tipoDeCocinaUsr=info["tipoDeCocinaUsr"],
                            fuenteUsr=info["fuenteUsr"], 
-                           procedimientoUsr=info["procedimientoUsr"])
+                           procedimientoUsr=info["procedimientoUsr"],
+                           imagenUsr=info.get("imagenUsr"))
       
       res_Usr.save()                       
       return render(request,'AppRecetas/inicio.html')  
@@ -275,7 +285,7 @@ def update_RecetasMain(request, recetas):
 
   if request.method == "POST":#despues de dar click a eviar
     
-    formulario1 = Form_AddRecetasMain(request.POST)
+    formulario1 = Form_AddRecetasMain(request.POST, request.FILES)
     
     if formulario1.is_valid():
 
@@ -289,6 +299,9 @@ def update_RecetasMain(request, recetas):
       recetas_eli.dificultad = info["dificultad"]
       recetas_eli.fuente = info["fuente"]
       recetas_eli.procedimiento = info["procedimiento"]
+      
+      if info.get("imagen"):
+        recetas_eli.imagen = info["imagen"]
       
       recetas_eli.save() 
       
@@ -308,13 +321,13 @@ def update_RecetasMain(request, recetas):
   return render(request, "AppRecetas/updateRecetasMain.html", {"formulario1": formulario1 , "recetas" : recetas  } )    
 
 @login_required    
-def update_RecetasUsr(request, recetasUsr):
+def update_RecetasUsr(request, pk):
 
-  recetas_eli_Usr = RecetasUsr.objects.get(nom_platosUsr=recetasUsr)
+  recetas_eli_Usr = RecetasUsr.objects.get(pk=pk)
 
   if request.method == "POST":#despues de dar click a eviar
     
-    formulario2 = Form_AddRecetasUsr(request.POST)
+    formulario2 = FormAddRecetasUsr(request.POST, request.FILES)
     
     if formulario2.is_valid():
 
@@ -328,6 +341,9 @@ def update_RecetasUsr(request, recetasUsr):
       recetas_eli_Usr.dificultadUsr = info["dificultadUsr"]
       recetas_eli_Usr.fuenteUsr = info["fuenteUsr"]
       recetas_eli_Usr.procedimientoUsr = info["procedimientoUsr"]
+      
+      if info.get("imagenUsr"):
+        recetas_eli_Usr.imagenUsr = info["imagenUsr"]
       
       recetas_eli_Usr.save() 
       
@@ -344,7 +360,7 @@ def update_RecetasUsr(request, recetasUsr):
                                                   "fuenteUsr" :recetas_eli_Usr.fuenteUsr,
                                                   "procedimientoUsr" : recetas_eli_Usr.procedimientoUsr} )
   
-  return render(request, "AppRecetas/updateRecetasUsr.html", {"formulario2": formulario2 , "recetasUsr" : recetasUsr  } )    
+  return render(request, "AppRecetas/updateRecetasUsr.html", {"formulario2": formulario2 , "recetasUsr" : recetas_eli_Usr  } )    
 
 
 
@@ -381,8 +397,8 @@ def vista_cheffs(request):
 
 #modificar datos CRU"D"    
 @login_required
-def eliminarRecetasUsr(request, nom_recetasUsr):
-  recetasUsr_eli = RecetasUsr.objects.get(nom_platosUsr=nom_recetasUsr)
+def eliminarRecetasUsr(request, pk):
+  recetasUsr_eli = RecetasUsr.objects.get(pk=pk)
   recetasUsr_eli.delete()
 
   recetasUsr_remain = RecetasUsr.objects.all()
@@ -446,5 +462,34 @@ class ListaAvatar(LoginRequiredMixin, ListView):
         return Avatar.objects.filter(usuario=self.request.user)
 
 
+class UpdateAvatar(LoginRequiredMixin, UpdateView):
+  model = Avatar
+  fields = ['image']
+  success_url = "/AppRecetas/avatar/list"
+  template_name = "AppRecetas/avatar_form.html"
   
+  def get_queryset(self):
+        # Solo permite editar sus propios avatares
+        return Avatar.objects.filter(usuario=self.request.user)
+
+
+class BorrarAvatar(LoginRequiredMixin, DeleteView):
+  model = Avatar
+  success_url = "/AppRecetas/avatar/list"
+  template_name = "AppRecetas/avatar_confirm_delete.html"
+  
+  def get_queryset(self):
+        # Solo permite borrar sus propios avatares
+        return Avatar.objects.filter(usuario=self.request.user)
+
+
+@login_required
+def activarAvatar(request, pk):
+    # Desactivar todos los avatares del usuario
+    Avatar.objects.filter(usuario=request.user).update(is_active=False)
+    # Activar el avatar seleccionado
+    avatar = Avatar.objects.get(pk=pk, usuario=request.user)
+    avatar.is_active = True
+    avatar.save()
+    return redirect('/AppRecetas/avatar/list')
 
