@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.db.models import Q
 
 from django.views.generic import ListView , FormView
 from django.views.generic.detail import DetailView
@@ -368,12 +369,30 @@ def update_RecetasUsr(request, pk):
 #para listar, recetas totales y usuarios ****listas***
 
 def vista_recetasMain(request):
+  q = request.GET.get("q", "").strip()
+  tab = request.GET.get("tab", "all")
+  if tab not in ("all", "usr", "main"):
+    tab = "all"
 
-  recetasUsr_all = RecetasUsr.objects.all()
-  recetasMain_all = RecetasMain.objects.all()
+  recetasUsr_all = RecetasUsr.objects.all().order_by("-id")
+  recetasMain_all = RecetasMain.objects.all().order_by("-id")
 
-    
-  return render(request,'AppRecetas/recetasMain.html', {"lista_recetasUsr" : recetasUsr_all , "lista_recetasMain": recetasMain_all})
+  if q:
+    recetasUsr_all = recetasUsr_all.filter(
+      Q(ingredientesUsr__icontains=q) | Q(nom_platosUsr__icontains=q) | Q(tipoDeCocinaUsr__icontains=q)
+    )
+    recetasMain_all = recetasMain_all.filter(
+      Q(ingredientes__icontains=q) | Q(nom_platos__icontains=q) | Q(tipoDeCocina__icontains=q)
+    )
+
+  return render(request,'AppRecetas/recetasMain.html', {
+    "lista_recetasUsr": recetasUsr_all,
+    "lista_recetasMain": recetasMain_all,
+    "q": q,
+    "tab": tab,
+    "total_usr": recetasUsr_all.count(),
+    "total_main": recetasMain_all.count(),
+  })
 
 
 

@@ -1,310 +1,131 @@
 {% extends "AppRecetas/base.html" %}
-
 {% load static %}
 
-{% block titulo %}
-Catálogo de Recetas
-{% endblock %}
+{% block title %}Catálogo de Recetas · Web de Recetas{% endblock %}
+{% block titulo %}Catálogo de Recetas{% endblock %}
+{% block breadcrumbs %}<a href="{% url 'Inicio' %}" class="hover:text-amber-700">Inicio</a> <span aria-hidden="true">›</span> <span aria-current="page" class="text-stone-800 font-semibold">Recetas</span>{% endblock %}
 
-{% block titulo_rec_1 %}  
-<i class="bi bi-people-fill"></i> Recetas de la Comunidad
-{% endblock %}
+{% block titulo_rec_1 %}Recetas de la Comunidad{% endblock %}
 
 {% block complement %}
-
-<div class="row g-3 mb-4">
-    <div class="col-12 text-end">
-        <a href="{% url 'AddRecetasUsr' %}" class="btn btn-success btn-sm">
-            <i class="bi bi-plus-circle"></i> Crear Receta
-        </a>
-        <a href="{% url 'seekRecetasUsr' %}" class="btn btn-info btn-sm">
-            <i class="bi bi-search"></i> Buscar Recetas
-        </a>
+<!-- Buscador unificado + tabs -->
+<div class="card-tw p-4 md:p-6 mb-6">
+    <form action="{% url 'RecetasMain' %}" method="GET" class="flex flex-col md:flex-row gap-2" role="search">
+        <input type="hidden" name="tab" value="{{ tab }}" />
+        <label for="q-recetas" class="sr-only">Buscar recetas</label>
+        <input id="q-recetas" type="search" name="q" value="{{ q }}" placeholder="Buscar por ingrediente, plato o cocina… Ej: tomate" class="input flex-1" />
+        <button type="submit" class="btn btn-primary"><i class="bi bi-search" aria-hidden="true"></i> Buscar</button>
+        {% if q %}<a href="{% url 'RecetasMain' %}?tab={{ tab }}" class="btn btn-ghost">Limpiar</a>{% endif %}
+    </form>
+    <div class="flex flex-wrap gap-2 mt-4" role="tablist" aria-label="Filtrar recetas">
+        <a role="tab" aria-selected="{% if tab == 'all' %}true{% else %}false{% endif %}" class="tab-tw {% if tab == 'all' %}active{% endif %}" href="{% url 'RecetasMain' %}?tab=all{% if q %}&q={{ q|urlencode }}{% endif %}">Todas ({{ total_usr|add:total_main }})</a>
+        <a role="tab" aria-selected="{% if tab == 'usr' %}true{% else %}false{% endif %}" class="tab-tw {% if tab == 'usr' %}active{% endif %}" href="{% url 'RecetasMain' %}?tab=usr{% if q %}&q={{ q|urlencode }}{% endif %}"><i class="bi bi-people-fill" aria-hidden="true"></i> Comunidad ({{ total_usr }})</a>
+        <a role="tab" aria-selected="{% if tab == 'main' %}true{% else %}false{% endif %}" class="tab-tw {% if tab == 'main' %}active{% endif %}" href="{% url 'RecetasMain' %}?tab=main{% if q %}&q={{ q|urlencode }}{% endif %}"><i class="bi bi-star-fill" aria-hidden="true"></i> Destacadas ({{ total_main }})</a>
     </div>
+    {% if q %}<p class="text-sm text-stone-500 mt-3" role="status">Resultados para <strong class="text-stone-800">“{{ q }}”</strong>: {{ total_usr }} comunidad + {{ total_main }} destacadas</p>{% endif %}
+    <p class="text-sm text-stone-500 mt-2"><strong class="text-amber-800">Comunidad</strong> = recetas de usuarios · <strong class="text-amber-800">Destacadas</strong> = verificadas por admin</p>
+</div>
+
+{% if tab == 'all' or tab == 'usr' %}
+<div class="flex justify-end gap-2 mb-4">
+    <a href="{% url 'AddRecetasUsr' %}" class="btn btn-success btn-sm"><i class="bi bi-plus-circle" aria-hidden="true"></i> Crear Receta</a>
+    <a href="{% url 'seekRecetasUsr' %}" class="btn btn-ghost btn-sm"><i class="bi bi-search" aria-hidden="true"></i> Búsqueda avanzada</a>
 </div>
 
 {% if lista_recetasUsr %}
-<div class="row g-4">
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
     {% for recetasUsr in lista_recetasUsr %}
-    <div class="col-md-6 col-lg-4">
-        <div class="card h-100 shadow-sm hover-shadow">
-            {% if recetasUsr.imagenUsr %}
-            <img src="{{ recetasUsr.imagenUsr.url }}" class="card-img-top" alt="{{ recetasUsr.nom_platosUsr }}" style="height: 200px; object-fit: cover;">
-            {% else %}
-            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
-                <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
+    <article class="card-tw card-tw-hover flex flex-col">
+        {% if recetasUsr.imagenUsr %}
+        <img src="{{ recetasUsr.imagenUsr.url }}" class="w-full" alt="{{ recetasUsr.nom_platosUsr }}" style="height:200px;object-fit:cover;" loading="lazy">
+        {% else %}
+        <div class="w-full bg-stone-300 flex items-center justify-center" style="height:200px;" aria-hidden="true"><i class="bi bi-image text-white" style="font-size:3rem"></i></div>
+        {% endif %}
+        <div class="p-4 flex-1">
+            <h3 class="font-bold text-amber-800 mb-2"><i class="bi bi-egg-fried" aria-hidden="true"></i> {{ recetasUsr.nom_platosUsr }}</h3>
+            <div class="flex flex-wrap gap-1 mb-3">
+                <span class="badge-tw badge-kitchen">{{ recetasUsr.tipoDeCocinaUsr }}</span>
+                <span class="badge-tw badge-time"><i class="bi bi-clock" aria-hidden="true"></i> {{ recetasUsr.tiempoUsr }} min</span>
+                <span class="badge-tw {% if recetasUsr.dificultadUsr == 'Fácil' %}badge-easy{% elif recetasUsr.dificultadUsr == 'Difícil' %}badge-hard{% else %}badge-medium{% endif %}">{{ recetasUsr.dificultadUsr }}</span>
             </div>
-            {% endif %}
-            <div class="card-body">
-                <h5 class="card-title text-primary mb-3">
-                    <i class="bi bi-egg-fried"></i> {{ recetasUsr.nom_platosUsr }}
-                </h5>
-                
-                <div class="mb-3">
-                    <span class="badge bg-secondary">{{ recetasUsr.tipoDeCocinaUsr }}</span>
-                    <span class="badge bg-info"><i class="bi bi-clock"></i> {{ recetasUsr.tiempoUsr }} min</span>
-                    <span class="badge bg-warning text-dark">{{ recetasUsr.dificultadUsr }}</span>
-                </div>
-                
-                <ul class="list-unstyled small mb-3">
-                    <li class="mb-2">
-                        <strong><i class="bi bi-basket text-success"></i> Ingredientes:</strong>
-                        <p class="text-muted mb-0">{{ recetasUsr.ingredientesUsr|truncatewords:8 }}</p>
-                    </li>
-                    <li class="mb-2">
-                        <strong><i class="bi bi-file-text text-info"></i> Descripción:</strong>
-                        <p class="text-muted mb-0">{{ recetasUsr.recetaUsr|truncatewords:12 }}</p>
-                    </li>
-                    <li class="mb-2">
-                        <strong><i class="bi bi-bookmark text-warning"></i> Fuente:</strong>
-                        <p class="text-muted mb-0">{{ recetasUsr.fuenteUsr|default:"No especificada" }}</p>
-                    </li>
-                </ul>
-                
-                <!-- Botón Ver Detalles -->
-                <button class="btn btn-sm btn-outline-info w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#detalles-{{ recetasUsr.id }}" aria-expanded="false">
-                    <i class="bi bi-eye"></i> Ver Procedimiento Completo
-                </button>
-                
-                <!-- Detalles colapsables -->
-                <div class="collapse" id="detalles-{{ recetasUsr.id }}">
-                    <div class="card card-body bg-light mt-2">
-                        <h6 class="text-primary"><i class="bi bi-list-ol"></i> Procedimiento:</h6>
-                        <p class="small text-dark mb-0" style="white-space: pre-line;">{{ recetasUsr.procedimientoUsr }}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer bg-transparent border-top-0">
-                <div class="btn-group w-100" role="group">
-                    {% if request.user.is_authenticated %}
-                    <a href="{% url 'updateRecetasUsr' recetasUsr.id %}" 
-                       class="btn btn-outline-primary btn-sm">
-                        <i class="bi bi-pencil"></i> Editar
-                    </a>
-                    <a href="{% url 'eliminarRecetasUsr' recetasUsr.id %}" 
-                       class="btn btn-outline-danger btn-sm"
-                       onclick="return confirm('¿Eliminar esta receta?')">
-                        <i class="bi bi-trash"></i> Eliminar
-                    </a>
-                    {% else %}
-                    <a href="{% url 'Login' %}" class="btn btn-outline-secondary btn-sm w-100">
-                        <i class="bi bi-lock"></i> Inicia sesión para editar
-                    </a>
-                    {% endif %}
-                </div>
-            </div>
+            <p class="text-sm text-stone-500 mb-1"><strong>Ingredientes:</strong> {{ recetasUsr.ingredientesUsr|truncatewords:10 }}</p>
+            <p class="text-sm text-stone-500 mb-3"><strong>Fuente:</strong> {{ recetasUsr.fuenteUsr|default:"No especificada" }}</p>
+            <details class="detail-tw">
+                <summary>Ver procedimiento completo</summary>
+                <div class="detail-body text-sm">{{ recetasUsr.procedimientoUsr }}</div>
+            </details>
         </div>
-    </div>
+        <div class="p-3 border-t border-stone-100 flex gap-2">
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'updateRecetasUsr' recetasUsr.id %}" class="btn btn-ghost btn-sm flex-1"><i class="bi bi-pencil" aria-hidden="true"></i> Editar</a>
+            <a href="{% url 'eliminarRecetasUsr' recetasUsr.id %}" class="btn btn-danger-ghost btn-sm flex-1" onclick="return confirm('¿Eliminar esta receta?')"><i class="bi bi-trash" aria-hidden="true"></i> Eliminar</a>
+            {% else %}
+            <a href="{% url 'Login' %}" class="btn btn-ghost btn-sm w-full"><i class="bi bi-lock" aria-hidden="true"></i> Inicia sesión para editar</a>
+            {% endif %}
+        </div>
+    </article>
     {% endfor %}
 </div>
 {% else %}
-<div class="alert alert-info text-center">
-    <i class="bi bi-info-circle"></i> No hay recetas de usuarios aún. ¡Sé el primero en agregar una!
+<div class="card-tw p-8 text-center text-stone-500">
+    <i class="bi bi-info-circle text-3xl" aria-hidden="true"></i>
+    <p class="mt-2 font-semibold">{% if q %}Sin resultados en Comunidad para “{{ q }}”{% else %}No hay recetas de usuarios aún{% endif %}</p>
+    <a href="{% url 'AddRecetasUsr' %}" class="btn btn-success btn-sm mt-3">¡Sé el primero en agregar una!</a>
 </div>
 {% endif %}
-
+{% endif %}
 {% endblock %}
 
-{% block titulos_rec_2 %}
-<i class="bi bi-star-fill"></i> Recetas Destacadas
-{% endblock %}
+{% block titulos_rec_2 %}Recetas Destacadas{% endblock %}
 
 {% block complement_1 %}
-
-<div class="row g-3 mb-4">
-    <div class="col-12 text-end">
-        {% if request.user.is_authenticated %}
-        <a href="{% url 'AddRecetasMain' %}" class="btn btn-success btn-sm">
-            <i class="bi bi-plus-circle"></i> Crear Receta
-        </a>
-        {% endif %}
-        <a href="{% url 'seekRecetas' %}" class="btn btn-info btn-sm">
-            <i class="bi bi-search"></i> Buscar Recetas
-        </a>
-    </div>
+{% if tab == 'all' or tab == 'main' %}
+<div class="flex justify-end gap-2 mb-4">
+    {% if request.user.is_authenticated %}
+    <a href="{% url 'AddRecetasMain' %}" class="btn btn-success btn-sm"><i class="bi bi-plus-circle" aria-hidden="true"></i> Crear Destacada</a>
+    {% endif %}
+    <a href="{% url 'seekRecetas' %}" class="btn btn-ghost btn-sm"><i class="bi bi-search" aria-hidden="true"></i> Búsqueda avanzada</a>
 </div>
 
 {% if lista_recetasMain %}
-<div class="row g-4">
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
     {% for recetasMain in lista_recetasMain %}
-    <div class="col-md-6 col-lg-4">
-        <div class="card h-100 shadow-sm hover-shadow border-primary">
-            {% if recetasMain.imagen %}
-            <img src="{{ recetasMain.imagen.url }}" class="card-img-top" alt="{{ recetasMain.nom_platos }}" style="height: 200px; object-fit: cover;">
-            {% else %}
-            <div class="card-img-top bg-primary d-flex align-items-center justify-content-center" style="height: 200px;">
-                <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
+    <article class="card-tw card-tw-hover flex flex-col" style="border-top:4px solid #d97706">
+        {% if recetasMain.imagen %}
+        <img src="{{ recetasMain.imagen.url }}" class="w-full" alt="{{ recetasMain.nom_platos }}" style="height:200px;object-fit:cover;" loading="lazy">
+        {% else %}
+        <div class="w-full bg-amber-700 flex items-center justify-center" style="height:200px;" aria-hidden="true"><i class="bi bi-star-fill text-white" style="font-size:3rem"></i></div>
+        {% endif %}
+        <div class="p-4 flex-1">
+            <h3 class="font-bold text-amber-800 mb-2"><i class="bi bi-star-fill text-amber-500" aria-hidden="true"></i> {{ recetasMain.nom_platos }}</h3>
+            <div class="flex flex-wrap gap-1 mb-3">
+                <span class="badge-tw badge-kitchen">{{ recetasMain.tipoDeCocina }}</span>
+                <span class="badge-tw badge-time"><i class="bi bi-clock" aria-hidden="true"></i> {{ recetasMain.tiempo }} min</span>
+                <span class="badge-tw badge-medium">{{ recetasMain.dificultad }}</span>
             </div>
-            {% endif %}
-            <div class="card-body">
-                <h5 class="card-title text-primary mb-3">
-                    <i class="bi bi-star-fill text-warning"></i> {{ recetasMain.nom_platos }}
-                </h5>
-                
-                <div class="mb-3">
-                    <span class="badge bg-primary">{{ recetasMain.tipoDeCocina }}</span>
-                    <span class="badge bg-info"><i class="bi bi-clock"></i> {{ recetasMain.tiempo }} min</span>
-                    <span class="badge bg-warning text-dark">{{ recetasMain.dificultad }}</span>
-                </div>
-                
-                <ul class="list-unstyled small mb-3">
-                    <li class="mb-2">
-                        <strong><i class="bi bi-basket text-success"></i> Ingredientes:</strong>
-                        <p class="text-muted mb-0">{{ recetasMain.ingredientes|truncatewords:8 }}</p>
-                    </li>
-                    <li class="mb-2">
-                        <strong><i class="bi bi-file-text text-info"></i> Descripción:</strong>
-                        <p class="text-muted mb-0">{{ recetasMain.receta|truncatewords:12 }}</p>
-                    </li>
-                    <li class="mb-2">
-                        <strong><i class="bi bi-bookmark text-warning"></i> Fuente:</strong>
-                        <p class="text-muted mb-0">{{ recetasMain.fuente }}</p>
-                    </li>
-                </ul>
-                
-                <!-- Botón Ver Detalles -->
-                <button class="btn btn-sm btn-outline-primary w-100 mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#detalles-main-{{ recetasMain.id }}" aria-expanded="false">
-                    <i class="bi bi-eye"></i> Ver Procedimiento Completo
-                </button>
-                
-                <!-- Detalles colapsables -->
-                <div class="collapse" id="detalles-main-{{ recetasMain.id }}">
-                    <div class="card card-body bg-light mt-2">
-                        <h6 class="text-primary"><i class="bi bi-list-ol"></i> Procedimiento:</h6>
-                        <p class="small text-dark mb-0" style="white-space: pre-line;">{{ recetasMain.procedimiento }}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer bg-transparent border-top-0">
-                <div class="btn-group w-100" role="group">
-                    {% if request.user.is_authenticated %}
-                    <a href="{% url 'updateRecetasMain' recetasMain.nom_platos %}" 
-                       class="btn btn-outline-primary btn-sm">
-                        <i class="bi bi-pencil"></i> Editar
-                    </a>
-                    <a href="{% url 'eliminarRecetasMain' recetasMain.nom_platos %}" 
-                       class="btn btn-outline-danger btn-sm"
-                       onclick="return confirm('¿Eliminar esta receta?')">
-                        <i class="bi bi-trash"></i> Eliminar
-                    </a>
-                    {% else %}
-                    <a href="{% url 'Login' %}" class="btn btn-outline-secondary btn-sm w-100">
-                        <i class="bi bi-lock"></i> Inicia sesión para editar
-                    </a>
-                    {% endif %}
-                </div>
-            </div>
+            <p class="text-sm text-stone-500 mb-1"><strong>Ingredientes:</strong> {{ recetasMain.ingredientes|truncatewords:10 }}</p>
+            <p class="text-sm text-stone-500 mb-3"><strong>Fuente:</strong> {{ recetasMain.fuente|default:"No especificada" }}</p>
+            <details class="detail-tw">
+                <summary>Ver procedimiento completo</summary>
+                <div class="detail-body text-sm">{{ recetasMain.procedimiento }}</div>
+            </details>
         </div>
-    </div>
+        <div class="p-3 border-t border-stone-100 flex gap-2">
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'updateRecetasMain' recetasMain.nom_platos %}" class="btn btn-ghost btn-sm flex-1"><i class="bi bi-pencil" aria-hidden="true"></i> Editar</a>
+            <a href="{% url 'eliminarRecetasMain' recetasMain.nom_platos %}" class="btn btn-danger-ghost btn-sm flex-1" onclick="return confirm('¿Eliminar esta receta?')"><i class="bi bi-trash" aria-hidden="true"></i> Eliminar</a>
+            {% else %}
+            <a href="{% url 'Login' %}" class="btn btn-ghost btn-sm w-full"><i class="bi bi-lock" aria-hidden="true"></i> Inicia sesión para editar</a>
+            {% endif %}
+        </div>
+    </article>
     {% endfor %}
 </div>
 {% else %}
-<div class="alert alert-warning text-center">
-    <i class="bi bi-exclamation-triangle"></i> No hay recetas destacadas disponibles.
+<div class="card-tw p-8 text-center text-stone-500">
+    <i class="bi bi-exclamation-triangle text-3xl" aria-hidden="true"></i>
+    <p class="mt-2 font-semibold">{% if q %}Sin resultados en Destacadas para “{{ q }}”{% else %}No hay recetas destacadas disponibles{% endif %}</p>
 </div>
 {% endif %}
-
-<style>
-    .hover-shadow {
-        transition: all 0.3s ease;
-    }
-    .hover-shadow:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-    }
-    .card {
-        border-radius: 0.75rem;
-        margin-bottom: 1rem;
-    }
-    .card-title {
-        font-weight: 600;
-    }
-    
-    /* Espaciado entre secciones */
-    .content-wrapper {
-        min-height: 300px;
-        position: relative;
-        z-index: 1;
-    }
-    
-    /* Asegurar que las secciones no se superpongan */
-    .page-section {
-        position: relative;
-        clear: both;
-        margin-bottom: 2rem;
-    }
-    
-    .bg-faded {
-        background-color: rgba(255, 255, 255, 0.95);
-        position: relative;
-        z-index: 2;
-    }
-    
-    /* Mejorar el grid de cards */
-    .row.g-4 {
-        margin-bottom: 2rem;
-    }
-    
-    /* Estilos para las listas de información */
-    .list-unstyled li {
-        padding: 0.25rem 0;
-    }
-    
-    .list-unstyled strong {
-        color: #495057;
-        font-size: 0.9rem;
-    }
-    
-    .list-unstyled p {
-        font-size: 0.85rem;
-        line-height: 1.4;
-    }
-    
-    /* Estilos para el collapse */
-    .collapse .card-body {
-        max-height: 300px;
-        overflow-y: auto;
-        border-radius: 0.5rem;
-    }
-    
-    .collapse .card-body::-webkit-scrollbar {
-        width: 6px;
-    }
-    
-    .collapse .card-body::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 10px;
-    }
-    
-    .collapse .card-body::-webkit-scrollbar-thumb {
-        background: #888;
-        border-radius: 10px;
-    }
-    
-    .collapse .card-body::-webkit-scrollbar-thumb:hover {
-        background: #555;
-    }
-    
-    /* Badges con mejor espaciado */
-    .badge {
-        margin-right: 0.25rem;
-        padding: 0.4rem 0.6rem;
-        font-weight: 500;
-    }
-    
-    /* Espaciado para móviles */
-    @media (max-width: 768px) {
-        .page-section {
-            margin-bottom: 3rem;
-        }
-        .card {
-            margin-bottom: 2rem;
-        }
-        
-        .list-unstyled p {
-            font-size: 0.8rem;
-        }
-    }
-</style>
-
+{% endif %}
 {% endblock %}
