@@ -126,3 +126,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+# Auth: el nav usa @login_required / LoginRequiredMixin.
+# Sin esto Django redirige a /accounts/login/ (no existe) y "Cheffs" parece roto.
+LOGIN_URL = "/AppRecetas/login/"
+LOGIN_REDIRECT_URL = "/AppRecetas/"
+LOGOUT_REDIRECT_URL = "/AppRecetas/"

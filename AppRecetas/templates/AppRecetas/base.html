@@ -128,10 +128,12 @@
     <main id="contenido" class="mx-auto max-w-7xl px-4 pb-12 w-full flex-1">
         {% block content %}{% endblock %}
         {% block complement %}{% endblock %}
+        {% if request.resolver_match.url_name == 'Inicio' or request.resolver_match.url_name == 'RecetasMain' or request.resolver_match.url_name == 'About' %}
         <section class="card-tw p-5 md:p-8 mt-8" aria-label="Sección secundaria">
             <h2 class="text-center text-amber-800 font-bold mb-4">{% block titulos_rec_2 %}{% endblock %}</h2>
             {% block complement_1 %}{% endblock %}
         </section>
+        {% endif %}
         {% block titulo_rec_1 %}{% endblock %}
     </main>
 
