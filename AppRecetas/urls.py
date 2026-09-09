@@ -59,7 +59,13 @@ urlpatterns = [
     path("cheff/<int:pk>/", DetalleCheff.as_view(), name="detalleCheff"),
     path("cheff/crear/", CrearCheff.as_view(), name="crearCheff"),
     path("cheff/editar/<int:pk>/", UpdateCheff.as_view(), name="updateCheff"),
-     path("cheff/borrar/<int:pk>/", BorrarCheff.as_view(), name="borrarCheff"),
+    path("cheff/borrar/<int:pk>/", BorrarCheff.as_view(), name="borrarCheff"),
+
+    # precios globales de ingredientes (para costo estimado)
+    path("precios/", ListaPrecios.as_view(), name="listaPrecios"),
+    path("precios/crear/", CrearPrecio.as_view(), name="crearPrecio"),
+    path("precios/editar/<int:pk>/", UpdatePrecio.as_view(), name="updatePrecio"),
+    path("precios/borrar/<int:pk>/", BorrarPrecio.as_view(), name="borrarPrecio"),
   
   
-  ] 
+  ]

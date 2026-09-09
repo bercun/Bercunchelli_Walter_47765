@@ -14,8 +14,25 @@ from django.contrib.auth.models import User
 #Decorador por defecto
 from django.contrib.auth.decorators import login_required
 
-from AppRecetas.models import RecetasMain, RecetasUsr, Cheff , Avatar
+from AppRecetas.models import RecetasMain, RecetasUsr, Cheff , Avatar, IngredientePrecio, PasoMain, PasoUsr
 from AppRecetas.forms import *
+
+
+def _get_pasos_from_post(request):
+    """Lee inputs dinámicos name='paso_texto' (Alpine) y los limpia/ordena."""
+    pasos = [p.strip() for p in request.POST.getlist("paso_texto")]
+    return [p for p in pasos if p]
+
+
+def _sync_pasos(receta, pasos, tipo="main"):
+    if tipo == "main":
+        receta.pasos.all().delete()
+        for i, texto in enumerate(pasos, start=1):
+            PasoMain.objects.create(receta=receta, orden=i, texto=texto)
+    else:
+        receta.pasos.all().delete()
+        for i, texto in enumerate(pasos, start=1):
+            PasoUsr.objects.create(receta=receta, orden=i, texto=texto)
 
 
 
@@ -146,7 +163,12 @@ def addRecetasMain(request):
                            procedimiento=info["procedimiento"],
                            imagen=info.get("imagen"))
       
-      res_Main.save()                       
+      res_Main.save()
+      pasos = _get_pasos_from_post(request)
+      if pasos:
+        _sync_pasos(res_Main, pasos, tipo="main")
+        res_Main.procedimiento = "\n".join(pasos)
+        res_Main.save(update_fields=["procedimiento"])
       return render(request,'AppRecetas/inicio.html')  
     
   else:
@@ -177,7 +199,12 @@ def addRecetasUsr(request):
                            procedimientoUsr=info["procedimientoUsr"],
                            imagenUsr=info.get("imagenUsr"))
       
-      res_Usr.save()                       
+      res_Usr.save()
+      pasos = _get_pasos_from_post(request)
+      if pasos:
+        _sync_pasos(res_Usr, pasos, tipo="usr")
+        res_Usr.procedimientoUsr = "\n".join(pasos)
+        res_Usr.save(update_fields=["procedimientoUsr"])
       return render(request,'AppRecetas/inicio.html')  
     
   else:
@@ -304,7 +331,12 @@ def update_RecetasMain(request, recetas):
       if info.get("imagen"):
         recetas_eli.imagen = info["imagen"]
       
-      recetas_eli.save() 
+      recetas_eli.save()
+      pasos = _get_pasos_from_post(request)
+      if pasos:
+        _sync_pasos(recetas_eli, pasos, tipo="main")
+        recetas_eli.procedimiento = "\n".join(pasos)
+        recetas_eli.save(update_fields=["procedimiento"])
       
       return render(request,'AppRecetas/inicio.html')  
 
@@ -319,7 +351,7 @@ def update_RecetasMain(request, recetas):
                                                   "fuente" :recetas_eli.fuente,
                                                   "procedimiento" : recetas_eli.procedimiento} )
   
-  return render(request, "AppRecetas/updateRecetasMain.html", {"formulario1": formulario1 , "recetas" : recetas  } )    
+  return render(request, "AppRecetas/updateRecetasMain.html", {"formulario1": formulario1 , "recetas" : recetas, "pasos": recetas_eli.get_pasos_lista()} )    
 
 @login_required    
 def update_RecetasUsr(request, pk):
@@ -346,7 +378,12 @@ def update_RecetasUsr(request, pk):
       if info.get("imagenUsr"):
         recetas_eli_Usr.imagenUsr = info["imagenUsr"]
       
-      recetas_eli_Usr.save() 
+      recetas_eli_Usr.save()
+      pasos = _get_pasos_from_post(request)
+      if pasos:
+        _sync_pasos(recetas_eli_Usr, pasos, tipo="usr")
+        recetas_eli_Usr.procedimientoUsr = "\n".join(pasos)
+        recetas_eli_Usr.save(update_fields=["procedimientoUsr"])
       
       return render(request,'AppRecetas/inicio.html')  
 
@@ -361,7 +398,7 @@ def update_RecetasUsr(request, pk):
                                                   "fuenteUsr" :recetas_eli_Usr.fuenteUsr,
                                                   "procedimientoUsr" : recetas_eli_Usr.procedimientoUsr} )
   
-  return render(request, "AppRecetas/updateRecetasUsr.html", {"formulario2": formulario2 , "recetasUsr" : recetas_eli_Usr  } )    
+  return render(request, "AppRecetas/updateRecetasUsr.html", {"formulario2": formulario2 , "recetasUsr" : recetas_eli_Usr, "pasos": recetas_eli_Usr.get_pasos_lista()} )    
 
 
 
@@ -511,4 +548,28 @@ def activarAvatar(request, pk):
     avatar.is_active = True
     avatar.save()
     return redirect('/AppRecetas/avatar/list')
+
+
+# Precios de ingredientes (global, para costo estimado)
+class ListaPrecios(LoginRequiredMixin, ListView):
+  model = IngredientePrecio
+  ordering = ["nombre"]
+  paginate_by = 30
+
+
+class CrearPrecio(LoginRequiredMixin, CreateView):
+  model = IngredientePrecio
+  success_url = "/AppRecetas/precios/"
+  fields = ["nombre", "unidad_base", "precio_estimado", "moneda", "fuente"]
+
+
+class UpdatePrecio(LoginRequiredMixin, UpdateView):
+  model = IngredientePrecio
+  success_url = "/AppRecetas/precios/"
+  fields = ["nombre", "unidad_base", "precio_estimado", "moneda", "fuente"]
+
+
+class BorrarPrecio(LoginRequiredMixin, DeleteView):
+  model = IngredientePrecio
+  success_url = "/AppRecetas/precios/"
 

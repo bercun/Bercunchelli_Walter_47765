@@ -1,0 +1,35 @@
+{% extends "AppRecetas/base.html" %}
+{% block title %}Precios de ingredientes · Web de Recetas{% endblock %}
+{% block titulo %}Precios de Ingredientes{% endblock %}
+{% block breadcrumbs %}<a href="{% url 'Inicio' %}" class="hover:text-amber-700">Inicio</a> <span aria-hidden="true">›</span> <span aria-current="page" class="text-stone-800 font-semibold">Precios</span>{% endblock %}
+{% block complement %}
+<div class="card-tw p-4 md:p-6 mb-5">
+  <p class="text-sm text-stone-500">Precio <strong>global estimado</strong> por ingrediente. Se usa para calcular el costo de cada receta manteniendo el campo de ingredientes como texto (ej: <em>2 kg harina, 3 unidad huevo</em>).</p>
+  <div class="flex justify-end mt-3"><a href="{% url 'crearPrecio' %}" class="btn btn-success btn-sm"><i class="bi bi-plus-circle" aria-hidden="true"></i> Agregar precio</a></div>
+</div>
+{% if object_list %}
+<div class="card-tw overflow-x-auto">
+<table class="w-full text-sm">
+<thead><tr class="text-left text-stone-500 border-b border-stone-200">
+<th class="p-3">Ingrediente</th><th class="p-3">Unidad base</th><th class="p-3">Precio</th><th class="p-3">Fuente</th><th class="p-3 text-right">Acciones</th>
+</tr></thead>
+<tbody>
+{% for p in object_list %}
+<tr class="border-b border-stone-100">
+<td class="p-3 font-bold">{{ p.nombre }}</td>
+<td class="p-3"><span class="badge-tw badge-kitchen">{{ p.unidad_base }}</span></td>
+<td class="p-3">${{ p.precio_estimado }} {{ p.moneda }}</td>
+<td class="p-3 text-stone-500">{{ p.fuente|default:"—" }}</td>
+<td class="p-3 text-right whitespace-nowrap">
+<a href="{% url 'updatePrecio' p.id %}" class="btn btn-ghost btn-sm">Editar</a>
+<a href="{% url 'borrarPrecio' p.id %}" class="btn btn-danger-ghost btn-sm">Borrar</a>
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% else %}
+<div class="card-tw p-8 text-center text-stone-500"><p class="font-semibold">Sin precios cargados.</p><a href="{% url 'crearPrecio' %}" class="btn btn-success btn-sm mt-3">Cargar el primero</a></div>
+{% endif %}
+{% endblock %}

@@ -51,6 +51,17 @@ class RecetasMain(models.Model):
         if pasos:
             return [p.texto for p in pasos]
         return [l.strip() for l in (self.procedimiento or "").splitlines() if l.strip()]
+
+    @property
+    def ingredientes_items(self):
+        from AppRecetas.costos import parse_ingredientes_texto
+        return parse_ingredientes_texto(self.ingredientes)
+
+    @property
+    def costo_estimado(self):
+        from AppRecetas.costos import calcular_costo
+        precios = IngredientePrecio.objects.all()
+        return calcular_costo(self.ingredientes_items, precios)
     
 
 
@@ -82,6 +93,17 @@ class RecetasUsr(models.Model):
         if pasos:
             return [p.texto for p in pasos]
         return [l.strip() for l in (self.procedimientoUsr or "").splitlines() if l.strip()]
+
+    @property
+    def ingredientes_items(self):
+        from AppRecetas.costos import parse_ingredientes_texto
+        return parse_ingredientes_texto(self.ingredientesUsr)
+
+    @property
+    def costo_estimado(self):
+        from AppRecetas.costos import calcular_costo
+        precios = IngredientePrecio.objects.all()
+        return calcular_costo(self.ingredientes_items, precios)
 
 
 

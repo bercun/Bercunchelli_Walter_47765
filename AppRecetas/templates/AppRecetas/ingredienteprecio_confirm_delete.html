@@ -1,0 +1,14 @@
+{% extends "AppRecetas/base.html" %}
+{% block title %}Borrar precio · Web de Recetas{% endblock %}
+{% block titulo %}Borrar precio{% endblock %}
+{% block complement %}
+<div class="flex justify-center"><div class="w-full max-w-md"><div class="card-tw p-6 text-center">
+<p>¿Eliminar <strong>{{ object.nombre }}</strong> (${{ object.precio_estimado }} / {{ object.unidad_base }})?</p>
+<form method="POST">{% csrf_token %}
+<div class="flex gap-2 justify-center mt-4">
+<a href="{% url 'listaPrecios' %}" class="btn btn-ghost">Cancelar</a>
+<button type="submit" class="btn btn-danger-ghost">Eliminar</button>
+</div>
+</form>
+</div></div></div>
+{% endblock %}
