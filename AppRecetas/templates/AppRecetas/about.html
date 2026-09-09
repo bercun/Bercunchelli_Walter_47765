@@ -1,6 +1,8 @@
 {% extends "AppRecetas/base.html" %}
 {% load static %}
 
+{% block title %}About · Web de Recetas{% endblock %}
+{% block breadcrumbs %}<a href="{% url 'Inicio' %}" class="hover:text-amber-700">Inicio</a> <span aria-hidden="true">›</span> <span aria-current="page" class="text-stone-800 font-semibold">About</span>{% endblock %}
 {% block titulo %}
 Acerca de Nosotros
 {% endblock %}
@@ -28,7 +30,7 @@ Acerca de Nosotros
                         <img src="{% static 'AppRecetas/assets/img/about.jpg' %}" 
                              class="img-fluid rounded-start h-100" 
                              style="object-fit: cover;" 
-                             alt="Acerca de nosotros">
+                             alt="Walter Bercunchelli cocinando" loading="lazy">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body p-4">
@@ -149,7 +151,7 @@ Acerca de Nosotros
                     <div class="row text-center">
                         <div class="col-6 col-md-3 mb-3">
                             <i class="bi bi-file-code text-success" style="font-size: 2rem;"></i>
-                            <p class="mb-0 mt-2"><strong>Django 4.2</strong></p>
+                            <p class="mb-0 mt-2"><strong>Django 5.1</strong></p>
                             <small class="text-muted">Framework Web</small>
                         </div>
                         <div class="col-6 col-md-3 mb-3">
@@ -158,9 +160,9 @@ Acerca de Nosotros
                             <small class="text-muted">Lenguaje Backend</small>
                         </div>
                         <div class="col-6 col-md-3 mb-3">
-                            <i class="bi bi-bootstrap-fill text-primary" style="font-size: 2rem;"></i>
-                            <p class="mb-0 mt-2"><strong>Bootstrap 5</strong></p>
-                            <small class="text-muted">Framework CSS</small>
+                            <i class="bi bi-wind text-amber-700" style="font-size: 2rem;"></i>
+                            <p class="mb-0 mt-2"><strong>Tailwind CSS</strong></p>
+                            <small class="text-muted">Framework CSS (migrado de Bootstrap 5)</small>
                         </div>
                         <div class="col-6 col-md-3 mb-3">
                             <i class="bi bi-database text-warning" style="font-size: 2rem;"></i>
@@ -196,14 +198,5 @@ Acerca de Nosotros
     </div>
 </div>
 
-<style>
-.hover-shadow {
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.hover-shadow:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-}
-</style>
+{# hover-shadow centralizado en tailwind-components.css #}
 {% endblock %}

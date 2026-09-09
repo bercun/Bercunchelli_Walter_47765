@@ -1,8 +1,10 @@
 {% extends "AppRecetas/base.html" %}
 {% load static %}
 
+{% block title %}Comunidad Cheffs · Web de Recetas{% endblock %}
+{% block breadcrumbs %}<a href="{% url 'Inicio' %}" class="hover:text-amber-700">Inicio</a> <span aria-hidden="true">›</span> <span aria-current="page" class="text-stone-800 font-semibold">Cheffs</span>{% endblock %}
 {% block titulo %}
-Lista de Usuarios
+Comunidad Cheffs
 {% endblock %}
 
 {% block complement %}
