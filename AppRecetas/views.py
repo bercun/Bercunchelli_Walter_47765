@@ -174,9 +174,9 @@ def addRecetasMain(request):
   else:
     formulario1 = Form_AddRecetasMain()
 
-                         
+  precios_nombres = list(IngredientePrecio.objects.order_by("nombre").values_list("nombre", flat=True)[:200])
 
-  return render(request,'AppRecetas/addRecetasMain.html', {"form1" :formulario1})
+  return render(request,'AppRecetas/addRecetasMain.html', {"form1" :formulario1, "precios_nombres": precios_nombres, "pasos": []})
   
 @login_required
 def addRecetasUsr(request):
@@ -210,9 +210,9 @@ def addRecetasUsr(request):
   else:
     formulario2 = FormAddRecetasUsr()
 
-                         
+  precios_nombres = list(IngredientePrecio.objects.order_by("nombre").values_list("nombre", flat=True)[:200])
 
-  return render(request,'AppRecetas/addRecetasUsr.html', {"form2" :formulario2})
+  return render(request,'AppRecetas/addRecetasUsr.html', {"form2" :formulario2, "precios_nombres": precios_nombres, "pasos": []})
                         
 @login_required
 def addCheff(request):
@@ -351,7 +351,7 @@ def update_RecetasMain(request, recetas):
                                                   "fuente" :recetas_eli.fuente,
                                                   "procedimiento" : recetas_eli.procedimiento} )
   
-  return render(request, "AppRecetas/updateRecetasMain.html", {"formulario1": formulario1 , "recetas" : recetas, "pasos": recetas_eli.get_pasos_lista()} )    
+  return render(request, "AppRecetas/updateRecetasMain.html", {"formulario1": formulario1 , "recetas" : recetas, "pasos": recetas_eli.get_pasos_lista(), "precios_nombres": list(IngredientePrecio.objects.order_by("nombre").values_list("nombre", flat=True)[:200])} )    
 
 @login_required    
 def update_RecetasUsr(request, pk):
@@ -398,7 +398,7 @@ def update_RecetasUsr(request, pk):
                                                   "fuenteUsr" :recetas_eli_Usr.fuenteUsr,
                                                   "procedimientoUsr" : recetas_eli_Usr.procedimientoUsr} )
   
-  return render(request, "AppRecetas/updateRecetasUsr.html", {"formulario2": formulario2 , "recetasUsr" : recetas_eli_Usr, "pasos": recetas_eli_Usr.get_pasos_lista()} )    
+  return render(request, "AppRecetas/updateRecetasUsr.html", {"formulario2": formulario2 , "recetasUsr" : recetas_eli_Usr, "pasos": recetas_eli_Usr.get_pasos_lista(), "precios_nombres": list(IngredientePrecio.objects.order_by("nombre").values_list("nombre", flat=True)[:200])} )    
 
 
 

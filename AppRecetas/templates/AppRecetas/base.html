@@ -53,6 +53,7 @@
                     {% with current=request.resolver_match.url_name %}
                     <a class="nav-link-tw {% if current == 'Inicio' %}active{% endif %}" href="{% url 'Inicio' %}" {% if current == 'Inicio' %}aria-current="page"{% endif %}><i class="bi bi-house-fill" aria-hidden="true"></i> Inicio</a>
                     <a class="nav-link-tw {% if current == 'RecetasMain' %}active{% endif %}" href="{% url 'RecetasMain' %}" {% if current == 'RecetasMain' %}aria-current="page"{% endif %}><i class="bi bi-book-fill" aria-hidden="true"></i> Recetas</a>
+                    <a class="nav-link-tw {% if current == 'listaPrecios' %}active{% endif %}" href="{% url 'listaPrecios' %}" {% if current == 'listaPrecios' %}aria-current="page"{% endif %}><i class="bi bi-cash-coin" aria-hidden="true"></i> Precios</a>
                     <a class="nav-link-tw {% if current == 'listaCheff' %}active{% endif %}" href="{% url 'listaCheff' %}"><i class="bi bi-award-fill" aria-hidden="true"></i> Cheffs</a>
                     <a class="nav-link-tw {% if current == 'About' %}active{% endif %}" href="{% url 'About' %}"><i class="bi bi-info-circle-fill" aria-hidden="true"></i> About</a>
                     {% endwith %}
@@ -98,6 +99,7 @@
                 </form>
                 <a class="block nav-link-tw" href="{% url 'Inicio' %}"><i class="bi bi-house-fill" aria-hidden="true"></i> Inicio</a>
                 <a class="block nav-link-tw" href="{% url 'RecetasMain' %}"><i class="bi bi-book-fill" aria-hidden="true"></i> Recetas</a>
+                <a class="block nav-link-tw" href="{% url 'listaPrecios' %}"><i class="bi bi-cash-coin" aria-hidden="true"></i> Precios</a>
                 <a class="block nav-link-tw" href="{% url 'listaCheff' %}"><i class="bi bi-award-fill" aria-hidden="true"></i> Cheffs</a>
                 <a class="block nav-link-tw" href="{% url 'About' %}"><i class="bi bi-info-circle-fill" aria-hidden="true"></i> About</a>
                 {% if request.user.is_authenticated %}

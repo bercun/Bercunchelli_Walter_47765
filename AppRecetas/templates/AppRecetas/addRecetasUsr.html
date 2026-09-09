@@ -47,19 +47,19 @@ Nueva Receta de Usuario
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="id_dificultadUsr" class="form-label fw-bold">
-                                <i class="bi bi-speedometer2"></i> Dificultad
+                                <i class="bi bi-signal-2"></i> Dificultad
                             </label>
                             {{ form2.dificultadUsr }}
-                            <small class="text-muted d-block">Fácil, Media, Difícil</small>
+                            <small class="text-muted d-block"><i class="bi bi-signal-1"></i> Fácil · <i class="bi bi-signal-2"></i> Media · <i class="bi bi-signal-3"></i> Difícil</small>
                         </div>
                     </div>
                     
                     <div class="mb-3">
                         <label for="id_ingredientesUsr" class="form-label fw-bold">
-                            <i class="bi bi-basket"></i> Ingredientes
+                            <i class="bi bi-basket"></i> Ingredientes (texto con cantidad + unidad)
                         </label>
                         {{ form2.ingredientesUsr }}
-                        <small class="text-muted">Separa cada ingrediente con comas</small>
+                        <small class="text-muted">Ej: 2 kg harina, 3 unidad huevo. <a href="{% url 'listaPrecios' %}">Ver precios</a> para estimar el costo.</small>
                     </div>
                     
                     <div class="mb-3">
@@ -77,6 +77,8 @@ Nueva Receta de Usuario
                         {{ form2.procedimientoUsr }}
                         <small class="text-muted">Describe paso a paso cómo preparar el plato</small>
                     </div>
+
+                    {% include "AppRecetas/_pasos_field.html" %}
                     
                     <div class="mb-3">
                         <label for="id_fuenteUsr" class="form-label fw-bold">

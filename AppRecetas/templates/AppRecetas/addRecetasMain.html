@@ -32,15 +32,16 @@ Agregar Nueva Receta
                             {{ form1.tiempo }}
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label for="id_dificultad" class="form-label fw-bold">Dificultad</label>
+                            <label for="id_dificultad" class="form-label fw-bold"><i class="bi bi-signal-2"></i> Dificultad</label>
                             {{ form1.dificultad }}
+                            <small class="text-muted"><i class="bi bi-signal-1"></i> Fácil · <i class="bi bi-signal-2"></i> Media · <i class="bi bi-signal-3"></i> Difícil</small>
                         </div>
                     </div>
                     
                     <div class="mb-3">
-                        <label for="id_ingredientes" class="form-label fw-bold">Ingredientes</label>
+                        <label for="id_ingredientes" class="form-label fw-bold">Ingredientes (texto con cantidad + unidad)</label>
                         {{ form1.ingredientes }}
-                        <small class="text-muted">Separados por comas</small>
+                        <small class="text-muted">Ej: 2 kg harina, 3 unidad huevo, 200 ml leche. <a href="{% url 'listaPrecios' %}">Ver precios</a> para estimar el costo.</small>
                     </div>
                     
                     <div class="mb-3">
@@ -53,6 +54,8 @@ Agregar Nueva Receta
                         {{ form1.procedimiento }}
                         <small class="text-muted">Describe paso a paso la preparación</small>
                     </div>
+
+                    {% include "AppRecetas/_pasos_field.html" %}
                     
                     <div class="mb-3">
                         <label for="id_fuente" class="form-label fw-bold">Fuente</label>
@@ -84,37 +87,7 @@ Agregar Nueva Receta
     </div>
 </div>
 
-<style>
-    input[type="text"], 
-    input[type="number"], 
-    textarea {
-        width: 100%;
-        padding: 0.75rem;
-        border: 1px solid #ced4da;
-        border-radius: 0.375rem;
-        font-size: 1rem;
-    }
-    
-    textarea {
-        min-height: 100px;
-        resize: vertical;
-    }
-    
-    input:focus, textarea:focus {
-        border-color: #86b7fe;
-        outline: 0;
-        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-    }
-    
-    .card {
-        border: none;
-        border-radius: 1rem;
-    }
-    
-    .card-header {
-        border-radius: 1rem 1rem 0 0 !important;
-    }
-</style>
+{# Estilos centralizados en tailwind-components.css #}
 
 {% endblock %}
 

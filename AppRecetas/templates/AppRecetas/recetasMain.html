@@ -46,13 +46,14 @@
             <div class="flex flex-wrap gap-1 mb-3">
                 <span class="badge-tw badge-kitchen">{{ recetasUsr.tipoDeCocinaUsr }}</span>
                 <span class="badge-tw badge-time"><i class="bi bi-clock" aria-hidden="true"></i> {{ recetasUsr.tiempoUsr }} min</span>
-                <span class="badge-tw {% if recetasUsr.dificultadUsr == 'Fácil' %}badge-easy{% elif recetasUsr.dificultadUsr == 'Difícil' %}badge-hard{% else %}badge-medium{% endif %}">{{ recetasUsr.dificultadUsr }}</span>
+                <span class="badge-tw {% if recetasUsr.dificultadUsr == 'FACIL' %}badge-easy{% elif recetasUsr.dificultadUsr == 'DIFICIL' %}badge-hard{% else %}badge-medium{% endif %}"><i class="bi {{ recetasUsr.dificultad_icon }}" aria-hidden="true"></i> {{ recetasUsr.get_dificultadUsr_display }}</span>
             </div>
             <p class="text-sm text-stone-500 mb-1"><strong>Ingredientes:</strong> {{ recetasUsr.ingredientesUsr|truncatewords:10 }}</p>
+            <p class="text-sm mb-1"><strong>Costo estimado:</strong> {% with c=recetasUsr.costo_estimado %}{% if c.total %}<span class="font-bold text-green-700">${{ c.total }}</span>{% else %}<span class="text-stone-400">sin precios</span>{% endif %}{% if c.faltantes %} <span class="text-xs text-stone-400">({{ c.faltantes|length }} sin precio)</span>{% endif %}{% endwith %} <a href="{% url 'listaPrecios' %}" class="text-xs underline">Precios</a></p>
             <p class="text-sm text-stone-500 mb-3"><strong>Fuente:</strong> {{ recetasUsr.fuenteUsr|default:"No especificada" }}</p>
             <details class="detail-tw">
-                <summary>Ver procedimiento completo</summary>
-                <div class="detail-body text-sm">{{ recetasUsr.procedimientoUsr }}</div>
+                <summary>Ver procedimiento ({{ recetasUsr.get_pasos_lista|length }} pasos)</summary>
+                <div class="detail-body text-sm"><ol class="list-decimal ml-4 space-y-1">{% for paso in recetasUsr.get_pasos_lista %}<li>{{ paso }}</li>{% empty %}{{ recetasUsr.procedimientoUsr }}{% endfor %}</ol></div>
             </details>
         </div>
         <div class="p-3 border-t border-stone-100 flex gap-2">
@@ -101,13 +102,14 @@
             <div class="flex flex-wrap gap-1 mb-3">
                 <span class="badge-tw badge-kitchen">{{ recetasMain.tipoDeCocina }}</span>
                 <span class="badge-tw badge-time"><i class="bi bi-clock" aria-hidden="true"></i> {{ recetasMain.tiempo }} min</span>
-                <span class="badge-tw badge-medium">{{ recetasMain.dificultad }}</span>
+                <span class="badge-tw {% if recetasMain.dificultad == 'FACIL' %}badge-easy{% elif recetasMain.dificultad == 'DIFICIL' %}badge-hard{% else %}badge-medium{% endif %}"><i class="bi {{ recetasMain.dificultad_icon }}" aria-hidden="true"></i> {{ recetasMain.get_dificultad_display }}</span>
             </div>
             <p class="text-sm text-stone-500 mb-1"><strong>Ingredientes:</strong> {{ recetasMain.ingredientes|truncatewords:10 }}</p>
+            <p class="text-sm mb-1"><strong>Costo estimado:</strong> {% with c=recetasMain.costo_estimado %}{% if c.total %}<span class="font-bold text-green-700">${{ c.total }}</span>{% else %}<span class="text-stone-400">sin precios</span>{% endif %}{% if c.faltantes %} <span class="text-xs text-stone-400">({{ c.faltantes|length }} sin precio)</span>{% endif %}{% endwith %} <a href="{% url 'listaPrecios' %}" class="text-xs underline">Precios</a></p>
             <p class="text-sm text-stone-500 mb-3"><strong>Fuente:</strong> {{ recetasMain.fuente|default:"No especificada" }}</p>
             <details class="detail-tw">
-                <summary>Ver procedimiento completo</summary>
-                <div class="detail-body text-sm">{{ recetasMain.procedimiento }}</div>
+                <summary>Ver procedimiento ({{ recetasMain.get_pasos_lista|length }} pasos)</summary>
+                <div class="detail-body text-sm"><ol class="list-decimal ml-4 space-y-1">{% for paso in recetasMain.get_pasos_lista %}<li>{{ paso }}</li>{% empty %}{{ recetasMain.procedimiento }}{% endfor %}</ol></div>
             </details>
         </div>
         <div class="p-3 border-t border-stone-100 flex gap-2">
