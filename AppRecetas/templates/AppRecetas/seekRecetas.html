@@ -1,58 +1,28 @@
 {% extends "AppRecetas/base.html" %}
 {% load static %}
-
-{% block titulo %}
-Buscar Recetas
-{% endblock %}
-
+{% block title %}Buscar Recetas · Web de Recetas{% endblock %}
+{% block titulo %}Buscar Recetas{% endblock %}
+{% block breadcrumbs %}<a href="{% url 'Inicio' %}" class="hover:text-amber-700">Inicio</a> <span aria-hidden="true">›</span> <a href="{% url 'RecetasMain' %}" class="hover:text-amber-700">Recetas</a> <span aria-hidden="true">›</span> <span aria-current="page" class="text-stone-800 font-semibold">Buscar</span>{% endblock %}
 {% block complement %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white text-center">
-                    <h4 class="mb-0">
-                        <i class="bi bi-search"></i> Buscar Recetas por Ingrediente
-                    </h4>
-                </div>
-                <div class="card-body p-4">
-                    <p class="text-muted text-center mb-4">
-                        Ingresa el nombre de un ingrediente para encontrar recetas que lo contengan
-                    </p>
-                    
-                    <form action="/AppRecetas/showRecetas/" method="GET">
-                        <div class="mb-4">
-                            <label for="ingredientes" class="form-label fw-bold">
-                                <i class="bi bi-basket"></i> Ingrediente:
-                            </label>
-                            <input type="text" 
-                                   name="ingredientes" 
-                                   id="ingredientes" 
-                                   class="form-control form-control-lg" 
-                                   placeholder="Ej: tomate, pollo, arroz..."
-                                   required
-                                   autofocus>
-                        </div>
-                        
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="bi bi-search"></i> Buscar Recetas
-                            </button>
-                            <a href="{% url 'RecetasMain' %}" class="btn btn-outline-secondary">
-                                <i class="bi bi-arrow-left"></i> Ver todas las recetas
-                            </a>
-                        </div>
-                    </form>
-                </div>
+<div class="flex justify-center">
+    <div class="w-full max-w-xl">
+        <div class="card-tw">
+            <div class="bg-amber-700 text-white text-center px-6 py-4">
+                <h2 class="font-bold text-lg"><i class="bi bi-search" aria-hidden="true"></i> Buscar Recetas por Ingrediente</h2>
             </div>
-            
-            <div class="text-center mt-4">
-                <p class="text-muted">
-                    <i class="bi bi-info-circle"></i> 
-                    Tip: Puedes buscar por cualquier ingrediente principal
-                </p>
+            <div class="p-6">
+                <p class="text-stone-500 text-center mb-4">Ingresa un ingrediente y te mostramos recetas que lo contengan. También puedes usar el buscador global de arriba.</p>
+                <form action="{% url 'showRecetas' %}" method="GET">
+                    <label for="ingredientes" class="form-label"><i class="bi bi-basket" aria-hidden="true"></i> Ingrediente:</label>
+                    <input type="text" name="ingredientes" id="ingredientes" class="input" placeholder="Ej: tomate, pollo, arroz..." required autofocus autocomplete="off">
+                    <div class="grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg w-full"><i class="bi bi-search" aria-hidden="true"></i> Buscar Recetas</button>
+                        <a href="{% url 'RecetasMain' %}" class="btn btn-ghost w-full"><i class="bi bi-arrow-left" aria-hidden="true"></i> Ver todas las recetas</a>
+                    </div>
+                </form>
             </div>
         </div>
+        <p class="text-center text-sm text-stone-500 mt-4"><i class="bi bi-info-circle" aria-hidden="true"></i> Tip: prueba con “tomate”, “pollo” o “arroz”. La búsqueda ignora mayúsculas.</p>
     </div>
 </div>
 {% endblock %}

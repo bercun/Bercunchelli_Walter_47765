@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% block title %}Inicio · Web de Recetas{% endblock %}
+{% block breadcrumbs %}<span aria-current="page" class="text-stone-800 font-semibold">Inicio</span>{% endblock %}
 {% block titulo %}
 Web de Recetas
 {% endblock %}
@@ -15,7 +17,7 @@ Web de Recetas
 <div class="row justify-content-center">
     <div class="col-lg-10">
         <div class="text-center mb-4">
-            <img class="img-fluid rounded shadow-lg mb-4" src="{% static 'AppRecetas/assets/img/intro.jpg' %}" alt="Cocina" style="max-height: 400px; width: 100%; object-fit: cover;">
+            <img class="img-fluid rounded shadow-lg mb-4" src="{% static 'AppRecetas/assets/img/intro.jpg' %}" alt="Mesa de cocina con ingredientes frescos" style="max-height: 400px; width: 100%; object-fit: cover;" loading="lazy">
         </div>
         
         <div class="bg-white p-5 rounded shadow-sm">
