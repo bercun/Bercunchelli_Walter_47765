@@ -1,169 +1,149 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        {% load static  %}
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>--Web de Recetas---</title>
-        <link rel="icon" type="image/x-icon" href="Bercunchelli_Walter_47765\AppRecetas\static\AppRecetas\assets\favicon.ico" />
-        <!-- Google fonts-->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="{% static 'AppRecetas/css/styles.css'%}" rel="stylesheet" />
-        <!-- Bootstrap Icons -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    </head>
-    <body>
-        <header>
-            <h1 class="site-heading text-center text-faded d-none d-lg-block">
-                <span class="site-heading-upper text-primary mb-3"></span>
-                <span class="site-heading-lower">
-                    {% block  titulo %}
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Web de Recetas: recetas verificadas y recetas de la comunidad. Busca por ingredientes, comparte tus platos." />
+    <meta name="author" content="Walter Bercunchelli" />
+    <title>{% block title %}Web de Recetas{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'AppRecetas/assets/favicon.ico' %}" />
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,500,600,700,800&family=Lora:400,700&display=swap" rel="stylesheet" />
+    <!-- Compat Bootstrap (se retirará al completar migración) -->
+    <link href="{% static 'AppRecetas/css/styles.css' %}" rel="stylesheet" />
+    <!-- Bootstrap Icons (se mantiene) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Tailwind CSS via CDN (sin build de Node) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        corePlugins: { preflight: false },
+        theme: { extend: { colors: { brand: {500:'#f59e0b',600:'#d97706',700:'#b45309',800:'#92400e'} } } }
+      }
+    </script>
+    <!-- Sistema de diseño propio -->
+    <link href="{% static 'AppRecetas/css/tailwind-components.css' %}" rel="stylesheet" />
+    <!-- Alpine.js para menú móvil / tabs / dropdown sin build -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-stone-100 text-stone-800 min-h-screen flex flex-col" style="font-family:'Raleway',system-ui,sans-serif">
+    <a href="#contenido" class="sr-only">Saltar al contenido</a>
 
-
-                     {% endblock %}
-
-
-
-                </span>
+    <!-- Brand bar -->
+    <header class="bg-amber-800 text-amber-50">
+        <div class="mx-auto max-w-7xl px-4 py-5 text-center">
+            <p class="text-xs font-bold tracking-[0.3em] uppercase opacity-80">Cocina · Comparte · Descubre</p>
+            <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight">
+                {% block titulo %}Web de Recetas{% endblock %}
             </h1>
-        </header>
-        <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
-            <div class="container">
-                <a class="navbar-brand text-uppercase fw-bold d-lg-none" href="{% url 'Inicio' %}">Recetas Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-stone-900 text-stone-100 shadow-lg" aria-label="Navegación principal">
+        <div class="mx-auto max-w-7xl px-4" x-data="{ open:false, user:false }">
+            <div class="flex h-16 items-center justify-between gap-3">
+                <a href="{% url 'Inicio' %}" class="flex items-center gap-2 font-extrabold text-lg">
+                    <i class="bi bi-egg-fried text-amber-500 text-2xl" aria-hidden="true"></i>
+                    <span>Recetas Web</span>
+                </a>
+                <!-- Desktop links -->
+                <div class="hidden lg:flex items-center gap-1">
+                    {% with current=request.resolver_match.url_name %}
+                    <a class="nav-link-tw {% if current == 'Inicio' %}active{% endif %}" href="{% url 'Inicio' %}" {% if current == 'Inicio' %}aria-current="page"{% endif %}><i class="bi bi-house-fill" aria-hidden="true"></i> Inicio</a>
+                    <a class="nav-link-tw {% if current == 'RecetasMain' %}active{% endif %}" href="{% url 'RecetasMain' %}" {% if current == 'RecetasMain' %}aria-current="page"{% endif %}><i class="bi bi-book-fill" aria-hidden="true"></i> Recetas</a>
+                    <a class="nav-link-tw {% if current == 'listaCheff' %}active{% endif %}" href="{% url 'listaCheff' %}"><i class="bi bi-award-fill" aria-hidden="true"></i> Cheffs</a>
+                    <a class="nav-link-tw {% if current == 'About' %}active{% endif %}" href="{% url 'About' %}"><i class="bi bi-info-circle-fill" aria-hidden="true"></i> About</a>
+                    {% endwith %}
+                </div>
+                <!-- Global search (desktop) -->
+                <form action="{% url 'RecetasMain' %}" method="GET" class="hidden md:flex items-center gap-2" role="search">
+                    <label for="q-global" class="sr-only">Buscar recetas</label>
+                    <input id="q-global" type="search" name="q" value="{{ request.GET.q|default:'' }}" placeholder="Buscar: tomate, pollo…" class="input !w-52 !py-2 !rounded-full" />
+                    <button type="submit" class="btn btn-primary btn-sm !rounded-full" aria-label="Buscar"><i class="bi bi-search" aria-hidden="true"></i></button>
+                </form>
+                <!-- Auth area desktop -->
+                <div class="hidden lg:flex items-center gap-2">
+                    {% if request.user.is_authenticated %}
+                    <div class="relative">
+                        <button @click="user=!user" class="flex items-center gap-2 rounded-full bg-stone-800 px-3 py-1.5 hover:bg-stone-700" aria-haspopup="true" :aria-expanded="user">
+                            {% for avatar in request.user.avatar_set.all %}{% if avatar.is_active and avatar.image %}<img src="{{ avatar.image.url }}" alt="Avatar de {{ request.user.username }}" class="rounded-full" style="width:32px;height:32px;object-fit:cover;">{% endif %}{% empty %}<i class="bi bi-person-circle text-xl" aria-hidden="true"></i>{% endfor %}
+                            <span class="font-bold text-sm">{{ request.user.username }}</span>
+                            <i class="bi bi-chevron-down text-xs" aria-hidden="true"></i>
+                        </button>
+                        <div x-show="user" @click.away="user=false" x-cloak class="absolute right-0 mt-2 w-56 card-tw p-2 text-stone-800">
+                            <a class="flex gap-2 px-3 py-2 rounded-lg hover:bg-stone-100" href="{% url 'listaavatar' %}"><i class="bi bi-images" aria-hidden="true"></i> Mis Avatares</a>
+                            <a class="flex gap-2 px-3 py-2 rounded-lg hover:bg-stone-100" href="{% url 'AddAvatar' %}"><i class="bi bi-plus-circle" aria-hidden="true"></i> Agregar Avatar</a>
+                            <a class="flex gap-2 px-3 py-2 rounded-lg hover:bg-stone-100" href="{% url 'EditUsr' %}"><i class="bi bi-pencil-square" aria-hidden="true"></i> Editar Perfil</a>
+                            <hr class="my-1" />
+                            <a class="flex gap-2 px-3 py-2 rounded-lg hover:bg-red-50 text-red-700" href="{% url 'Logout' %}"><i class="bi bi-box-arrow-right" aria-hidden="true"></i> Cerrar Sesión</a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <a class="btn btn-success btn-sm" href="{% url 'Login' %}"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i> Login</a>
+                    <a class="btn btn-primary btn-sm" href="{% url 'Register' %}"><i class="bi bi-person-plus" aria-hidden="true"></i> Registrarse</a>
+                    {% endif %}
+                </div>
+                <!-- Mobile toggle -->
+                <button class="lg:hidden p-2 rounded-lg hover:bg-stone-800" @click="open=!open" aria-label="Abrir menú" :aria-expanded="open">
+                    <i class="bi bi-list text-2xl" aria-hidden="true"></i>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mx-auto align-items-center">
-                        <li class="nav-item px-lg-2">
-                            <a class="nav-link text-uppercase" href="{% url 'Inicio' %}">
-                                <i class="bi bi-house-fill"></i> Inicio
-                            </a>
-                        </li>
-                        <li class="nav-item px-lg-2">
-                            <a class="nav-link text-uppercase" href="{% url 'RecetasMain' %}">
-                                <i class="bi bi-book-fill"></i> Recetas
-                            </a>
-                        </li>
-                        {% if request.user.is_authenticated %}
-                        <li class="nav-item px-lg-2">
-                            <a class="nav-link text-uppercase" href="{% url 'listaCheff' %}">
-                                <i class="bi bi-award-fill"></i> Cheffs
-                            </a>
-                        </li>
-                        {% endif %}
-                        <li class="nav-item px-lg-2">
-                            <a class="nav-link text-uppercase" href="{% url 'About' %}">
-                                <i class="bi bi-info-circle-fill"></i> About
-                            </a>
-                        </li>
-                    </ul>
-                    
-                    <ul class="navbar-nav ms-auto align-items-center">
-                        {% if request.user.is_authenticated %}
-                        <li class="nav-item dropdown px-lg-2">
-                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                {% for avatar in user.avatar_set.all %}
-                                    {% if avatar.is_active %}
-                                        {% if avatar.image %}
-                                        <img src="{{ avatar.image.url }}" alt="Avatar" class="rounded-circle me-2" style="width: 35px; height: 35px; object-fit: cover;">
-                                        {% else %}
-                                        <i class="bi bi-person-circle me-2" style="font-size: 1.5rem;"></i>
-                                        {% endif %}
-                                    {% endif %}
-                                {% empty %}
-                                <i class="bi bi-person-circle me-2" style="font-size: 1.5rem;"></i>
-                                {% endfor %}
-                                <span class="fw-bold">{{ user.username }}</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{% url 'listaavatar' %}">
-                                    <i class="bi bi-images"></i> Mis Avatares
-                                </a></li>
-                                <li><a class="dropdown-item" href="{% url 'AddAvatar' %}">
-                                    <i class="bi bi-plus-circle"></i> Agregar Avatar
-                                </a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{% url 'EditUsr' %}">
-                                    <i class="bi bi-pencil-square"></i> Editar Perfil
-                                </a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" href="{% url 'Logout' %}">
-                                    <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
-                                </a></li>
-                            </ul>
-                        </li>
-                        {% else %}
-                        <li class="nav-item px-lg-2">
-                            <a class="btn btn-success btn-sm" href="{% url 'Login' %}">
-                                <i class="bi bi-box-arrow-in-right"></i> Login
-                            </a>
-                        </li>
-                        <li class="nav-item px-lg-2">
-                            <a class="btn btn-primary btn-sm" href="{% url 'Register' %}">
-                                <i class="bi bi-person-plus"></i> Registrarse
-                            </a>
-                        </li>
-                        {% endif %}
-                    </ul>
-                </div>
             </div>
+            <!-- Mobile menu -->
+            <div x-show="open" x-cloak class="lg:hidden pb-4 space-y-2">
+                <form action="{% url 'RecetasMain' %}" method="GET" class="flex gap-2" role="search">
+                    <input type="search" name="q" value="{{ request.GET.q|default:'' }}" placeholder="Buscar recetas…" class="input" aria-label="Buscar recetas" />
+                    <button class="btn btn-primary" type="submit" aria-label="Buscar"><i class="bi bi-search" aria-hidden="true"></i></button>
+                </form>
+                <a class="block nav-link-tw" href="{% url 'Inicio' %}"><i class="bi bi-house-fill" aria-hidden="true"></i> Inicio</a>
+                <a class="block nav-link-tw" href="{% url 'RecetasMain' %}"><i class="bi bi-book-fill" aria-hidden="true"></i> Recetas</a>
+                <a class="block nav-link-tw" href="{% url 'listaCheff' %}"><i class="bi bi-award-fill" aria-hidden="true"></i> Cheffs</a>
+                <a class="block nav-link-tw" href="{% url 'About' %}"><i class="bi bi-info-circle-fill" aria-hidden="true"></i> About</a>
+                {% if request.user.is_authenticated %}
+                <div class="flex gap-2 pt-2">
+                    <a class="btn btn-ghost btn-sm flex-1" href="{% url 'listaavatar' %}">Mis Avatares</a>
+                    <a class="btn btn-ghost btn-sm flex-1" href="{% url 'EditUsr' %}">Editar Perfil</a>
+                    <a class="btn btn-danger-ghost btn-sm flex-1" href="{% url 'Logout' %}">Salir</a>
+                </div>
+                {% else %}
+                <div class="flex gap-2 pt-2">
+                    <a class="btn btn-success flex-1" href="{% url 'Login' %}">Login</a>
+                    <a class="btn btn-primary flex-1" href="{% url 'Register' %}">Registrarse</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumbs -->
+    <div class="mx-auto max-w-7xl px-4 w-full">
+        <nav class="text-sm text-stone-500 py-3" aria-label="Migas de pan">
+            {% block breadcrumbs %}<a href="{% url 'Inicio' %}" class="hover:text-amber-700">Inicio</a>{% endblock %}
         </nav>
-        
-        <!-- Primera sección de contenido -->
-        <section class="page-section clearfix py-5">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="bg-faded p-4 rounded shadow-sm mb-5">
-                            <h2 class="section-heading text-center mb-4">
-                                <span class="section-heading-upper text-primary"> 
-                                    {% block titulo_rec_1 %}{% endblock %}
-                                </span>
-                            </h2>
-                            <div class="content-wrapper">
-                                {% block complement %} 
-                                {% endblock %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        {% if messages %}<div class="space-y-2 mb-4">{% for message in messages %}<div class="card-tw p-3 border-l-4 {% if message.tags == 'error' %}border-red-500{% else %}border-green-500{% endif %}" role="alert">{{ message }}</div>{% endfor %}</div>{% endif %}
+    </div>
+
+    <!-- Content (compat: mantiene complement/complement_1 + nuevo block content) -->
+    <main id="contenido" class="mx-auto max-w-7xl px-4 pb-12 w-full flex-1">
+        {% block content %}{% endblock %}
+        {% block complement %}{% endblock %}
+        <section class="card-tw p-5 md:p-8 mt-8" aria-label="Sección secundaria">
+            <h2 class="text-center text-amber-800 font-bold mb-4">{% block titulos_rec_2 %}{% endblock %}</h2>
+            {% block complement_1 %}{% endblock %}
         </section>
-        
-        <!-- Segunda sección de contenido -->
-        <section class="page-section cta py-5" style="margin-top: 3rem;">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="bg-faded p-4 rounded shadow-sm">
-                            <h2 class="section-heading text-center mb-4">
-                                <span class="section-heading-upper text-primary">
-                                    {% block titulos_rec_2 %}{% endblock titulos_rec_2 %}
-                                </span>
-                            </h2>
-                            <div class="content-wrapper">
-                                {% block complement_1 %}
-                                {% endblock %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <footer class="footer text-faded text-center py-5">
-            <div class="container">
-                <p class="m-0 small">Copyright &copy; brkoon  2023</p>
-            </div>
-        </footer>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="{% static  'AppRecetas/js/scripts.js' %}"></script>
-    </body>
+        {% block titulo_rec_1 %}{% endblock %}
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 text-center py-8 mt-auto">
+        <div class="mx-auto max-w-7xl px-4">
+            <p class="flex items-center justify-center gap-2 font-semibold text-stone-200"><i class="bi bi-egg-fried text-amber-500" aria-hidden="true"></i> Recetas Web — Cocina · Comparte · Descubre</p>
+            <p class="m-0 small mt-2">Copyright &copy; brkoon 2023 · Migrando a Tailwind</p>
+        </div>
+    </footer>
+    <!-- Bootstrap JS compat (para data-bs-toggle antiguos; se retirará) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'AppRecetas/js/scripts.js' %}"></script>
+    <style>[x-cloak]{display:none!important}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}</style>
+</body>
 </html>
