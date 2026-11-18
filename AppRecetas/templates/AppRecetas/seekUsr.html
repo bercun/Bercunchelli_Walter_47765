@@ -1,32 +1,58 @@
 {% extends "AppRecetas/base.html" %}
+{% load static %}
 
+{% block titulo %}
+Buscar Cheffs
+{% endblock %}
 
-
-{ % load static % }
-
-
-{% block  titulo %}
-                                
-Busqueda  de Cheff
-
-{% endblock  %}
-
-
-
-{% block  complement %}
-
-<h5>
-buesqueda por nombre    
-</h5>
-    
-<form action="/AppRecetas/showUsr/" method="GET" >
-    
-    <input type="text" name="Usr"  id="Usr">
-
-    <input type="submit" value="Busacar">
-    
-    
-
-</form>
-
-{% endblock  %}
+{% block complement %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-warning">
+                <div class="card-header bg-warning text-dark text-center">
+                    <h4 class="mb-0">
+                        <i class="bi bi-person-search"></i> Buscar Cheffs
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <p class="text-muted text-center mb-4">
+                        Encuentra cheffs por su nombre
+                    </p>
+                    
+                    <form action="/AppRecetas/showUsr/" method="GET">
+                        <div class="mb-4">
+                            <label for="Usr" class="form-label fw-bold">
+                                <i class="bi bi-person"></i> Nombre del Cheff:
+                            </label>
+                            <input type="text" 
+                                   name="Usr" 
+                                   id="Usr" 
+                                   class="form-control form-control-lg" 
+                                   placeholder="Ingresa el nombre..."
+                                   required
+                                   autofocus>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-warning btn-lg">
+                                <i class="bi bi-search"></i> Buscar Cheff
+                            </button>
+                            <a href="{% url 'Cheffs' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Ver todos los cheffs
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <p class="text-muted">
+                    <i class="bi bi-award"></i> 
+                    Conoce a nuestros cheffs expertos
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

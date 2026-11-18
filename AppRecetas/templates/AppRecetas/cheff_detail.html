@@ -1,27 +1,91 @@
-
 {% extends "AppRecetas/base.html" %}
+{% load static %}
 
+{% block titulo %}
+Detalle del Cheff
+{% endblock %}
 
-
-{ % load static % }
-
-
-{% block  titulo %}
-                                
-Cheff
-
-{% endblock  %}
-
-{% block  complement %}
-
-<p> Nombre: {{cheff.nombreUsr}}  </p>
-<p> Email: {{cheff.emailUsr}}  </p>
-<p> Ciudad: {{cheff.ciudad}}  </p>
-<p> Telefono: {{cheff.telfonoUsr}}  </p>
-<p> Ciudad: {{cheff.ciudad}}  </p>
-<p> Tipo de cocina: {{cheff.tipoDeCocina}}  </p>
-
-
-
-
-{% endblock  %}
+{% block complement %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-warning">
+                <div class="card-header bg-warning text-center">
+                    <h3 class="mb-0">
+                        <i class="bi bi-person-badge"></i> {{ cheff.nombreUsr }}
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="rounded-circle bg-warning d-inline-flex align-items-center justify-content-center" 
+                             style="width: 120px; height: 120px;">
+                            <i class="bi bi-person-fill text-white" style="font-size: 4rem;"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-muted mb-2">
+                                        <i class="bi bi-envelope-fill text-primary"></i> Email
+                                    </h6>
+                                    <p class="mb-0">
+                                        <a href="mailto:{{ cheff.emailUsr }}" class="text-decoration-none">
+                                            {{ cheff.emailUsr }}
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-muted mb-2">
+                                        <i class="bi bi-telephone-fill text-success"></i> Teléfono
+                                    </h6>
+                                    <p class="mb-0">{{ cheff.telfonoUsr }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-muted mb-2">
+                                        <i class="bi bi-geo-alt-fill text-danger"></i> Ciudad
+                                    </h6>
+                                    <p class="mb-0">{{ cheff.ciudad }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="text-muted mb-2">
+                                        <i class="bi bi-egg-fried text-warning"></i> Tipo de Cocina
+                                    </h6>
+                                    <p class="mb-0">{{ cheff.tipoDeCocina }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'updateCheff' cheff.id %}" class="btn btn-warning">
+                            <i class="bi bi-pencil"></i> Editar Cheff
+                        </a>
+                        <a href="{% url 'listaCheff' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Volver a la Lista
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

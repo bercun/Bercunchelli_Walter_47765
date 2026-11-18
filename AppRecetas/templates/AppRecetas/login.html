@@ -1,27 +1,48 @@
 {% extends "AppRecetas/base.html" %}
+{% load static %}
 
+{% block title %}Iniciar Sesión · Web de Recetas{% endblock %}
+{% block titulo %}Iniciar Sesión{% endblock %}
+{% block breadcrumbs %}<a href="{% url 'Inicio' %}" class="hover:text-amber-700">Inicio</a> <span aria-hidden="true">›</span> <span aria-current="page" class="text-stone-800 font-semibold">Login</span>{% endblock %}
 
+{% block complement %}
+{% if mensaje %}
+<div class="card-tw p-3 mb-4 border-l-4 {% if 'correcto' in mensaje %}border-green-500{% else %}border-red-500{% endif %}" role="alert">
+    <strong>{{ mensaje }}</strong>
+</div>
+{% endif %}
 
-{ % load static % }
-
-
-{% block  titulo %}
-                                
-{{mensaje}}
-
-{% endblock  %}
-
-{% block  complement %}
-
-<form action="" method="POST" > {% csrf_token %}
-
-    {{formulario.as_p}}
-
-
-
-
-<button type="submit"> inicio de sesion </button>
-
-</form>
-
-{% endblock  %}
+<div class="flex justify-center">
+    <div class="w-full max-w-md">
+        <div class="card-tw card-tw-hover">
+            <div class="p-6 md:p-8">
+                <h2 class="text-center text-xl font-extrabold mb-1">Acceder a tu cuenta</h2>
+                <p class="text-center text-sm text-stone-500 mb-6">Bienvenido de nuevo a tu espacio culinario</p>
+                <form action="" method="POST" novalidate> {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="{{ formulario.username.id_for_label }}" class="form-label">Usuario</label>
+                        {{ formulario.username }}
+                        {% if formulario.username.errors %}
+                        <div class="field-error" role="alert">{{ formulario.username.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-5">
+                        <label for="{{ formulario.password.id_for_label }}" class="form-label">Contraseña</label>
+                        {{ formulario.password }}
+                        {% if formulario.password.errors %}
+                        <div class="field-error" role="alert">{{ formulario.password.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg w-full">
+                        <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i> Iniciar Sesión
+                    </button>
+                </form>
+                <hr class="my-6 border-stone-200" />
+                <p class="text-center mb-0 text-sm">
+                    ¿No tienes cuenta? <a href="{% url 'Register' %}" class="font-bold text-amber-700 hover:text-amber-800 underline underline-offset-2">Regístrate aquí</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

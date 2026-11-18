@@ -1,13 +1,32 @@
 {% extends "AppRecetas/base.html" %}
+{% load static %}
 
+{% block titulo %}
+Recetas de Usuarios
+{% endblock %}
 
-
-{ % load static % }
-
-
-{% block  titulo %}
-                                
-Recetas aportadas por usuarios
-
-{% endblock  %}
+{% block complement %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+                <h2><i class="bi bi-people"></i> Recetas Aportadas por Usuarios</h2>
+                <div class="d-flex gap-2">
+                    <a href="{% url 'AddRecetasUsr' %}" class="btn btn-success">
+                        <i class="bi bi-plus-circle"></i> Agregar Receta
+                    </a>
+                    <a href="{% url 'seekRecetasUsr' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-search"></i> Buscar Receta
+                    </a>
+                </div>
+            </div>
+            
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> 
+                <strong>Comunidad Activa:</strong> Explora las recetas compartidas por nuestra comunidad de usuarios
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
 

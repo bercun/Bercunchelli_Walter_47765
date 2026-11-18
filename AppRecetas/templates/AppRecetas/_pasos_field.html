@@ -1,0 +1,21 @@
+{# Pasos por líneas (Alpine.js, sin build). Requiere var "pasos" (lista) en contexto. #}
+<div class="mb-3" x-data="{ pasos: [{% for p in pasos|default:'' %}{% if p %}'{{ p|escapejs }}'{% if not forloop.last %},{% endif %}{% endif %}{% endfor %}] }">
+  <label class="form-label fw-bold"><i class="bi bi-list-ol"></i> Pasos de preparación (uno por línea)</label>
+  <p class="field-help">Agrega cada paso por separado. Se guardan ordenados y también en el procedimiento.</p>
+  <template x-for="(paso, i) in pasos" :key="i">
+    <div class="flex gap-2 mb-2">
+      <span class="badge-tw badge-kitchen shrink-0" x-text="i+1"></span>
+      <textarea name="paso_texto" rows="2" class="input flex-1" :placeholder="'Paso ' + (i+1)" x-model="pasos[i]"></textarea>
+      <button type="button" class="btn btn-danger-ghost btn-sm" @click="pasos.splice(i,1)" aria-label="Quitar paso"><i class="bi bi-trash" aria-hidden="true"></i></button>
+    </div>
+  </template>
+  <div class="flex gap-2 mt-2">
+    <button type="button" class="btn btn-ghost btn-sm" @click="pasos.push('')"><i class="bi bi-plus-circle" aria-hidden="true"></i> Agregar paso</button>
+  </div>
+</div>
+{% if precios_nombres %}
+<datalist id="ingredientes-sugeridos">
+  {% for n in precios_nombres %}<option value="{{ n }}"></option>{% endfor %}
+</datalist>
+<p class="field-help">Sugerencias con precio cargado: {{ precios_nombres|join:", "|truncatechars:120 }}</p>
+{% endif %}

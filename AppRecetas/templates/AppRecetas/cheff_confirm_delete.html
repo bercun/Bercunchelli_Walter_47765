@@ -1,25 +1,51 @@
 {% extends "AppRecetas/base.html" %}
+{% load static %}
 
+{% block titulo %}
+Confirmar Eliminación
+{% endblock %}
 
-
-{ % load static % }
-
-
-{% block  titulo %}
-                                
-
-<form action="" method="POST">  {% csrf_token %} 
-
-   <p> Cuidado!!!  Se va a borrar!!!!!! <br> ***{{cheff.nombreUsr}}*** </p>
-
-    <input type="submit" value="aceptar">
-
-</form>
-
-
- 
-
-{% endblock  %}
+{% block complement %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-danger">
+                <div class="card-header bg-danger text-white text-center">
+                    <h4 class="mb-0">
+                        <i class="bi bi-exclamation-triangle"></i> Confirmar Eliminación
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-trash3 text-danger" style="font-size: 5rem;"></i>
+                    </div>
+                    
+                    <div class="alert alert-warning text-center">
+                        <h5 class="mb-3">¡Cuidado! Esta acción no se puede deshacer</h5>
+                        <p class="mb-0">
+                            ¿Estás seguro de que deseas eliminar al cheff<br>
+                            <strong class="fs-5">{{ cheff.nombreUsr }}</strong>?
+                        </p>
+                    </div>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-danger btn-lg">
+                                <i class="bi bi-trash3"></i> Sí, Eliminar Cheff
+                            </button>
+                            <a href="{% url 'listaCheff' %}" class="btn btn-outline-secondary btn-lg">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
 
 
 

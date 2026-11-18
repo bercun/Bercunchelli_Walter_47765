@@ -1,27 +1,126 @@
 {% extends "AppRecetas/base.html" %}
 
+{% load static %}
 
+{% block titulo %}
+Crear Cuenta Nueva
+{% endblock %}
 
-{ % load static % }
+{% block complement %}
 
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+        <div class="card shadow-lg">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0"><i class="bi bi-person-plus"></i> Registro de Usuario</h4>
+            </div>
+            <div class="card-body p-4">
+                <form action="" method="POST"> {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="id_username" class="form-label fw-bold">
+                            <i class="bi bi-person"></i> Nombre de Usuario
+                        </label>
+                        {{ formulario.username }}
+                        {% if formulario.username.errors %}
+                        <div class="text-danger small mt-1">{{ formulario.username.errors }}</div>
+                        {% endif %}
+                        <small class="text-muted d-block mt-1">Requerido. 150 caracteres o menos. Letras, dígitos y @/./+/-/_ únicamente.</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_first_name" class="form-label fw-bold">
+                            <i class="bi bi-tag"></i> Nombre
+                        </label>
+                        {{ formulario.first_name }}
+                        {% if formulario.first_name.errors %}
+                        <div class="text-danger small mt-1">{{ formulario.first_name.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_email" class="form-label fw-bold">
+                            <i class="bi bi-envelope"></i> Email
+                        </label>
+                        {{ formulario.email }}
+                        {% if formulario.email.errors %}
+                        <div class="text-danger small mt-1">{{ formulario.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_password1" class="form-label fw-bold">
+                            <i class="bi bi-lock"></i> Contraseña
+                        </label>
+                        {{ formulario.password1 }}
+                        {% if formulario.password1.errors %}
+                        <div class="text-danger small mt-1">{{ formulario.password1.errors }}</div>
+                        {% endif %}
+                        <small class="text-muted d-block mt-1">
+                            <ul class="mb-0 ps-3">
+                                <li>Tu contraseña debe tener al menos 8 caracteres</li>
+                                <li>No puede ser completamente numérica</li>
+                                <li>No puede ser muy común</li>
+                            </ul>
+                        </small>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="id_password2" class="form-label fw-bold">
+                            <i class="bi bi-lock-fill"></i> Confirmar Contraseña
+                        </label>
+                        {{ formulario.password2 }}
+                        {% if formulario.password2.errors %}
+                        <div class="text-danger small mt-1">{{ formulario.password2.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="bi bi-check-circle"></i> Registrarse
+                        </button>
+                    </div>
+                </form>
+                
+                <hr class="my-4">
+                
+                <p class="text-center mb-0">
+                    ¿Ya tienes cuenta? <a href="{% url 'Login' %}" class="text-decoration-none fw-bold">Inicia sesión aquí</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
-{% block  titulo %}
-                                
-Registro 
+<style>
+    input[type="text"], 
+    input[type="email"], 
+    input[type="password"] {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        font-size: 1rem;
+    }
+    
+    input:focus {
+        border-color: #86b7fe;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+    
+    .card {
+        border: none;
+        border-radius: 1rem;
+    }
+    
+    .card-header {
+        border-radius: 1rem 1rem 0 0 !important;
+    }
+    
+    .text-danger small {
+        font-size: 0.875rem;
+    }
+</style>
 
-{% endblock  %}
-
-{% block  complement %}
-
-<form action="" method="POST" > {% csrf_token %}
-
-    {{formulario.as_p}}
-
-
-
-
-<button type="submit"> registrase </button>
-
-</form>
-
-{% endblock  %}
+{% endblock %}

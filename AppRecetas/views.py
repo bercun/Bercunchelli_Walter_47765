@@ -1,20 +1,36 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
+from django.db.models import Q
+from django.views.decorators.http import require_POST
 
 from django.views.generic import ListView , FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView  
 
 from django.contrib.auth.forms import AuthenticationForm ,UserCreationForm
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 
 #Decorador por defecto
 from django.contrib.auth.decorators import login_required
 
-from AppRecetas.models import RecetasMain, RecetasUsr, Cheff , Avatar
+from AppRecetas.models import RecetasMain, RecetasUsr, Cheff , Avatar, IngredientePrecio, PasoMain, PasoUsr
 from AppRecetas.forms import *
+
+
+def _get_pasos_from_post(request):
+    """Lee inputs dinámicos name='paso_texto' (Alpine) y los limpia/ordena."""
+    pasos = [p.strip() for p in request.POST.getlist("paso_texto")]
+    return [p for p in pasos if p]
+
+
+def _sync_pasos(receta, pasos, tipo="main"):
+    receta.pasos.all().delete()
+    modelo = PasoMain if tipo == "main" else PasoUsr
+    modelo.objects.bulk_create(
+        [modelo(receta=receta, orden=i, texto=texto) for i, texto in enumerate(pasos, start=1)]
+    )
 
 
 
@@ -38,6 +54,11 @@ def inicioDeSesion(request):
     else:
         form = AuthenticationForm()
     return render(request, "AppRecetas/login.html", {'formulario': form})
+
+
+def cerrarSesion(request):
+    logout(request)
+    return render(request, "AppRecetas/logout.html")
 
 
 def register (request):
@@ -70,11 +91,12 @@ def editarUsuario (request):
 
       usr.email = info["email"]
       usr.set_password(info["password1"])
-      usr.first_name = ["first_name"]
+      usr.first_name = info["first_name"]
 
       usr.save()
+      update_session_auth_hash(request, usr)
 
-      return render(request, "AppRecetas/inicio.html")
+      return redirect("Inicio")
 
   else:
 
@@ -93,7 +115,10 @@ def addAvatar(request):
     if form.is_valid():
       usuarioActual = User.objects.get(username=request.user)
 
-      avatar = Avatar(usuario=usuarioActual, image=form.cleaned_data["image"])
+      # Si el usuario no tiene avatares, este será el activo
+      tiene_avatares = Avatar.objects.filter(usuario=usuarioActual).exists()
+      
+      avatar = Avatar(usuario=usuarioActual, image=form.cleaned_data["image"], is_active=not tiene_avatares)
       
       avatar.save()
 
@@ -121,37 +146,43 @@ def test(request):
 def addRecetasMain(request):
   if request.method == "POST":#despues de dar click a eviar
     
-    formulario1 = Form_AddRecetasMain(request.POST)
+    formulario1 = Form_AddRecetasMain(request.POST, request.FILES)
     
     if formulario1.is_valid():
 
       info =formulario1.cleaned_data
 
       res_Main = RecetasMain(nom_platos=info["nom_platos"],
-                           ingredientes=request.POST["ingredientes"],
-                           receta=request.POST["receta"],
-                           tiempo=request.POST["tiempo"],
-                           dificultad=request.POST["dificultad"],
-                           tipoDeCocina=request.POST["tipoDeCocina"],
-                           fuente=request.POST["fuente"], 
-                           procedimiento=request.POST["procedimiento"])
+                           ingredientes=info["ingredientes"],
+                           receta=info["receta"],
+                           tiempo=info["tiempo"],
+                           dificultad=info["dificultad"],
+                           tipoDeCocina=info["tipoDeCocina"],
+                           fuente=info["fuente"], 
+                           procedimiento=info["procedimiento"],
+                           imagen=info.get("imagen"))
       
-      res_Main.save()                       
+      res_Main.save()
+      pasos = _get_pasos_from_post(request)
+      if pasos:
+        _sync_pasos(res_Main, pasos, tipo="main")
+        res_Main.procedimiento = "\n".join(pasos)
+        res_Main.save(update_fields=["procedimiento"])
       return render(request,'AppRecetas/inicio.html')  
     
   else:
     formulario1 = Form_AddRecetasMain()
 
-                         
+  precios_nombres = list(IngredientePrecio.objects.order_by("nombre").values_list("nombre", flat=True)[:200])
 
-  return render(request,'AppRecetas/addRecetasMain.html', {"form1" :formulario1})
+  return render(request,'AppRecetas/addRecetasMain.html', {"form1" :formulario1, "precios_nombres": precios_nombres, "pasos": []})
   
 @login_required
 def addRecetasUsr(request):
   
   if request.method == "POST":#despues de dar click a eviar
     
-    formulario2 = FormAddRecetasUsr(request.POST)
+    formulario2 = FormAddRecetasUsr(request.POST, request.FILES)
     
     if formulario2.is_valid():
 
@@ -164,17 +195,23 @@ def addRecetasUsr(request):
                            dificultadUsr=info["dificultadUsr"],
                            tipoDeCocinaUsr=info["tipoDeCocinaUsr"],
                            fuenteUsr=info["fuenteUsr"], 
-                           procedimientoUsr=info["procedimientoUsr"])
+                           procedimientoUsr=info["procedimientoUsr"],
+                           imagenUsr=info.get("imagenUsr"))
       
-      res_Usr.save()                       
+      res_Usr.save()
+      pasos = _get_pasos_from_post(request)
+      if pasos:
+        _sync_pasos(res_Usr, pasos, tipo="usr")
+        res_Usr.procedimientoUsr = "\n".join(pasos)
+        res_Usr.save(update_fields=["procedimientoUsr"])
       return render(request,'AppRecetas/inicio.html')  
     
   else:
     formulario2 = FormAddRecetasUsr()
 
-                         
+  precios_nombres = list(IngredientePrecio.objects.order_by("nombre").values_list("nombre", flat=True)[:200])
 
-  return render(request,'AppRecetas/addRecetasUsr.html', {"form2" :formulario2})
+  return render(request,'AppRecetas/addRecetasUsr.html', {"form2" :formulario2, "precios_nombres": precios_nombres, "pasos": []})
                         
 @login_required
 def addCheff(request):
@@ -269,13 +306,13 @@ def showUsr(request):
 
 #modificar datos CR"U"D
 @login_required
-def update_RecetasMain(request, recetas):
+def update_RecetasMain(request, pk):
   
-  recetas_eli = RecetasMain.objects.get(nom_platos=recetas)
+  recetas_eli = get_object_or_404(RecetasMain, pk=pk)
 
   if request.method == "POST":#despues de dar click a eviar
     
-    formulario1 = Form_AddRecetasMain(request.POST)
+    formulario1 = Form_AddRecetasMain(request.POST, request.FILES)
     
     if formulario1.is_valid():
 
@@ -290,7 +327,15 @@ def update_RecetasMain(request, recetas):
       recetas_eli.fuente = info["fuente"]
       recetas_eli.procedimiento = info["procedimiento"]
       
-      recetas_eli.save() 
+      if info.get("imagen"):
+        recetas_eli.imagen = info["imagen"]
+      
+      recetas_eli.save()
+      pasos = _get_pasos_from_post(request)
+      if pasos:
+        _sync_pasos(recetas_eli, pasos, tipo="main")
+        recetas_eli.procedimiento = "\n".join(pasos)
+        recetas_eli.save(update_fields=["procedimiento"])
       
       return render(request,'AppRecetas/inicio.html')  
 
@@ -305,16 +350,16 @@ def update_RecetasMain(request, recetas):
                                                   "fuente" :recetas_eli.fuente,
                                                   "procedimiento" : recetas_eli.procedimiento} )
   
-  return render(request, "AppRecetas/updateRecetasMain.html", {"formulario1": formulario1 , "recetas" : recetas  } )    
+  return render(request, "AppRecetas/updateRecetasMain.html", {"formulario1": formulario1 , "recetas" : recetas_eli.nom_platos, "pasos": recetas_eli.get_pasos_lista(), "precios_nombres": list(IngredientePrecio.objects.order_by("nombre").values_list("nombre", flat=True)[:200])} )    
 
 @login_required    
-def update_RecetasUsr(request, recetasUsr):
+def update_RecetasUsr(request, pk):
 
-  recetas_eli_Usr = RecetasUsr.objects.get(nom_platosUsr=recetasUsr)
+  recetas_eli_Usr = get_object_or_404(RecetasUsr, pk=pk)
 
   if request.method == "POST":#despues de dar click a eviar
     
-    formulario2 = Form_AddRecetasUsr(request.POST)
+    formulario2 = FormAddRecetasUsr(request.POST, request.FILES)
     
     if formulario2.is_valid():
 
@@ -329,7 +374,15 @@ def update_RecetasUsr(request, recetasUsr):
       recetas_eli_Usr.fuenteUsr = info["fuenteUsr"]
       recetas_eli_Usr.procedimientoUsr = info["procedimientoUsr"]
       
-      recetas_eli_Usr.save() 
+      if info.get("imagenUsr"):
+        recetas_eli_Usr.imagenUsr = info["imagenUsr"]
+      
+      recetas_eli_Usr.save()
+      pasos = _get_pasos_from_post(request)
+      if pasos:
+        _sync_pasos(recetas_eli_Usr, pasos, tipo="usr")
+        recetas_eli_Usr.procedimientoUsr = "\n".join(pasos)
+        recetas_eli_Usr.save(update_fields=["procedimientoUsr"])
       
       return render(request,'AppRecetas/inicio.html')  
 
@@ -344,7 +397,7 @@ def update_RecetasUsr(request, recetasUsr):
                                                   "fuenteUsr" :recetas_eli_Usr.fuenteUsr,
                                                   "procedimientoUsr" : recetas_eli_Usr.procedimientoUsr} )
   
-  return render(request, "AppRecetas/updateRecetasUsr.html", {"formulario2": formulario2 , "recetasUsr" : recetasUsr  } )    
+  return render(request, "AppRecetas/updateRecetasUsr.html", {"formulario2": formulario2 , "recetasUsr" : recetas_eli_Usr, "pasos": recetas_eli_Usr.get_pasos_lista(), "precios_nombres": list(IngredientePrecio.objects.order_by("nombre").values_list("nombre", flat=True)[:200])} )    
 
 
 
@@ -352,12 +405,43 @@ def update_RecetasUsr(request, recetasUsr):
 #para listar, recetas totales y usuarios ****listas***
 
 def vista_recetasMain(request):
+  q = request.GET.get("q", "").strip()
+  tab = request.GET.get("tab", "all")
+  if tab not in ("all", "usr", "main"):
+    tab = "all"
 
-  recetasUsr_all = RecetasUsr.objects.all()
-  recetasMain_all = RecetasMain.objects.all()
+  recetasUsr_qs = RecetasUsr.objects.prefetch_related("pasos").order_by("-id")
+  recetasMain_qs = RecetasMain.objects.prefetch_related("pasos").order_by("-id")
 
-    
-  return render(request,'AppRecetas/recetasMain.html', {"lista_recetasUsr" : recetasUsr_all , "lista_recetasMain": recetasMain_all})
+  if q:
+    recetasUsr_qs = recetasUsr_qs.filter(
+      Q(ingredientesUsr__icontains=q) | Q(nom_platosUsr__icontains=q) | Q(tipoDeCocinaUsr__icontains=q)
+    )
+    recetasMain_qs = recetasMain_qs.filter(
+      Q(ingredientes__icontains=q) | Q(nom_platos__icontains=q) | Q(tipoDeCocina__icontains=q)
+    )
+
+  total_usr = recetasUsr_qs.count()
+  total_main = recetasMain_qs.count()
+
+  lista_usr = list(recetasUsr_qs) if tab in ("all", "usr") else []
+  lista_main = list(recetasMain_qs) if tab in ("all", "main") else []
+
+  if lista_usr or lista_main:
+    precios = list(IngredientePrecio.objects.all())
+    for r in lista_usr:
+      r._costo_estimado_cache = r.calcular_costo_con_precios(precios)
+    for r in lista_main:
+      r._costo_estimado_cache = r.calcular_costo_con_precios(precios)
+
+  return render(request,'AppRecetas/recetasMain.html', {
+    "lista_recetasUsr": lista_usr,
+    "lista_recetasMain": lista_main,
+    "q": q,
+    "tab": tab,
+    "total_usr": total_usr,
+    "total_main": total_main,
+  })
 
 
 
@@ -381,27 +465,18 @@ def vista_cheffs(request):
 
 #modificar datos CRU"D"    
 @login_required
-def eliminarRecetasUsr(request, nom_recetasUsr):
-  recetasUsr_eli = RecetasUsr.objects.get(nom_platosUsr=nom_recetasUsr)
+@require_POST
+def eliminarRecetasUsr(request, pk):
+  recetasUsr_eli = get_object_or_404(RecetasUsr, pk=pk)
   recetasUsr_eli.delete()
-
-  recetasUsr_remain = RecetasUsr.objects.all()
-
-  envioWeb ={"lista_recetasUsr": recetasUsr_remain}
-
-  return render(request, "AppRecetas/recetasMain.html", envioWeb)
+  return redirect("RecetasMain")
 
 @login_required
-def eliminarRecetasMain(request, recetas):
-  recetas_eli =RecetasMain.objects.get(nom_platos=recetas)
+@require_POST
+def eliminarRecetasMain(request, pk):
+  recetas_eli = get_object_or_404(RecetasMain, pk=pk)
   recetas_eli.delete()
-
-  
-  recetas_remain = RecetasMain.objects.all()
-
-  envWeb = {"lista_recetasMain": recetas_remain}
-
-  return render(request, "AppRecetas/recetasMain.html", envWeb)
+  return redirect("RecetasMain")
 
 
     # CRUD con clases
@@ -446,5 +521,58 @@ class ListaAvatar(LoginRequiredMixin, ListView):
         return Avatar.objects.filter(usuario=self.request.user)
 
 
+class UpdateAvatar(LoginRequiredMixin, UpdateView):
+  model = Avatar
+  fields = ['image']
+  success_url = "/AppRecetas/avatar/list"
+  template_name = "AppRecetas/avatar_form.html"
   
+  def get_queryset(self):
+        # Solo permite editar sus propios avatares
+        return Avatar.objects.filter(usuario=self.request.user)
+
+
+class BorrarAvatar(LoginRequiredMixin, DeleteView):
+  model = Avatar
+  success_url = "/AppRecetas/avatar/list"
+  template_name = "AppRecetas/avatar_confirm_delete.html"
+  
+  def get_queryset(self):
+        # Solo permite borrar sus propios avatares
+        return Avatar.objects.filter(usuario=self.request.user)
+
+
+@login_required
+def activarAvatar(request, pk):
+    # Desactivar todos los avatares del usuario
+    Avatar.objects.filter(usuario=request.user).update(is_active=False)
+    # Activar el avatar seleccionado
+    avatar = Avatar.objects.get(pk=pk, usuario=request.user)
+    avatar.is_active = True
+    avatar.save()
+    return redirect('/AppRecetas/avatar/list')
+
+
+# Precios de ingredientes (global, para costo estimado)
+class ListaPrecios(LoginRequiredMixin, ListView):
+  model = IngredientePrecio
+  ordering = ["nombre"]
+  paginate_by = 30
+
+
+class CrearPrecio(LoginRequiredMixin, CreateView):
+  model = IngredientePrecio
+  success_url = "/AppRecetas/precios/"
+  fields = ["nombre", "unidad_base", "precio_estimado", "moneda", "fuente"]
+
+
+class UpdatePrecio(LoginRequiredMixin, UpdateView):
+  model = IngredientePrecio
+  success_url = "/AppRecetas/precios/"
+  fields = ["nombre", "unidad_base", "precio_estimado", "moneda", "fuente"]
+
+
+class BorrarPrecio(LoginRequiredMixin, DeleteView):
+  model = IngredientePrecio
+  success_url = "/AppRecetas/precios/"
 

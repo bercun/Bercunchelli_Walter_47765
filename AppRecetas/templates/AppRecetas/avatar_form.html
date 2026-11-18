@@ -1,22 +1,125 @@
 {% extends "AppRecetas/base.html" %}
+{% load static %}
 
+{% block titulo %}
+{% if object %}Cambiar Avatar{% else %}Agregar Avatar{% endif %}
+{% endblock %}
 
+{% block complement %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-info">
+                <div class="card-header bg-info text-white text-center">
+                    <h4 class="mb-0">
+                        <i class="bi bi-{% if object %}arrow-repeat{% else %}plus-circle{% endif %}"></i>
+                        {% if object %}Cambiar Avatar{% else %}Agregar Avatar{% endif %}
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    {% if object.image %}
+                        <div class="text-center mb-4">
+                            <div class="rounded-circle overflow-hidden mx-auto border border-3 border-info mb-2" 
+                                 style="width: 150px; height: 150px;">
+                                <img src="{{ object.image.url }}" 
+                                     alt="Avatar actual"
+                                     class="w-100 h-100"
+                                     id="currentImage"
+                                     style="object-fit: cover;">
+                            </div>
+                            <p class="text-muted small mb-0">Avatar actual</p>
+                            <p class="text-info small mb-0">Selecciona una nueva imagen para reemplazarlo</p>
+                        </div>
+                    {% else %}
+                        <div class="text-center mb-4">
+                            <div class="rounded-circle bg-light border border-3 border-info d-flex align-items-center justify-content-center mx-auto mb-2" 
+                                 style="width: 150px; height: 150px;"
+                                 id="imagePreview">
+                                <i class="bi bi-camera text-info" style="font-size: 3rem;"></i>
+                            </div>
+                            <p class="text-muted mt-2 small">Vista previa de tu avatar</p>
+                        </div>
+                    {% endif %}
+                    
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        {% if not object %}
+                        <div class="mb-4">
+                            <label for="{{ form.usuario.id_for_label }}" class="form-label fw-bold">
+                                <i class="bi bi-person"></i> Usuario:
+                            </label>
+                            {{ form.usuario }}
+                            {% if form.usuario.errors %}
+                                <div class="text-danger small mt-1">{{ form.usuario.errors }}</div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        
+                        <div class="mb-4">
+                            <label for="{{ form.image.id_for_label }}" class="form-label fw-bold">
+                                <i class="bi bi-image"></i> 
+                                {% if object %}Nueva Imagen de Avatar:{% else %}Imagen de Avatar:{% endif %}
+                            </label>
+                            {{ form.image }}
+                            {% if form.image.errors %}
+                                <div class="text-danger small mt-1">{{ form.image.errors }}</div>
+                            {% endif %}
+                            <div class="form-text">
+                                <i class="bi bi-info-circle"></i> 
+                                Formatos permitidos: JPG, PNG. Tamaño máximo: 5MB
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-info btn-lg text-white">
+                                <i class="bi bi-{% if object %}arrow-repeat{% else %}check-circle{% endif %}"></i> 
+                                {% if object %}Cambiar Avatar{% else %}Agregar Avatar{% endif %}
+                            </button>
+                            <a href="{% url 'listaavatar' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-{ % load static % }
-
-
-{% block  complement %}
-                                
-
-<form method="post" action="">
-    {% csrf_token %}
-    {{form.as_p}}
-    <!-- otros campos del formulario -->
-    <input type="submit" value="Enviar">
-</form>
-
-
- 
-
-{% endblock  %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add form-control class to inputs
+    const inputs = document.querySelectorAll('input:not([type="file"]):not([type="submit"]), select');
+    inputs.forEach(input => {
+        input.classList.add('form-control');
+    });
+    
+    // Add form-control to file input
+    const fileInput = document.querySelector('input[type="file"]');
+    if (fileInput) {
+        fileInput.classList.add('form-control');
+        
+        // Image preview
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    {% if object %}
+                    document.getElementById('currentImage').src = e.target.result;
+                    {% else %}
+                    document.getElementById('imagePreview').innerHTML = 
+                        '<img src="' + e.target.result + '" class="rounded-circle" style="width: 100%; height: 100%; object-fit: cover;">';
+                    {% endif %}
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+});
+</script>
+{% endblock %}
 

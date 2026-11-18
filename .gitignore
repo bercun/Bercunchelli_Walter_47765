@@ -1,0 +1,16 @@
+# Entornos virtuales y bytecode
+.env/
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django / medios locales
+media/
+*.sqlite3-journal
+
+# OS / editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

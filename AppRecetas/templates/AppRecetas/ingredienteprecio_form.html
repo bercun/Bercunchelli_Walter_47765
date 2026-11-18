@@ -1,0 +1,15 @@
+{% extends "AppRecetas/base.html" %}
+{% block title %}Precio · Web de Recetas{% endblock %}
+{% block titulo %}{% if object %}Editar precio{% else %}Nuevo precio{% endif %}{% endblock %}
+{% block breadcrumbs %}<a href="{% url 'Inicio' %}" class="hover:text-amber-700">Inicio</a> <span aria-hidden="true">›</span> <a href="{% url 'listaPrecios' %}" class="hover:text-amber-700">Precios</a> <span aria-hidden="true">›</span> <span aria-current="page" class="text-stone-800 font-semibold">{% if object %}Editar{% else %}Nuevo{% endif %}</span>{% endblock %}
+{% block complement %}
+<div class="flex justify-center"><div class="w-full max-w-xl"><div class="card-tw p-6">
+<form method="POST">{% csrf_token %}
+{{ form.as_p }}
+<div class="flex gap-2 justify-end mt-4">
+<a href="{% url 'listaPrecios' %}" class="btn btn-ghost">Cancelar</a>
+<button type="submit" class="btn btn-primary">Guardar</button>
+</div>
+</form>
+</div></div></div>
+{% endblock %}
