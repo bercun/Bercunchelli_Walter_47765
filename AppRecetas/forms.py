@@ -69,9 +69,6 @@ class UserRegiser(UserCreationForm):
 
 class EditUsrForm(UserCreationForm):
 
-    mail = forms.EmailField()
-    
-
     class Meta:
 
         model = User

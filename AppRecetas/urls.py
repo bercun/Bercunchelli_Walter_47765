@@ -50,8 +50,8 @@ urlpatterns = [
 
     # editar y borrar modelos
     path("eliminarRecetasUsr/<int:pk>/", eliminarRecetasUsr, name="eliminarRecetasUsr"),
-    path("eliminarRecetasMain/<recetas>/", eliminarRecetasMain, name="eliminarRecetasMain"),
-    path("updateRecetasMain/<recetas>/", update_RecetasMain, name="updateRecetasMain"),
+    path("eliminarRecetasMain/<int:pk>/", eliminarRecetasMain, name="eliminarRecetasMain"),
+    path("updateRecetasMain/<int:pk>/", update_RecetasMain, name="updateRecetasMain"),
     path("updateRecetasUsr/<int:pk>/", update_RecetasUsr, name="updateRecetasUsr"),
 
     # editar con classes

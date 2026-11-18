@@ -1,13 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.db.models import Q
+from django.views.decorators.http import require_POST
 
 from django.views.generic import ListView , FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView  
 
 from django.contrib.auth.forms import AuthenticationForm ,UserCreationForm
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 
@@ -25,14 +26,11 @@ def _get_pasos_from_post(request):
 
 
 def _sync_pasos(receta, pasos, tipo="main"):
-    if tipo == "main":
-        receta.pasos.all().delete()
-        for i, texto in enumerate(pasos, start=1):
-            PasoMain.objects.create(receta=receta, orden=i, texto=texto)
-    else:
-        receta.pasos.all().delete()
-        for i, texto in enumerate(pasos, start=1):
-            PasoUsr.objects.create(receta=receta, orden=i, texto=texto)
+    receta.pasos.all().delete()
+    modelo = PasoMain if tipo == "main" else PasoUsr
+    modelo.objects.bulk_create(
+        [modelo(receta=receta, orden=i, texto=texto) for i, texto in enumerate(pasos, start=1)]
+    )
 
 
 
@@ -93,11 +91,12 @@ def editarUsuario (request):
 
       usr.email = info["email"]
       usr.set_password(info["password1"])
-      usr.first_name = ["first_name"]
+      usr.first_name = info["first_name"]
 
       usr.save()
+      update_session_auth_hash(request, usr)
 
-      return render(request, "AppRecetas/inicio.html")
+      return redirect("Inicio")
 
   else:
 
@@ -307,9 +306,9 @@ def showUsr(request):
 
 #modificar datos CR"U"D
 @login_required
-def update_RecetasMain(request, recetas):
+def update_RecetasMain(request, pk):
   
-  recetas_eli = RecetasMain.objects.get(nom_platos=recetas)
+  recetas_eli = get_object_or_404(RecetasMain, pk=pk)
 
   if request.method == "POST":#despues de dar click a eviar
     
@@ -351,12 +350,12 @@ def update_RecetasMain(request, recetas):
                                                   "fuente" :recetas_eli.fuente,
                                                   "procedimiento" : recetas_eli.procedimiento} )
   
-  return render(request, "AppRecetas/updateRecetasMain.html", {"formulario1": formulario1 , "recetas" : recetas, "pasos": recetas_eli.get_pasos_lista(), "precios_nombres": list(IngredientePrecio.objects.order_by("nombre").values_list("nombre", flat=True)[:200])} )    
+  return render(request, "AppRecetas/updateRecetasMain.html", {"formulario1": formulario1 , "recetas" : recetas_eli.nom_platos, "pasos": recetas_eli.get_pasos_lista(), "precios_nombres": list(IngredientePrecio.objects.order_by("nombre").values_list("nombre", flat=True)[:200])} )    
 
 @login_required    
 def update_RecetasUsr(request, pk):
 
-  recetas_eli_Usr = RecetasUsr.objects.get(pk=pk)
+  recetas_eli_Usr = get_object_or_404(RecetasUsr, pk=pk)
 
   if request.method == "POST":#despues de dar click a eviar
     
@@ -411,24 +410,37 @@ def vista_recetasMain(request):
   if tab not in ("all", "usr", "main"):
     tab = "all"
 
-  recetasUsr_all = RecetasUsr.objects.all().order_by("-id")
-  recetasMain_all = RecetasMain.objects.all().order_by("-id")
+  recetasUsr_qs = RecetasUsr.objects.prefetch_related("pasos").order_by("-id")
+  recetasMain_qs = RecetasMain.objects.prefetch_related("pasos").order_by("-id")
 
   if q:
-    recetasUsr_all = recetasUsr_all.filter(
+    recetasUsr_qs = recetasUsr_qs.filter(
       Q(ingredientesUsr__icontains=q) | Q(nom_platosUsr__icontains=q) | Q(tipoDeCocinaUsr__icontains=q)
     )
-    recetasMain_all = recetasMain_all.filter(
+    recetasMain_qs = recetasMain_qs.filter(
       Q(ingredientes__icontains=q) | Q(nom_platos__icontains=q) | Q(tipoDeCocina__icontains=q)
     )
 
+  total_usr = recetasUsr_qs.count()
+  total_main = recetasMain_qs.count()
+
+  lista_usr = list(recetasUsr_qs) if tab in ("all", "usr") else []
+  lista_main = list(recetasMain_qs) if tab in ("all", "main") else []
+
+  if lista_usr or lista_main:
+    precios = list(IngredientePrecio.objects.all())
+    for r in lista_usr:
+      r._costo_estimado_cache = r.calcular_costo_con_precios(precios)
+    for r in lista_main:
+      r._costo_estimado_cache = r.calcular_costo_con_precios(precios)
+
   return render(request,'AppRecetas/recetasMain.html', {
-    "lista_recetasUsr": recetasUsr_all,
-    "lista_recetasMain": recetasMain_all,
+    "lista_recetasUsr": lista_usr,
+    "lista_recetasMain": lista_main,
     "q": q,
     "tab": tab,
-    "total_usr": recetasUsr_all.count(),
-    "total_main": recetasMain_all.count(),
+    "total_usr": total_usr,
+    "total_main": total_main,
   })
 
 
@@ -453,27 +465,18 @@ def vista_cheffs(request):
 
 #modificar datos CRU"D"    
 @login_required
+@require_POST
 def eliminarRecetasUsr(request, pk):
-  recetasUsr_eli = RecetasUsr.objects.get(pk=pk)
+  recetasUsr_eli = get_object_or_404(RecetasUsr, pk=pk)
   recetasUsr_eli.delete()
-
-  recetasUsr_remain = RecetasUsr.objects.all()
-
-  envioWeb ={"lista_recetasUsr": recetasUsr_remain}
-
-  return render(request, "AppRecetas/recetasMain.html", envioWeb)
+  return redirect("RecetasMain")
 
 @login_required
-def eliminarRecetasMain(request, recetas):
-  recetas_eli =RecetasMain.objects.get(nom_platos=recetas)
+@require_POST
+def eliminarRecetasMain(request, pk):
+  recetas_eli = get_object_or_404(RecetasMain, pk=pk)
   recetas_eli.delete()
-
-  
-  recetas_remain = RecetasMain.objects.all()
-
-  envWeb = {"lista_recetasMain": recetas_remain}
-
-  return render(request, "AppRecetas/recetasMain.html", envWeb)
+  return redirect("RecetasMain")
 
 
     # CRUD con clases

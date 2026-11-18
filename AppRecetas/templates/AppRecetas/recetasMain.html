@@ -51,15 +51,20 @@
             <p class="text-sm text-stone-500 mb-1"><strong>Ingredientes:</strong> {{ recetasUsr.ingredientesUsr|truncatewords:10 }}</p>
             <p class="text-sm mb-1"><strong>Costo estimado:</strong> {% with c=recetasUsr.costo_estimado %}{% if c.total %}<span class="font-bold text-green-700">${{ c.total }}</span>{% else %}<span class="text-stone-400">sin precios</span>{% endif %}{% if c.faltantes %} <span class="text-xs text-stone-400">({{ c.faltantes|length }} sin precio)</span>{% endif %}{% endwith %} <a href="{% url 'listaPrecios' %}" class="text-xs underline">Precios</a></p>
             <p class="text-sm text-stone-500 mb-3"><strong>Fuente:</strong> {{ recetasUsr.fuenteUsr|default:"No especificada" }}</p>
+            {% with pasos=recetasUsr.get_pasos_lista %}
             <details class="detail-tw">
-                <summary>Ver procedimiento ({{ recetasUsr.get_pasos_lista|length }} pasos)</summary>
-                <div class="detail-body text-sm"><ol class="list-decimal ml-4 space-y-1">{% for paso in recetasUsr.get_pasos_lista %}<li>{{ paso }}</li>{% empty %}{{ recetasUsr.procedimientoUsr }}{% endfor %}</ol></div>
+                <summary>Ver procedimiento ({{ pasos|length }} pasos)</summary>
+                <div class="detail-body text-sm"><ol class="list-decimal ml-4 space-y-1">{% for paso in pasos %}<li>{{ paso }}</li>{% empty %}{{ recetasUsr.procedimientoUsr }}{% endfor %}</ol></div>
             </details>
+            {% endwith %}
         </div>
         <div class="p-3 border-t border-stone-100 flex gap-2">
             {% if request.user.is_authenticated %}
             <a href="{% url 'updateRecetasUsr' recetasUsr.id %}" class="btn btn-ghost btn-sm flex-1"><i class="bi bi-pencil" aria-hidden="true"></i> Editar</a>
-            <a href="{% url 'eliminarRecetasUsr' recetasUsr.id %}" class="btn btn-danger-ghost btn-sm flex-1" onclick="return confirm('¿Eliminar esta receta?')"><i class="bi bi-trash" aria-hidden="true"></i> Eliminar</a>
+            <form method="POST" action="{% url 'eliminarRecetasUsr' recetasUsr.id %}" class="flex-1" onsubmit="return confirm('¿Eliminar esta receta?')">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger-ghost btn-sm w-full"><i class="bi bi-trash" aria-hidden="true"></i> Eliminar</button>
+            </form>
             {% else %}
             <a href="{% url 'Login' %}" class="btn btn-ghost btn-sm w-full"><i class="bi bi-lock" aria-hidden="true"></i> Inicia sesión para editar</a>
             {% endif %}
@@ -107,15 +112,20 @@
             <p class="text-sm text-stone-500 mb-1"><strong>Ingredientes:</strong> {{ recetasMain.ingredientes|truncatewords:10 }}</p>
             <p class="text-sm mb-1"><strong>Costo estimado:</strong> {% with c=recetasMain.costo_estimado %}{% if c.total %}<span class="font-bold text-green-700">${{ c.total }}</span>{% else %}<span class="text-stone-400">sin precios</span>{% endif %}{% if c.faltantes %} <span class="text-xs text-stone-400">({{ c.faltantes|length }} sin precio)</span>{% endif %}{% endwith %} <a href="{% url 'listaPrecios' %}" class="text-xs underline">Precios</a></p>
             <p class="text-sm text-stone-500 mb-3"><strong>Fuente:</strong> {{ recetasMain.fuente|default:"No especificada" }}</p>
+            {% with pasos=recetasMain.get_pasos_lista %}
             <details class="detail-tw">
-                <summary>Ver procedimiento ({{ recetasMain.get_pasos_lista|length }} pasos)</summary>
-                <div class="detail-body text-sm"><ol class="list-decimal ml-4 space-y-1">{% for paso in recetasMain.get_pasos_lista %}<li>{{ paso }}</li>{% empty %}{{ recetasMain.procedimiento }}{% endfor %}</ol></div>
+                <summary>Ver procedimiento ({{ pasos|length }} pasos)</summary>
+                <div class="detail-body text-sm"><ol class="list-decimal ml-4 space-y-1">{% for paso in pasos %}<li>{{ paso }}</li>{% empty %}{{ recetasMain.procedimiento }}{% endfor %}</ol></div>
             </details>
+            {% endwith %}
         </div>
         <div class="p-3 border-t border-stone-100 flex gap-2">
             {% if request.user.is_authenticated %}
-            <a href="{% url 'updateRecetasMain' recetasMain.nom_platos %}" class="btn btn-ghost btn-sm flex-1"><i class="bi bi-pencil" aria-hidden="true"></i> Editar</a>
-            <a href="{% url 'eliminarRecetasMain' recetasMain.nom_platos %}" class="btn btn-danger-ghost btn-sm flex-1" onclick="return confirm('¿Eliminar esta receta?')"><i class="bi bi-trash" aria-hidden="true"></i> Eliminar</a>
+            <a href="{% url 'updateRecetasMain' recetasMain.id %}" class="btn btn-ghost btn-sm flex-1"><i class="bi bi-pencil" aria-hidden="true"></i> Editar</a>
+            <form method="POST" action="{% url 'eliminarRecetasMain' recetasMain.id %}" class="flex-1" onsubmit="return confirm('¿Eliminar esta receta?')">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger-ghost btn-sm w-full"><i class="bi bi-trash" aria-hidden="true"></i> Eliminar</button>
+            </form>
             {% else %}
             <a href="{% url 'Login' %}" class="btn btn-ghost btn-sm w-full"><i class="bi bi-lock" aria-hidden="true"></i> Inicia sesión para editar</a>
             {% endif %}

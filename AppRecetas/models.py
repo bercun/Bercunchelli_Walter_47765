@@ -57,11 +57,15 @@ class RecetasMain(models.Model):
         from AppRecetas.costos import parse_ingredientes_texto
         return parse_ingredientes_texto(self.ingredientes)
 
+    def calcular_costo_con_precios(self, precios):
+        from AppRecetas.costos import calcular_costo
+        return calcular_costo(self.ingredientes_items, precios)
+
     @property
     def costo_estimado(self):
-        from AppRecetas.costos import calcular_costo
-        precios = IngredientePrecio.objects.all()
-        return calcular_costo(self.ingredientes_items, precios)
+        if hasattr(self, "_costo_estimado_cache"):
+            return self._costo_estimado_cache
+        return self.calcular_costo_con_precios(IngredientePrecio.objects.all())
     
 
 
@@ -99,11 +103,15 @@ class RecetasUsr(models.Model):
         from AppRecetas.costos import parse_ingredientes_texto
         return parse_ingredientes_texto(self.ingredientesUsr)
 
+    def calcular_costo_con_precios(self, precios):
+        from AppRecetas.costos import calcular_costo
+        return calcular_costo(self.ingredientes_items, precios)
+
     @property
     def costo_estimado(self):
-        from AppRecetas.costos import calcular_costo
-        precios = IngredientePrecio.objects.all()
-        return calcular_costo(self.ingredientes_items, precios)
+        if hasattr(self, "_costo_estimado_cache"):
+            return self._costo_estimado_cache
+        return self.calcular_costo_con_precios(IngredientePrecio.objects.all())
 
 
 
