@@ -2,15 +2,16 @@
 
 ## 📖 Índice
 1. [Introducción](#introducción)
-2. [Acceso al Sistema](#acceso-al-sistema)
-3. [Funciones para Usuarios No Registrados](#funciones-para-usuarios-no-registrados)
-4. [Funciones para Usuarios Registrados](#funciones-para-usuarios-registrados)
-5. [Gestión de Recetas](#gestión-de-recetas)
-6. [Precios de Ingredientes y Costo Estimado](#precios-de-ingredientes-y-costo-estimado)
-7. [Gestión de Perfil](#gestión-de-perfil)
-8. [Administración de Avatares](#administración-de-avatares)
-9. [Gestión de Chefs](#gestión-de-chefs)
-10. [Preguntas Frecuentes](#preguntas-frecuentes)
+2. [Instalación y Ejecución (Desarrolladores)](#instalación-y-ejecución-desarrolladores)
+3. [Acceso al Sistema](#acceso-al-sistema)
+4. [Funciones para Usuarios No Registrados](#funciones-para-usuarios-no-registrados)
+5. [Funciones para Usuarios Registrados](#funciones-para-usuarios-registrados)
+6. [Gestión de Recetas](#gestión-de-recetas)
+7. [Precios de Ingredientes y Costo Estimado](#precios-de-ingredientes-y-costo-estimado)
+8. [Gestión de Perfil](#gestión-de-perfil)
+9. [Administración de Avatares](#administración-de-avatares)
+10. [Gestión de Chefs](#gestión-de-chefs)
+11. [Preguntas Frecuentes](#preguntas-frecuentes)
 
 ---
 
@@ -28,6 +29,151 @@ Bienvenido al **Sistema de Recetas Web**, una plataforma diseñada para amantes 
 El sistema cuenta con **dos colecciones de recetas**:
 - **Destacadas (`RecetasMain`)**: Recetas curadas/verificadas destacadas en la plataforma
 - **Comunidad (`RecetasUsr`)**: Recetas creadas y compartidas por los usuarios
+
+---
+
+## 🛠️ Instalación y Ejecución (Desarrolladores)
+
+Esta sección explica cómo poner en marcha el proyecto en un equipo local con Windows, usando PowerShell.
+
+### Requisitos previos
+
+- **Python 3.13** (el entorno del proyecto fue creado con esta versión; `Pillow==11.0.0` y `Django==5.1.6` son compatibles con ella)
+- **Conexión a internet** en el navegador: Tailwind CSS, Alpine.js, Bootstrap, Bootstrap Icons y Google Fonts se cargan desde CDN
+- Verifica la versión instalada:
+
+```powershell
+python --version
+```
+
+### Estructura relevante
+
+| Ruta | Descripción |
+|------|-------------|
+| `manage.py` | Punto de entrada de Django (migraciones, servidor, pruebas, etc.) |
+| `requirements.txt` | Dependencias exactas del proyecto |
+| `recetasWeb/settings.py` | Configuración global (base de datos, idioma, archivos estáticos, medios) |
+| `AppRecetas/` | Aplicación principal (modelos, vistas, formularios, plantillas, pruebas) |
+| `db.sqlite3` | Base de datos SQLite incluida en el proyecto |
+| `media/` | Imágenes subidas por los usuarios (recetas y avatares) |
+| `.env/` | Entorno virtual de Python (**no** es un archivo de variables de entorno) |
+
+> **Nota sobre el archivo `.env`:** en este proyecto la carpeta `.env/` contiene únicamente el **entorno virtual** de Python. No hay un archivo `.env` con variables de configuración. `SECRET_KEY`, `DEBUG` y `ALLOWED_HOSTS` están definidos directamente en `recetasWeb/settings.py`.
+
+### Paso 1: Ubicarse en la carpeta del proyecto
+
+```powershell
+cd "D:\ruta\a\Bercunchelli_Walter_47765"
+```
+
+### Paso 2: Crear el entorno virtual (solo la primera vez)
+
+Si la carpeta `.env/` ya existe y funciona, puedes saltar este paso. Si no existe, o está dañada, créala así:
+
+```powershell
+python -m venv .env
+```
+
+### Paso 3: Activar el entorno virtual
+
+```powershell
+.\.env\Scripts\Activate.ps1
+```
+
+Si PowerShell muestra un error de "ejecución de scripts deshabilitada", permite la ejecución de scripts para tu usuario (una sola vez):
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
+
+Alternativa en CMD: `.env\Scripts\activate.bat`. Cuando el entorno está activo, el prompt muestra `(.env)` al inicio.
+
+### Paso 4: Instalar las dependencias
+
+```powershell
+pip install -r requirements.txt
+```
+
+Esto instala:
+
+| Paquete | Versión | Uso |
+|---------|---------|-----|
+| `Django` | 5.1.6 | Framework web |
+| `Pillow` | 11.0.0 | Procesamiento de imágenes (necesario para `ImageField`) |
+| `asgiref` | 3.8.1 | Dependencia de Django |
+| `sqlparse` | 0.5.3 | Dependencia de Django |
+| `tzdata` | 2024.2 | Zonas horarias |
+
+### Paso 5: Aplicar migraciones
+
+```powershell
+python manage.py migrate
+```
+
+Crea o actualiza las tablas de la base de datos `db.sqlite3`. Si el archivo ya existe con los datos del proyecto, el comando solo aplica las migraciones pendientes.
+
+### Paso 6: Crear un superusuario (opcional)
+
+Necesario solo si quieres acceder al panel de administración de Django (`/admin/`) o si la base de datos es nueva:
+
+```powershell
+python manage.py createsuperuser
+```
+
+Te pedirá usuario, correo y contraseña.
+
+### Paso 7: Ejecutar el servidor de desarrollo
+
+```powershell
+python manage.py runserver
+```
+
+Luego abre el navegador en:
+
+- **Sitio principal:** http://127.0.0.1:8000/
+- **Catálogo de recetas:** http://127.0.0.1:8000/AppRecetas/recetasMain/
+- **Panel de administración:** http://127.0.0.1:8000/admin/
+
+Para detener el servidor, presiona `Ctrl + C` en la terminal.
+
+### Ejecutar las pruebas automatizadas
+
+```powershell
+python manage.py test AppRecetas
+```
+
+Debe mostrar `Ran 7 tests` y `OK`. Las pruebas usan una base de datos temporal en memoria, así que no modifican `db.sqlite3`.
+
+### Configuración importante
+
+| Parámetro | Valor actual | Ubicación | Recomendación |
+|-----------|--------------|-----------|---------------|
+| `DEBUG` | `True` | `recetasWeb/settings.py` | Desarrollo únicamente. Debe ser `False` en producción. |
+| `SECRET_KEY` | Valor fijo en el código | `recetasWeb/settings.py` | No publicar ni reutilizar en producción. Moverla a una variable de entorno. |
+| `ALLOWED_HOSTS` | `[]` | `recetasWeb/settings.py` | Con `DEBUG = False` es obligatorio listar los dominios permitidos. |
+| `LANGUAGE_CODE` | `es` | `recetasWeb/settings.py` | Interfaz en español. |
+| `TIME_ZONE` | `UTC` | `recetasWeb/settings.py` | Cambiar a la zona local si se muestran fechas. |
+| `MEDIA_ROOT` | `media/` | `recetasWeb/settings.py` | Carpeta donde se guardan las imágenes subidas. |
+
+> El proyecto **no lee variables de entorno** en este momento. Para cambiar `SECRET_KEY`, `DEBUG` o `ALLOWED_HOSTS` hay que editar `settings.py`. Usar un archivo `.env` real con `python-dotenv` es una mejora pendiente.
+
+### Problemas frecuentes
+
+| Síntoma | Causa probable | Solución |
+|---------|----------------|----------|
+| `No module named 'django'` | El entorno virtual no está activo | Ejecuta `.\.env\Scripts\Activate.ps1` antes de los comandos |
+| `running scripts is disabled on this system` | Política de ejecución de PowerShell | `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` |
+| Error al subir imágenes | Falta `Pillow` | `pip install -r requirements.txt` |
+| Estilos o iconos no se ven | Sin conexión a internet (CDN) | Verifica la conexión y recarga la página |
+| Las imágenes subidas no aparecen | Servidor no está en modo `DEBUG` | Con `DEBUG = True`, Django sirve `/media/` automáticamente (solo desarrollo) |
+| `Port 8000 is already in use` | Otro servidor usa el puerto | `python manage.py runserver 8001` |
+| Error `no such table` | Faltan migraciones | Ejecuta `python manage.py migrate` |
+
+### Seguridad del repositorio
+
+- La carpeta `.env/` y `media/` están en `.gitignore`: no se suben al repositorio.
+- `db.sqlite3` no está en `.gitignore`, por lo que los datos de la base se versionan junto con el código.
+- No compartas contraseñas ni claves reales en el código ni en la documentación.
 
 ---
 
